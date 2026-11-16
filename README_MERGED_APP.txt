@@ -1,8 +1,8 @@
-NATIONAL SMART MOTOR CONTROL — INTERACTIVE FRONTEND DEMO
+SMART ENTERPRISES MOTOR CONTROL — INTERACTIVE FRONTEND DEMO
 
 RUN
 1. Extract the ZIP.
-2. Open stitch_animated_national_splash_screen/index.html in Chrome or Edge.
+2. Open index.html in Chrome or Edge.
 3. Use the left navigation or the screen-specific buttons to move through the supplied screens.
 
 FUNCTIONALITY INCLUDED

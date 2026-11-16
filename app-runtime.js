@@ -1,5 +1,5 @@
 /**
- * National Smart Motor Control - Unified App Runtime Engine
+ * Smart Enterprises — Smart Motor Control - Unified App Runtime Engine
  * Powers mobile navigation, state persistence, live micro-interactions,
  * native dialogs (Analytics, Profile, Notifications, Add Motor, OTP), and hardware simulation.
  */
@@ -185,8 +185,8 @@
       width: 50px !important;
       height: 50px !important;
       border-radius: 50% !important;
-      background: linear-gradient(135deg, #FF3D47 0%, #D81921 55%, #A60911 100%) !important;
-      box-shadow: 0 10px 22px rgba(216, 25, 33, 0.42), 0 2px 6px rgba(0, 0, 0, 0.12) !important;
+      background: linear-gradient(135deg, #FF3D47 0%, #DE0000 55%, #A60911 100%) !important;
+      box-shadow: 0 10px 22px rgba(222, 0, 0, 0.42), 0 2px 6px rgba(0, 0, 0, 0.12) !important;
       display: flex !important;
       align-items: center !important;
       justify-content: center !important;
@@ -271,7 +271,7 @@
     }
 
     .nav-tab-item.active .nav-tab-label {
-      color: #D81921 !important;
+      color: #DE0000 !important;
       font-weight: 800 !important;
       transform: translateY(-2px) !important;
     }
@@ -540,7 +540,7 @@
           <div style="width:36px; height:36px; border-radius:50%; background:#e2e8f0; display:flex; align-items:center; justify-content:center; color:#475569; font-size:16px; flex-shrink:0;">ℹ️</div>
           <div>
             <div style="font-size:13px; font-weight:700; color:#334155;">Gateway Communication Stable</div>
-            <div style="font-size:11px; color:#64748b; margin-top:2px;">National NMC-100 cellular signal quality: 94%.</div>
+            <div style="font-size:11px; color:#64748b; margin-top:2px;">Smart SE-100 cellular signal quality: 94%.</div>
             <div style="font-size:10px; color:#94a3b8; font-weight:600; margin-top:4px;">Yesterday</div>
           </div>
         </div>
@@ -565,7 +565,7 @@
   function openProfileSheet() {
     showBottomSheet('Operator Profile', `
       <div style="display:flex; flex-direction:column; align-items:center; text-align:center; padding:10px 0;">
-        <div style="width:68px; height:68px; border-radius:50%; background:#d81921; color:#fff; display:flex; align-items:center; justify-content:center; font-size:26px; font-weight:800; margin-bottom:10px; box-shadow:0 6px 18px rgba(216,25,33,0.3);">
+        <div style="width:68px; height:68px; border-radius:50%; background:#DE0000; color:#fff; display:flex; align-items:center; justify-content:center; font-size:26px; font-weight:800; margin-bottom:10px; box-shadow:0 6px 18px rgba(222, 0, 0,0.3);">
           RP
         </div>
         <h4 style="font-size:18px; font-weight:800; color:#0f172a; margin:0;">Ramesh Patel</h4>
@@ -578,7 +578,7 @@
           </div>
           <div style="display:flex; justify-content:space-between; margin-bottom:8px;">
             <span style="font-size:12px; color:#64748b;">Controller Unit</span>
-            <span style="font-size:12px; font-weight:700; color:#1e293b;">National NMC-100</span>
+            <span style="font-size:12px; font-weight:700; color:#1e293b;">Smart SE-100</span>
           </div>
           <div style="display:flex; justify-content:space-between;">
             <span style="font-size:12px; color:#64748b;">Gateway Link</span>
@@ -587,7 +587,7 @@
         </div>
 
         <button id="app-profile-logout-btn" style="width:100%; background:#fee2e2; color:#dc2626; border:1.5px solid #fca5a5; padding:13px; border-radius:14px; font-weight:700; font-size:14px; cursor:pointer;">
-          Log Out of National
+          Log Out of Smart Enterprises
         </button>
       </div>
     `);
@@ -665,13 +665,13 @@
         </p>
 
         <div style="display:flex; justify-content:center; gap:10px; margin-bottom:20px;">
-          <input type="text" maxlength="1" value="5" style="width:48px; height:52px; text-align:center; font-size:22px; font-weight:800; border:2px solid #d91a23; border-radius:12px; outline:none; color:#0f172a;">
-          <input type="text" maxlength="1" value="8" style="width:48px; height:52px; text-align:center; font-size:22px; font-weight:800; border:2px solid #d91a23; border-radius:12px; outline:none; color:#0f172a;">
-          <input type="text" maxlength="1" value="2" style="width:48px; height:52px; text-align:center; font-size:22px; font-weight:800; border:2px solid #d91a23; border-radius:12px; outline:none; color:#0f172a;">
-          <input type="text" maxlength="1" value="9" style="width:48px; height:52px; text-align:center; font-size:22px; font-weight:800; border:2px solid #d91a23; border-radius:12px; outline:none; color:#0f172a;">
+          <input type="text" maxlength="1" value="5" style="width:48px; height:52px; text-align:center; font-size:22px; font-weight:800; border:2px solid #DE0000; border-radius:12px; outline:none; color:#0f172a;">
+          <input type="text" maxlength="1" value="8" style="width:48px; height:52px; text-align:center; font-size:22px; font-weight:800; border:2px solid #DE0000; border-radius:12px; outline:none; color:#0f172a;">
+          <input type="text" maxlength="1" value="2" style="width:48px; height:52px; text-align:center; font-size:22px; font-weight:800; border:2px solid #DE0000; border-radius:12px; outline:none; color:#0f172a;">
+          <input type="text" maxlength="1" value="9" style="width:48px; height:52px; text-align:center; font-size:22px; font-weight:800; border:2px solid #DE0000; border-radius:12px; outline:none; color:#0f172a;">
         </div>
 
-        <button id="app-verify-otp-btn" style="width:100%; background:#d91a23; color:#fff; border:0; padding:14px; border-radius:14px; font-weight:700; font-size:15px; cursor:pointer;">
+        <button id="app-verify-otp-btn" style="width:100%; background:#DE0000; color:#fff; border:0; padding:14px; border-radius:14px; font-weight:700; font-size:15px; cursor:pointer;">
           Verify &amp; Continue
         </button>
       </div>

@@ -3,7 +3,7 @@
 <html lang="en"><head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport"/>
-<title>National - Smart Motor Control &amp; Monitoring Application</title>
+<title>Smart Enterprises — Smart Motor Control &amp; Monitoring</title>
 <!-- Tailwind CSS v3 with Plugins -->
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
 <!-- Google Fonts: Inter (Clear, Simple, Standard UI Font) -->
@@ -20,8 +20,8 @@
           },
           colors: {
             brand: {
-              red: '#D91D24',
-              darkRed: '#B81319',
+              red: '#DE0000',
+              darkRed: '#B80000',
               navy: '#0E1E38',
               muted: '#4B5563'
             }
@@ -56,10 +56,10 @@
     /* Pulse Glow for Spinner */
     @keyframes softGlow {
       0%, 100% {
-        filter: drop-shadow(0 0 4px rgba(217, 29, 36, 0.45));
+        filter: drop-shadow(0 0 4px rgba(222, 0, 0, 0.45));
       }
       50% {
-        filter: drop-shadow(0 0 12px rgba(217, 29, 36, 0.8));
+        filter: drop-shadow(0 0 12px rgba(222, 0, 0, 0.8));
       }
     }
 
@@ -162,21 +162,21 @@
 </div>
 <!-- BEGIN: TopBrandingSection -->
 <header class="relative z-10 w-full pt-16 sm:pt-20 px-6 flex flex-col items-center text-center" data-purpose="branding-content">
-<!-- Brand Card: National Red Box -->
-<div class="animate-in-1 opacity-0 mb-7 transition-transform hover:scale-[1.02] duration-300" data-purpose="logo-card">
-<img src="../assets/national-logo.svg" alt="National Logo" class="w-[190px] h-auto drop-shadow-2xl">
+<!-- Brand Card: Smart Enterprises Logo -->
+<div class="animate-in-1 opacity-0 mb-6 transition-transform hover:scale-[1.02] duration-300" data-purpose="logo-card">
+<img src="../assets/smart-logo.png" alt="Smart Enterprises Logo" class="w-[190px] h-auto drop-shadow-2xl">
 </div>
 <!-- Application Title -->
-<h1 class="animate-in-2 opacity-0 text-[23.5px] sm:text-[25px] leading-[1.28] font-extrabold text-[#0D2040] max-w-[320px] tracking-[-0.015em] font-display" data-purpose="app-title">
-        Smart Motor Control<br/>&amp; Monitoring Application
+<h1 class="animate-in-2 opacity-0 text-[24px] sm:text-[26px] leading-[1.25] font-black text-[#0D2040] max-w-[340px] tracking-tight font-display" data-purpose="app-title">
+        Smart Enterprises<br/><span class="text-[17px] sm:text-[18px] font-bold text-slate-700">Smart Motor Control &amp; Monitoring</span>
       </h1>
 <!-- Elegant Red Accent Divider -->
 <div class="animate-in-3 opacity-0 my-3.5" data-purpose="accent-divider">
-<div class="w-11 h-[3px] bg-gradient-to-r from-[#d91d24] via-[#f02d35] to-[#d91d24] rounded-full shadow-sm"></div>
+<div class="w-12 h-[3.5px] bg-gradient-to-r from-[#DE0000] via-[#ff333a] to-[#DE0000] rounded-full shadow-sm"></div>
 </div>
 <!-- Subtitle -->
-<p class="animate-in-4 opacity-0 text-[16px] sm:text-[17px] font-medium text-[#4B586E] tracking-tight" data-purpose="app-subtitle">
-        A clearer way to control the farm
+<p class="animate-in-4 opacity-0 text-[13px] sm:text-[14px] font-bold text-[#DE0000] tracking-wider uppercase" data-purpose="app-subtitle">
+        Where is smart, there is a security
       </p>
 </header>
 <!-- END: TopBrandingSection -->
@@ -191,7 +191,7 @@
 <svg class="absolute inset-0 w-12 h-12 spinner-ring" viewbox="0 0 48 48">
 <defs>
 <lineargradient id="spinnerGradient" x1="0%" x2="100%" y1="0%" y2="100%">
-<stop offset="0%" stop-color="#D91D24" stop-opacity="0"></stop>
+<stop offset="0%" stop-color="#DE0000" stop-opacity="0"></stop>
 <stop offset="50%" stop-color="#E5232B" stop-opacity="0.6"></stop>
 <stop offset="100%" stop-color="#FF1A23" stop-opacity="1"></stop>
 </lineargradient>
@@ -226,7 +226,7 @@
           touchRipple.style.left = `${x - 12}px`;
           touchRipple.style.top = `${y - 12}px`;
           touchRipple.style.animation = 'floatParticle 1.5s ease-out forwards';
-          touchRipple.style.background = 'radial-gradient(circle, rgba(255,255,255,0.7) 0%, rgba(217,29,36,0.2) 60%, transparent 100%)';
+          touchRipple.style.background = 'radial-gradient(circle, rgba(255,255,255,0.7) 0%, rgba(222, 0, 0,0.2) 60%, transparent 100%)';
           
           mainContainer.appendChild(touchRipple);
           setTimeout(() => {

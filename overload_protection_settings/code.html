@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8"/>
   <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport"/>
-  <title>Overload Protection Settings - National Auto Starter</title>
+  <title>Overload Protection Settings - Smart Enterprises Auto Starter</title>
   <!-- Google Fonts: Inter -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -16,8 +16,8 @@
         extend: {
           colors: {
             brand: {
-              red: '#D81921',
-              darkRed: '#B91219',
+              red: '#DE0000',
+              darkRed: '#B80000',
               lightRed: '#FEECEC',
               emerald: '#10B981',
               darkEmerald: '#059669',
@@ -49,7 +49,7 @@
   <div class="w-full max-w-md min-h-screen bg-[#F4F6F9] flex flex-col relative pb-8 shadow-xl">
     
     <!-- Top Header Bar (National Crimson) -->
-    <header class="bg-gradient-to-r from-[#D81921] via-[#D81921] to-[#B91219] text-white pt-5 pb-6 px-4 rounded-b-[24px] shadow-md relative z-10">
+    <header class="bg-gradient-to-r from-[#DE0000] via-[#DE0000] to-[#B80000] text-white pt-5 pb-6 px-4 rounded-b-[24px] shadow-md relative z-10">
       <div class="flex items-center gap-2.5">
         <!-- Back Button -->
         <button data-route="protection" aria-label="Go back" class="p-2 -ml-2 rounded-full hover:bg-white/10 active:scale-90 transition-all focus:outline-none flex items-center justify-center cursor-pointer shrink-0" id="backBtn" type="button">
@@ -60,7 +60,7 @@
 
         <!-- National Brand Logo in Left Corner After Back Button -->
         <div class="bg-white rounded-lg p-1 shadow-xs flex items-center justify-center shrink-0 cursor-pointer btn-tactile" data-route="home" style="width: 36px; height: 36px;">
-          <img src="../assets/national-logo.svg" alt="National Logo" class="h-5 w-auto object-contain">
+          <img src="../assets/smart-logo.png" alt="Smart Enterprises Logo" class="h-5 w-auto object-contain">
         </div>
 
         <!-- Title and Subtitle -->
@@ -104,13 +104,13 @@
       <section class="bg-white rounded-2xl p-3.5 shadow-sm border border-slate-100" id="motorRatingSection">
         <div class="flex items-center justify-between mb-2 px-0.5">
           <span class="text-xs font-bold text-slate-800 uppercase tracking-wider">Motor Rating (415V FLC)</span>
-          <span class="text-[11px] font-bold text-[#D81921] bg-red-50 px-2 py-0.5 rounded-full border border-red-100" id="flcBadge">FLC: 8.4 A</span>
+          <span class="text-[11px] font-bold text-[#DE0000] bg-red-50 px-2 py-0.5 rounded-full border border-red-100" id="flcBadge">FLC: 8.4 A</span>
         </div>
         <div class="grid grid-cols-3 gap-2" id="motorHpGroup">
           <button type="button" data-hp="3.0" data-flc="5.5" class="hp-btn py-2 text-xs font-medium rounded-xl border border-slate-200 text-slate-700 hover:bg-slate-50 transition-all text-center cursor-pointer">
             3.0 HP (5.5A)
           </button>
-          <button type="button" data-hp="5.0" data-flc="8.4" class="hp-btn active py-2 text-xs font-bold rounded-xl border-2 border-[#D81921] bg-red-50/60 text-[#D81921] transition-all text-center cursor-pointer">
+          <button type="button" data-hp="5.0" data-flc="8.4" class="hp-btn active py-2 text-xs font-bold rounded-xl border-2 border-[#DE0000] bg-red-50/60 text-[#DE0000] transition-all text-center cursor-pointer">
             5.0 HP (8.4A)
           </button>
           <button type="button" data-hp="7.5" data-flc="12.5" class="hp-btn py-2 text-xs font-medium rounded-xl border border-slate-200 text-slate-700 hover:bg-slate-50 transition-all text-center cursor-pointer">
@@ -215,7 +215,7 @@
 
     <!-- Bottom Actions -->
     <footer class="px-4 mt-4 pt-2">
-      <button data-route="review" class="save-btn cursor-pointer w-full bg-[#D81921] hover:bg-[#B91219] active:scale-[0.98] text-white font-bold py-3.5 px-4 rounded-xl shadow-lg shadow-red-600/30 flex items-center justify-center space-x-2 transition-all duration-150" id="saveBtn" type="button">
+      <button data-route="review" class="save-btn cursor-pointer w-full bg-[#DE0000] hover:bg-[#B80000] active:scale-[0.98] text-white font-bold py-3.5 px-4 rounded-xl shadow-lg shadow-red-600/30 flex items-center justify-center space-x-2 transition-all duration-150" id="saveBtn" type="button">
         <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
           <path d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round"></path>
         </svg>
@@ -293,7 +293,7 @@
       document.querySelectorAll('.hp-btn').forEach(btn => {
         const hp = parseFloat(btn.getAttribute('data-hp'));
         if (hp === motorHp) {
-          btn.className = 'hp-btn active py-2 text-xs font-bold rounded-xl border-2 border-[#D81921] bg-red-50/60 text-[#D81921] transition-all text-center cursor-pointer';
+          btn.className = 'hp-btn active py-2 text-xs font-bold rounded-xl border-2 border-[#DE0000] bg-red-50/60 text-[#DE0000] transition-all text-center cursor-pointer';
         } else {
           btn.className = 'hp-btn py-2 text-xs font-medium rounded-xl border border-slate-200 text-slate-700 hover:bg-slate-50 transition-all text-center cursor-pointer';
         }

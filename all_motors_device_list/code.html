@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport">
-  <title>National - All Connected Motors</title>
+  <title>Smart Enterprises - All Connected Motors</title>
   <!-- Google Fonts: Inter (Clear, Simple, Standard UI Font) -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -16,8 +16,8 @@
         extend: {
           colors: {
             brand: {
-              red: '#D81921',
-              darkRed: '#B91219',
+              red: '#DE0000',
+              darkRed: '#B80000',
               lightRed: '#FEECEC',
             },
             status: {
@@ -34,7 +34,7 @@
             card: '0 4px 18px -2px rgba(15, 23, 42, 0.06), 0 2px 6px -1px rgba(15, 23, 42, 0.04)',
             cardHover: '0 12px 28px -4px rgba(15, 23, 42, 0.12), 0 4px 12px -2px rgba(15, 23, 42, 0.06)',
             nav: '0 -4px 20px rgba(0, 0, 0, 0.06)',
-            tactileRed: '0 4px 14px rgba(216, 25, 33, 0.35)',
+            tactileRed: '0 4px 14px rgba(222, 0, 0, 0.35)',
             tactileGreen: '0 4px 14px rgba(16, 185, 129, 0.35)',
           }
         }
@@ -96,11 +96,11 @@
   <!-- ======================================================== -->
   <!-- BEGIN: TopAppBar with Official National Brand Logo        -->
   <!-- ======================================================== -->
-  <header class="bg-[#D81921] text-white px-4 py-2.5 flex items-center justify-between shadow-md sticky top-0 z-40">
+  <header class="bg-[#DE0000] text-white px-4 py-2.5 flex items-center justify-between shadow-md sticky top-0 z-40">
     <!-- Brand Logo & Identity in Left Corner (No Back Arrow on Tab Screen) -->
     <div class="flex items-center space-x-2.5 cursor-pointer btn-tactile" data-route="home">
       <div class="bg-white rounded-lg p-1 shadow-xs flex items-center justify-center" style="width: 38px; height: 38px;">
-        <img src="../assets/national-logo.svg" alt="National Logo" class="h-6 w-auto object-contain">
+        <img src="../assets/smart-logo.png" alt="Smart Enterprises Logo" class="h-6 w-auto object-contain">
       </div>
       <div>
         <span class="text-base font-black tracking-tight text-white block leading-tight">My Motors</span>
@@ -127,7 +127,7 @@
       <div>
         <div class="flex items-center gap-2">
           <h1 class="text-2xl font-black text-slate-900 tracking-tight leading-tight">My Motors</h1>
-          <span id="badgeTotalCount" class="text-xs font-black px-2 py-0.5 rounded-full bg-red-100 text-[#D81921]">
+          <span id="badgeTotalCount" class="text-xs font-black px-2 py-0.5 rounded-full bg-red-100 text-[#DE0000]">
             4 Devices
           </span>
         </div>
@@ -135,7 +135,7 @@
       </div>
 
       <!-- Elevated Add Motor Button with Dialog Trigger -->
-      <button id="btnOpenAddMotor" aria-label="Add Motor" class="btn-tactile w-11 h-11 rounded-2xl bg-[#D81921] hover:bg-red-700 active:bg-red-800 text-white flex items-center justify-center shadow-tactileRed transition-all cursor-pointer" type="button">
+      <button id="btnOpenAddMotor" aria-label="Add Motor" class="btn-tactile w-11 h-11 rounded-2xl bg-[#DE0000] hover:bg-red-700 active:bg-red-800 text-white flex items-center justify-center shadow-tactileRed transition-all cursor-pointer" type="button">
         <svg class="w-6 h-6 stroke-[2.5]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path d="M12 4v16m8-8H4" stroke-linecap="round" stroke-linejoin="round"></path>
         </svg>
@@ -196,7 +196,7 @@
             <path d="M21 21l-4.35-4.35m0 0A7.5 7.5 0 1116.65 6.65a7.5 7.5 0 010 10.7z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"></path>
           </svg>
         </span>
-        <input id="inputMotorSearch" class="w-full bg-white border border-slate-200/90 rounded-2xl py-2.5 pl-10 pr-9 text-xs font-semibold text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-[#D81921]/20 shadow-xs" placeholder="Search by name, sector or HP rating..." type="search">
+        <input id="inputMotorSearch" class="w-full bg-white border border-slate-200/90 rounded-2xl py-2.5 pl-10 pr-9 text-xs font-semibold text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-[#DE0000]/20 shadow-xs" placeholder="Search by name, sector or HP rating..." type="search">
         <button id="btnClearSearch" class="hidden absolute right-3 text-slate-400 hover:text-slate-600 text-xs font-bold p-1">
           ✕
         </button>
@@ -204,7 +204,7 @@
 
       <!-- Quick Status Filter Pills Bar -->
       <div class="flex items-center gap-1.5 overflow-x-auto no-scrollbar pt-0.5">
-        <button class="filter-tab-pill active px-3.5 py-1.5 rounded-full text-xs font-extrabold bg-[#D81921] text-white shadow-xs transition-all cursor-pointer" data-filter="all">
+        <button class="filter-tab-pill active px-3.5 py-1.5 rounded-full text-xs font-extrabold bg-[#DE0000] text-white shadow-xs transition-all cursor-pointer" data-filter="all">
           All (4)
         </button>
         <button class="filter-tab-pill px-3.5 py-1.5 rounded-full text-xs font-bold bg-white text-slate-600 border border-slate-200 hover:bg-slate-50 transition-all cursor-pointer" data-filter="running">
@@ -648,11 +648,11 @@
     filterPills.forEach(pill => {
       pill.addEventListener('click', () => {
         filterPills.forEach(p => {
-          p.classList.remove('bg-[#D81921]', 'text-white', 'shadow-xs');
+          p.classList.remove('bg-[#DE0000]', 'text-white', 'shadow-xs');
           p.classList.add('bg-white', 'text-slate-600', 'border', 'border-slate-200');
         });
         pill.classList.remove('bg-white', 'text-slate-600', 'border', 'border-slate-200');
-        pill.classList.add('bg-[#D81921]', 'text-white', 'shadow-xs');
+        pill.classList.add('bg-[#DE0000]', 'text-white', 'shadow-xs');
 
         currentFilter = pill.getAttribute('data-filter');
         applyFilters();

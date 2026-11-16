@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport">
-  <title>National Farm Operator Dashboard - Smart Motor Control</title>
+  <title>Smart Enterprises Farm Operator Dashboard - Smart Motor Control</title>
   
   <!-- Google Fonts: Inter (Clear, Simple, Standard Modern UI Font) -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -20,8 +20,8 @@
         extend: {
           colors: {
             brand: {
-              red: '#D81921',
-              darkRed: '#B91219',
+              red: '#DE0000',
+              darkRed: '#B80000',
               green: '#10B981',
               darkGreen: '#059669',
               mint: '#DCFCE7',
@@ -104,7 +104,7 @@
   <!-- ======================================================== -->
   <!-- 1. TOP STATUS BAR (White iOS-Style on Red Background)     -->
   <!-- ======================================================== -->
-  <div class="bg-[#D81921] px-5 pt-2 pb-1 flex items-center justify-between text-white text-xs font-semibold select-none">
+  <div class="bg-[#DE0000] px-5 pt-2 pb-1 flex items-center justify-between text-white text-xs font-semibold select-none">
     <span class="tracking-tight font-bold text-[13px]">9:41</span>
     <div class="flex items-center space-x-1.5">
       <!-- Cellular Signal Bars -->
@@ -131,15 +131,15 @@
   <!-- ======================================================== -->
   <!-- 2. BRAND APP BAR (National Logo + Notification + Avatar) -->
   <!-- ======================================================== -->
-  <header class="bg-[#D81921] px-4 py-2.5 flex items-center justify-between sticky top-0 z-40 shadow-sm">
+  <header class="bg-[#DE0000] px-4 py-2.5 flex items-center justify-between sticky top-0 z-40 shadow-sm">
     <!-- Brand Logo & Identity -->
     <div class="flex items-center space-x-2.5 cursor-pointer btn-tactile" data-route="home">
-      <!-- White Box with Red National Logo Badge -->
+      <!-- White Box with Smart Enterprises Logo -->
       <div class="bg-white rounded-lg p-1 shadow-xs flex items-center justify-center" style="width: 38px; height: 38px;">
-        <img src="../assets/national-logo.svg" alt="National Logo" class="h-6 w-auto object-contain">
+        <img src="../assets/smart-logo.png" alt="Smart Enterprises Logo" class="h-7 w-auto object-contain">
       </div>
       <div>
-        <span class="text-lg font-black tracking-tight text-white block leading-tight">National</span>
+        <span class="text-base font-black tracking-tight text-white block leading-tight">Smart Enterprises</span>
         <span class="text-[11px] font-medium text-white/90 block leading-tight">Smart Motor Control</span>
       </div>
     </div>
@@ -151,12 +151,12 @@
         <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" d="M14.857 17.082a23.848 23.848 0 005.454-1.31A8.967 8.967 0 0118 9.75v-.7V9A6 6 0 006 9v.75a8.967 8.967 0 01-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 01-5.714 0m5.714 0a3 3 0 11-5.714 0"></path>
         </svg>
-        <span class="absolute top-1 right-1.5 w-2 h-2 rounded-full bg-white ring-2 ring-[#D81921]"></span>
+        <span class="absolute top-1 right-1.5 w-2 h-2 rounded-full bg-white ring-2 ring-[#DE0000]"></span>
       </button>
 
       <!-- Profile Avatar Button with Dropdown Chevron -->
       <div class="flex items-center space-x-1 cursor-pointer btn-tactile" data-route="profile">
-        <div class="w-9 h-9 rounded-full bg-white text-[#D81921] font-black text-xs flex items-center justify-center shadow-xs">
+        <div class="w-9 h-9 rounded-full bg-white text-[#DE0000] font-black text-xs flex items-center justify-center shadow-xs">
           RP
         </div>
         <svg class="w-3.5 h-3.5 text-white/90" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
@@ -171,7 +171,7 @@
   <!-- ======================================================== -->
   <section class="px-4 pt-3.5 pb-2 flex items-start justify-between">
     <div>
-      <span class="text-[11px] font-black uppercase tracking-wider text-[#D81921] block mb-0.5">FARM DASHBOARD</span>
+      <span class="text-[11px] font-black uppercase tracking-wider text-[#DE0000] block mb-0.5">FARM DASHBOARD</span>
       <h1 class="text-2xl font-black text-slate-900 tracking-tight leading-none mb-1">East Field Farm</h1>
       <p class="text-xs font-semibold text-slate-500 flex items-center space-x-1">
         <span>📍</span>
@@ -252,7 +252,7 @@
         <div class="col-span-8 relative flex items-center justify-center min-w-0 overflow-hidden">
           <img id="motorPhoto" 
                src="../assets/hero_pump_water_splash.png" 
-               alt="National Smart Motor Pump with Water Splash" 
+               alt="Smart Enterprises Motor Pump with Water Splash" 
                class="w-full max-w-full h-auto max-h-40 object-contain animate-float-pump transition-all duration-500 drop-shadow-sm">
         </div>
 
