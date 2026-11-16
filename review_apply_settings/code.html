@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport"/>
+  <title>Review &amp; Apply Settings - National Smart Motor Control</title>
+  <!-- Google Fonts: Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              red: '#D81921',
+              darkRed: '#B91219',
+              lightRed: '#FEECEC',
+              emerald: '#10B981',
+              darkEmerald: '#059669',
+            }
+          },
+          fontFamily: {
+            sans: ['"Inter"', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body {
+      -webkit-tap-highlight-color: transparent;
+      user-select: none;
+    }
+    .touch-press {
+      transition: transform 0.12s ease;
+    }
+    .touch-press:active {
+      transform: scale(0.98);
+    }
+  </style>
+</head>
+<body class="bg-slate-100 min-h-screen flex justify-center text-slate-800 antialiased font-sans select-none">
+  <!-- Mobile Screen Container -->
+  <div class="w-full max-w-md min-h-screen bg-[#F4F6F9] flex flex-col justify-between shadow-2xl relative pb-8">
+    
+    <div>
+      <!-- Header Section (National Crimson) -->
+      <header class="bg-gradient-to-r from-[#D81921] via-[#D81921] to-[#B91219] text-white pt-5 pb-6 px-4 shadow-md">
+        <div class="flex items-center gap-2.5">
+          <!-- Back navigation button -->
+          <button data-route="protection" aria-label="Go back" class="p-2 -ml-2 rounded-full hover:bg-white/10 active:scale-90 transition-all cursor-pointer shrink-0" id="back-btn" type="button">
+            <svg class="w-6 h-6 stroke-[2.5]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path d="M15 19l-7-7 7-7" stroke-linecap="round" stroke-linejoin="round"></path>
+            </svg>
+          </button>
+
+          <!-- National Brand Logo in Left Corner After Back Button -->
+          <div class="bg-white rounded-lg p-1 shadow-xs flex items-center justify-center shrink-0 cursor-pointer btn-tactile" data-route="home" style="width: 36px; height: 36px;">
+            <img src="../assets/national-logo.svg" alt="National Logo" class="h-5 w-auto object-contain">
+          </div>
+
+          <!-- Title & Subtitle -->
+          <div class="flex-1 min-w-0">
+            <div class="flex items-center justify-between gap-1">
+              <h1 class="text-lg font-extrabold leading-tight tracking-tight truncate">Review Settings</h1>
+              <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold bg-white/20 text-white backdrop-blur-sm shrink-0">
+                Ready to Apply
+              </span>
+            </div>
+            <p class="text-xs text-red-100 font-medium mt-0.5 truncate">Verify safety parameters before dispatch</p>
+          </div>
+        </div>
+      </header>
+
+      <!-- Content List -->
+      <main class="p-4 space-y-3">
+        
+        <!-- Motor Info Header Card -->
+        <section data-route="details" class="setting-card bg-white rounded-2xl p-3.5 shadow-sm border border-slate-100 flex items-center gap-3.5 cursor-pointer touch-press hover:shadow-md transition-all">
+          <div class="w-12 h-12 rounded-xl bg-red-50 flex items-center justify-center p-1.5 flex-shrink-0 border border-red-100">
+            <img alt="Submersible Pump Motor" class="w-full h-full object-contain mix-blend-multiply" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA0c1XvcJ0wcwXZDh7SduKk0hqI58ImUN-1msRA1vbCpAmRklzS-uxrfc1frJyunucK6DZfZbnmW1QzXbOVAgQLt-lsmk4QFJh0UKJD5rjnN2SnNs5z3UjHEInXcS8cjdsxWYNLziLf0k9h3qn44JYkNihC7SgTcqcARcV0SZzl4mrV7wmsIipnH3Kdd3iJq68nh2ni1LaYdYj5grNG_pMoY5iOPzwbTRx1YRdlWGOb_J5BZZyCCf7i"/>
+          </div>
+          <div class="flex-1">
+            <div class="flex items-center gap-2">
+              <h2 class="text-base font-extrabold text-slate-900 leading-snug">Main Pump (5.0 HP)</h2>
+              <span class="text-[10px] font-bold bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded-full">3-Phase 415V</span>
+            </div>
+            <p class="text-xs font-medium text-slate-500 mt-0.5">Farm - East Field • Borewell Sector 4</p>
+          </div>
+          <svg class="w-4 h-4 text-slate-400 stroke-[2.5] flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+        </section>
+
+        <!-- 1. Dry-Run Protection Card -->
+        <article data-route="dryrun" class="setting-card bg-white rounded-2xl p-3.5 shadow-sm border border-slate-100 cursor-pointer touch-press hover:shadow-md transition-all">
+          <div class="flex items-start justify-between">
+            <div class="flex items-center gap-3">
+              <div class="w-10 h-10 rounded-xl bg-sky-50 flex items-center justify-center text-sky-600 flex-shrink-0">
+                <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24">
+                  <path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"></path>
+                </svg>
+              </div>
+              <div>
+                <h3 class="text-sm font-bold text-slate-900 leading-tight">Dry-Run Protection</h3>
+                <span class="text-[10px] text-slate-400 font-medium">Automatic Well Cutoff</span>
+              </div>
+            </div>
+            <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-bold bg-emerald-100 text-emerald-700">On</span>
+          </div>
+          <div class="mt-2.5 pl-[52px] space-y-1">
+            <div class="flex items-center justify-between text-xs text-slate-500">
+              <span>Low Current Cutoff :</span>
+              <span class="font-bold text-slate-800" id="revDryThreshold">5.2 A</span>
+            </div>
+            <div class="flex items-center justify-between text-xs text-slate-500">
+              <span>Trip Delay Time :</span>
+              <span class="font-bold text-slate-800" id="revDryDelay">15 sec</span>
+            </div>
+            <div class="flex items-center justify-between text-xs text-slate-500">
+              <span>Well Recovery Auto-Restart :</span>
+              <span class="font-bold text-emerald-700" id="revDryRec">45 min</span>
+            </div>
+          </div>
+        </article>
+
+        <!-- 2. Overload Protection Card -->
+        <article data-route="overload" class="setting-card bg-white rounded-2xl p-3.5 shadow-sm border border-slate-100 cursor-pointer touch-press hover:shadow-md transition-all">
+          <div class="flex items-start justify-between">
+            <div class="flex items-center gap-3">
+              <div class="w-10 h-10 rounded-xl bg-amber-50 flex items-center justify-center text-amber-600 flex-shrink-0">
+                <svg class="w-5 h-5 fill-none stroke-current stroke-2" viewBox="0 0 24 24">
+                  <path d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
+                </svg>
+              </div>
+              <div>
+                <h3 class="text-sm font-bold text-slate-900 leading-tight">Overload Protection</h3>
+                <span class="text-[10px] text-slate-400 font-medium">Thermal Class 10</span>
+              </div>
+            </div>
+            <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-bold bg-emerald-100 text-emerald-700">On</span>
+          </div>
+          <div class="mt-2.5 pl-[52px] space-y-1">
+            <div class="flex items-center justify-between text-xs text-slate-500">
+              <span>Rated Motor FLC :</span>
+              <span class="font-bold text-slate-800" id="revMotorFlc">8.4 A (5.0 HP)</span>
+            </div>
+            <div class="flex items-center justify-between text-xs text-slate-500">
+              <span>Overload Cutoff Limit :</span>
+              <span class="font-bold text-slate-800" id="revOverloadLimit">10.0 A (120% FLC)</span>
+            </div>
+            <div class="flex items-center justify-between text-xs text-slate-500">
+              <span>Trip Time / Cooling Lock :</span>
+              <span class="font-bold text-slate-800" id="revOverloadTime">8s trip / 15m rest</span>
+            </div>
+          </div>
+        </article>
+
+        <!-- 3. Voltage Protection Card -->
+        <article data-route="voltage" class="setting-card bg-white rounded-2xl p-3.5 shadow-sm border border-slate-100 cursor-pointer touch-press hover:shadow-md transition-all">
+          <div class="flex items-start justify-between">
+            <div class="flex items-center gap-3">
+              <div class="w-10 h-10 rounded-xl bg-purple-50 flex items-center justify-center text-purple-600 flex-shrink-0">
+                <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24">
+                  <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"></path>
+                </svg>
+              </div>
+              <div>
+                <h3 class="text-sm font-bold text-slate-900 leading-tight">Voltage Protection</h3>
+                <span class="text-[10px] text-slate-400 font-medium">3-Phase 415V Nominal</span>
+              </div>
+            </div>
+            <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-bold bg-emerald-100 text-emerald-700">On</span>
+          </div>
+          <div class="mt-2.5 pl-[52px] space-y-1">
+            <div class="flex items-center justify-between text-xs text-slate-500">
+              <span>Safe Operating Voltage :</span>
+              <span class="font-bold text-slate-800" id="revVoltWindow">350 V – 470 V</span>
+            </div>
+            <div class="flex items-center justify-between text-xs text-slate-500">
+              <span>Fault Trip Delay :</span>
+              <span class="font-bold text-slate-800" id="revVoltDelay">3 sec</span>
+            </div>
+            <div class="flex items-center justify-between text-xs text-slate-500">
+              <span>Power Recovery Delay :</span>
+              <span class="font-bold text-emerald-700" id="revVoltRec">15 sec</span>
+            </div>
+          </div>
+        </article>
+
+        <!-- 4. Phase Protection Card -->
+        <article data-route="phase" class="setting-card bg-white rounded-2xl p-3.5 shadow-sm border border-slate-100 cursor-pointer touch-press hover:shadow-md transition-all">
+          <div class="flex items-start justify-between">
+            <div class="flex items-center gap-3">
+              <div class="w-10 h-10 rounded-xl bg-rose-50 flex items-center justify-center text-[#D81921] flex-shrink-0">
+                <svg class="w-5 h-5 stroke-current fill-none stroke-2" viewBox="0 0 24 24">
+                  <path d="M3 12h2l3-7 4 14 4-10 2 5h3"></path>
+                </svg>
+              </div>
+              <div>
+                <h3 class="text-sm font-bold text-slate-900 leading-tight">Phase Protection</h3>
+                <span class="text-[10px] text-slate-400 font-medium">Single Phasing &amp; Reverse Lock</span>
+              </div>
+            </div>
+            <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-bold bg-emerald-100 text-emerald-700">On</span>
+          </div>
+          <div class="mt-2.5 pl-[52px] space-y-1">
+            <div class="flex items-center justify-between text-xs text-slate-500">
+              <span>Single Phasing (SPP) :</span>
+              <span class="font-bold text-slate-800">&lt; 1.5s Instant Trip</span>
+            </div>
+            <div class="flex items-center justify-between text-xs text-slate-500">
+              <span>Phase Sequence Lock :</span>
+              <span class="font-bold text-slate-800">Enabled (Reverse Safe)</span>
+            </div>
+            <div class="flex items-center justify-between text-xs text-slate-500">
+              <span>Phase Imbalance Limit :</span>
+              <span class="font-bold text-slate-800" id="revPhaseImb">15 % (2s delay)</span>
+            </div>
+          </div>
+        </article>
+
+        <!-- 5. Advanced Auto Starter Settings Card -->
+        <article data-route="advanced" class="setting-card bg-white rounded-2xl p-3.5 shadow-sm border border-slate-100 cursor-pointer touch-press hover:shadow-md transition-all">
+          <div class="flex items-start justify-between">
+            <div class="flex items-center gap-3">
+              <div class="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center text-blue-600 flex-shrink-0">
+                <svg class="w-5 h-5 fill-none stroke-current stroke-2" viewBox="0 0 24 24">
+                  <path d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path>
+                </svg>
+              </div>
+              <div>
+                <h3 class="text-sm font-bold text-slate-900 leading-tight">Auto Starter Logic</h3>
+                <span class="text-[10px] text-slate-400 font-medium">Automatic Power Control</span>
+              </div>
+            </div>
+            <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-bold bg-blue-100 text-blue-700" id="revStarterMode">Auto Mode</span>
+          </div>
+          <div class="mt-2.5 pl-[52px] space-y-1">
+            <div class="flex items-center justify-between text-xs text-slate-500">
+              <span>Grid Surge Delay :</span>
+              <span class="font-bold text-slate-800" id="revSurgeDelay">60 sec</span>
+            </div>
+            <div class="flex items-center justify-between text-xs text-slate-500">
+              <span>Star-Delta Contactor :</span>
+              <span class="font-bold text-slate-800" id="revSdDelay">6 sec</span>
+            </div>
+            <div class="flex items-center justify-between text-xs text-slate-500">
+              <span>Cyclic Run / Rest :</span>
+              <span class="font-bold text-slate-800" id="revCyclic">45m Run / 30m Rest</span>
+            </div>
+          </div>
+        </article>
+
+      </main>
+    </div>
+
+    <!-- Bottom Action Button -->
+    <footer class="p-4 bg-[#F4F6F9] sticky bottom-0 z-10">
+      <button data-route="confirm" class="w-full bg-[#D81921] hover:bg-[#B91219] active:scale-[0.98] text-white font-bold py-3.5 px-4 rounded-xl shadow-lg shadow-red-600/30 flex items-center justify-center gap-2.5 transition duration-150 cursor-pointer" id="apply-btn" type="button">
+        <svg class="w-5 h-5 fill-none stroke-current stroke-2" viewBox="0 0 24 24">
+          <path d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+        </svg>
+        <span class="text-sm tracking-wide">Apply Settings to Starter</span>
+      </button>
+    </footer>
+
+    <!-- Confirmation Modal Dialog -->
+    <div class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs hidden items-center justify-center p-4 transition-opacity" id="confirm-modal">
+      <div class="bg-white rounded-3xl max-w-sm w-full p-6 shadow-2xl transform transition-transform scale-95 duration-200" id="modal-box">
+        <div class="w-14 h-14 rounded-full bg-red-50 text-[#D81921] flex items-center justify-center mx-auto mb-3.5 border border-red-100">
+          <svg class="w-7 h-7 stroke-current stroke-2" fill="none" viewBox="0 0 24 24">
+            <path d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+          </svg>
+        </div>
+        <h3 class="text-lg font-black text-slate-900 text-center">Apply Settings to Starter?</h3>
+        <p class="text-xs text-slate-600 text-center mt-2 leading-relaxed">
+          The 3-phase auto starter will update all motor protection parameters and reboot safety monitors.
+        </p>
+        <div class="mt-5 grid grid-cols-2 gap-2.5">
+          <button class="py-3 px-3 rounded-xl border border-slate-200 text-slate-700 font-bold text-xs hover:bg-slate-50 active:scale-95 transition cursor-pointer" id="modal-cancel-btn" type="button">
+            Cancel
+          </button>
+          <button class="py-3 px-3 rounded-xl bg-[#D81921] text-white font-bold text-xs hover:bg-[#B91219] active:scale-95 transition shadow-sm cursor-pointer" id="modal-confirm-btn" type="button">
+            Apply Now
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div class="fixed top-5 left-1/2 -translate-x-1/2 z-50 bg-slate-900/95 text-white text-xs font-semibold px-4 py-2.5 rounded-full shadow-xl opacity-0 pointer-events-none transition-all duration-300 flex items-center gap-2 -translate-y-4" id="toast">
+      <svg class="w-4 h-4 text-emerald-400 stroke-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"></path></svg>
+      <span id="toast-text">Settings applied successfully!</span>
+    </div>
+
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      // Sync review metrics with localStorage
+      try {
+        const stored = JSON.parse(localStorage.getItem('nationalMotorProtectionSettings') || '{}');
+        if (stored.dryrun && stored.dryrun.threshold) {
+          document.getElementById('revDryThreshold').textContent = `${stored.dryrun.threshold.toFixed(1)} A`;
+          document.getElementById('revDryDelay').textContent = `${stored.dryrun.tripDelay || 15} sec`;
+          document.getElementById('revDryRec').textContent = `${stored.dryrun.recoveryMinutes || 45} min auto-restart`;
+        }
+        if (stored.overload && stored.overload.currentLimit) {
+          document.getElementById('revMotorFlc').textContent = `${stored.overload.motorFlc || 8.4} A (${stored.overload.motorHp || 5.0} HP)`;
+          document.getElementById('revOverloadLimit').textContent = `${stored.overload.currentLimit.toFixed(1)} A`;
+          document.getElementById('revOverloadTime').textContent = `${stored.overload.tripTime || 8}s trip / ${stored.overload.coolingMinutes || 15}m rest`;
+        }
+        if (stored.voltage && stored.voltage.overVoltage) {
+          document.getElementById('revVoltWindow').textContent = `${stored.voltage.underVoltage} V – ${stored.voltage.overVoltage} V`;
+          document.getElementById('revVoltDelay').textContent = `${stored.voltage.tripDelay || 3} sec`;
+          document.getElementById('revVoltRec').textContent = `${stored.voltage.recoveryDelay || 15} sec`;
+        }
+        if (stored.phase && stored.phase.imbalance) {
+          document.getElementById('revPhaseImb').textContent = `${stored.phase.imbalance} % (${stored.phase.tripDelay || 2}s delay)`;
+        }
+        if (stored.advanced) {
+          const m = stored.advanced.starterMode;
+          document.getElementById('revStarterMode').textContent = m === 'auto' ? 'Auto Mode' : m === 'cyclic' ? 'Cyclic Mode' : 'Manual';
+          document.getElementById('revSurgeDelay').textContent = `${stored.advanced.surgeDelay || 60} sec`;
+          document.getElementById('revSdDelay').textContent = `${stored.advanced.starDeltaDelay || 6} sec`;
+          document.getElementById('revCyclic').textContent = `${stored.advanced.cyclicRun || 45}m Run / ${stored.advanced.cyclicRest || 30}m Rest`;
+        }
+      } catch(e) {}
+
+      // Apply Button opens confirmation modal
+      const applyBtn = document.getElementById('apply-btn');
+      const confirmModal = document.getElementById('confirm-modal');
+      const modalBox = document.getElementById('modal-box');
+      const cancelBtn = document.getElementById('modal-cancel-btn');
+      const confirmBtn = document.getElementById('modal-confirm-btn');
+      const toast = document.getElementById('toast');
+      const toastText = document.getElementById('toast-text');
+
+      function openModal() {
+        confirmModal.classList.remove('hidden');
+        confirmModal.classList.add('flex');
+        setTimeout(() => {
+          modalBox.classList.remove('scale-95');
+          modalBox.classList.add('scale-100');
+        }, 10);
+      }
+
+      function closeModal() {
+        modalBox.classList.remove('scale-100');
+        modalBox.classList.add('scale-95');
+        setTimeout(() => {
+          confirmModal.classList.remove('flex');
+          confirmModal.classList.add('hidden');
+        }, 150);
+      }
+
+      applyBtn.addEventListener('click', openModal);
+      cancelBtn.addEventListener('click', closeModal);
+
+      confirmBtn.addEventListener('click', () => {
+        closeModal();
+        toastText.textContent = 'Settings successfully applied to Auto Starter!';
+        toast.classList.remove('opacity-0', 'pointer-events-none', '-translate-y-4');
+        toast.classList.add('opacity-100', 'translate-y-0');
+        setTimeout(() => {
+          toast.classList.add('opacity-0', 'pointer-events-none', '-translate-y-4');
+          toast.classList.remove('opacity-100', 'translate-y-0');
+          // Navigate back to details or control screen
+          if (window.parent && window.parent !== window) {
+            window.parent.postMessage({ type: 'motor-app-navigate', screen: 'control' }, '*');
+          } else {
+            location.href = '../motor_control_screen/code.html';
+          }
+        }, 2000);
+      });
+    });
+  </script>
+  <script src="../app-runtime.js"></script>
+</body>
+</html>

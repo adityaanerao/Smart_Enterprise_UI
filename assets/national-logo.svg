@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 250" width="100%" height="100%">
+  <defs>
+    <!-- Rich vibrant National Brand Red -->
+    <linearGradient id="nationalRed" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#E81D24"/>
+      <stop offset="100%" stop-color="#CC1319"/>
+    </linearGradient>
+    <!-- Soft premium badge shadow -->
+    <filter id="badgeShadow" x="-10%" y="-10%" width="120%" height="125%" filterUnits="userSpaceOnUse">
+      <feDropShadow dx="0" dy="8" stdDeviation="12" flood-color="rgba(217, 29, 36, 0.35)"/>
+      <feDropShadow dx="0" dy="2" stdDeviation="4" flood-color="rgba(0, 0, 0, 0.2)"/>
+    </filter>
+  </defs>
+
+  <!-- Red Rounded Badge Background -->
+  <rect x="8" y="8" width="344" height="234" rx="26" fill="url(#nationalRed)" filter="url(#badgeShadow)"/>
+
+  <!-- Inner border highlight -->
+  <rect x="9.5" y="9.5" width="341" height="231" rx="24.5" fill="none" stroke="rgba(255, 255, 255, 0.2)" stroke-width="1.5"/>
+
+  <!-- Official National 4-Petal Dual-Wing Emblem -->
+  <g transform="translate(180, 134)" fill="#FFFFFF">
+    <!-- Right Inner Petal -->
+    <path d="M 0 0 C 8 -22 22 -62 36 -96 C 42 -99 52 -92 56 -84 C 42 -60 22 -28 0 0 Z"/>
+    
+    <!-- Right Outer Petal -->
+    <path d="M 3 0 C 24 -18 56 -48 88 -66 C 82 -76 68 -84 56 -86 C 36 -62 18 -26 3 0 Z"/>
+
+    <!-- Left Inner Petal (Mirrored) -->
+    <path d="M 0 0 C -8 -22 -22 -62 -36 -96 C -42 -99 -52 -92 -56 -84 C -42 -60 -22 -28 0 0 Z"/>
+
+    <!-- Left Outer Petal (Mirrored) -->
+    <path d="M -3 0 C -24 -18 -56 -48 -88 -66 C -82 -76 -68 -84 -56 -86 C -36 -62 -18 -26 -3 0 Z"/>
+  </g>
+
+  <!-- TM Trademark -->
+  <text x="306" y="118" fill="#FFFFFF" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Arial Black', sans-serif" font-size="19" font-weight="900" letter-spacing="0.5">TM</text>
+
+  <!-- Wordmark 'National' -->
+  <text x="180" y="196" text-anchor="middle" fill="#FFFFFF" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Arial Black', sans-serif" font-size="64" font-weight="900" letter-spacing="-1.2px">National</text>
+
+  <!-- Clean Horizontal Underline -->
+  <rect x="28" y="210" width="304" height="6" rx="3" fill="#FFFFFF"/>
+</svg>

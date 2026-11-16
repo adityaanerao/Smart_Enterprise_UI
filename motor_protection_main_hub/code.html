@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport"/>
+  <title>Motor Protection Hub - National Smart Motor Control</title>
+  <!-- Google Fonts: Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              red: '#D81921',
+              darkRed: '#B91219',
+              lightRed: '#FEECEC',
+              emerald: '#10B981',
+              darkEmerald: '#059669',
+            }
+          },
+          fontFamily: {
+            sans: ['"Inter"', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body {
+      -webkit-tap-highlight-color: transparent;
+      user-select: none;
+    }
+    .touch-press {
+      transition: transform 0.12s ease, box-shadow 0.12s ease;
+    }
+    .touch-press:active {
+      transform: scale(0.97);
+    }
+  </style>
+</head>
+<body class="bg-slate-100 flex justify-center items-start min-h-screen p-0 sm:py-4 text-slate-800 antialiased font-sans select-none">
+  <!-- Mobile Device Frame -->
+  <main class="w-full max-w-md bg-[#F4F6F9] min-h-screen flex flex-col overflow-hidden relative pb-28 shadow-2xl">
+    
+    <!-- Top Header Bar (National Crimson) -->
+    <header class="bg-gradient-to-r from-[#D81921] via-[#D81921] to-[#B91219] px-4 pt-4 pb-8 text-white relative shadow-md">
+      <div class="flex items-center justify-between mb-2">
+        <!-- Brand Logo & Identity in Left Corner (No Back Arrow on Tab Screen) -->
+        <div class="flex items-center space-x-2.5 cursor-pointer btn-tactile" data-route="home">
+          <div class="bg-white rounded-lg p-1 shadow-xs flex items-center justify-center" style="width: 38px; height: 38px;">
+            <img src="../assets/national-logo.svg" alt="National Logo" class="h-6 w-auto object-contain">
+          </div>
+          <div>
+            <span class="text-base font-black tracking-tight text-white block leading-tight">National</span>
+            <span class="text-[11px] font-medium text-white/90 block leading-tight">Auto Starter Protection</span>
+          </div>
+        </div>
+
+        <!-- Right Quick Status Pill -->
+        <div class="flex items-center space-x-1.5 bg-white/15 border border-white/25 rounded-full px-2.5 py-1 text-[11px] font-bold text-white">
+          <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
+          <span>Guarded</span>
+        </div>
+      </div>
+      <div class="text-center px-4 pt-1">
+        <h1 class="text-2xl font-black tracking-tight text-white leading-tight">Motor Protection</h1>
+        <p class="text-red-100 text-xs mt-0.5 font-medium">Automatic Starter Guard &amp; Electrical Safety Hub</p>
+      </div>
+    </header>
+
+    <!-- Main Content Area -->
+    <div class="flex-1 px-4 -mt-4 space-y-3.5 overflow-y-auto">
+      
+      <!-- Motor Summary Header Card -->
+      <section data-route="details" class="bg-white rounded-2xl p-3.5 shadow-sm border border-slate-100 flex items-center justify-between cursor-pointer touch-press hover:shadow-md transition-all" id="motorCard">
+        <div class="flex items-center space-x-3.5">
+          <div class="w-12 h-12 rounded-2xl bg-red-50 overflow-hidden flex-shrink-0 border border-red-100 flex items-center justify-center p-1.5">
+            <img alt="Submersible Pump Motor" class="w-full h-full object-contain mix-blend-multiply" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA0c1XvcJ0wcwXZDh7SduKk0hqI58ImUN-1msRA1vbCpAmRklzS-uxrfc1frJyunucK6DZfZbnmW1QzXbOVAgQLt-lsmk4QFJh0UKJD5rjnN2SnNs5z3UjHEInXcS8cjdsxWYNLziLf0k9h3qn44JYkNihC7SgTcqcARcV0SZzl4mrV7wmsIipnH3Kdd3iJq68nh2ni1LaYdYj5grNG_pMoY5iOPzwbTRx1YRdlWGOb_J5BZZyCCf7i"/>
+          </div>
+          <div>
+            <div class="flex items-center gap-1.5">
+              <h2 class="font-extrabold text-slate-900 text-base leading-tight">Main Pump (5.0 HP)</h2>
+            </div>
+            <p class="text-xs text-slate-500 font-medium mt-0.5">3-Phase 415V • Borewell Sector 4</p>
+          </div>
+        </div>
+        <div class="flex items-center">
+          <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-bold bg-emerald-50 text-emerald-700 border border-emerald-200 shadow-xs">
+            <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 mr-1.5 animate-pulse"></span>
+            Auto Online
+          </span>
+        </div>
+      </section>
+
+      <!-- Segmented Control Switcher -->
+      <nav aria-label="Protection Tabs" class="bg-slate-200/80 p-1 rounded-xl flex items-center shadow-inner">
+        <button class="flex-1 py-2 text-xs font-bold rounded-lg bg-[#D81921] text-white shadow-sm transition-all text-center cursor-pointer" id="tabProtection" type="button">
+          Protection Settings
+        </button>
+        <button data-route="advanced" class="flex-1 py-2 text-xs font-medium text-slate-600 hover:text-slate-900 rounded-lg transition-all text-center cursor-pointer" id="tabAdvanced" type="button">
+          Auto Starter Logic
+        </button>
+      </nav>
+
+      <!-- Settings Action List -->
+      <section class="space-y-2.5 pt-0.5" id="settingsList">
+        
+        <!-- 1. Dry-Run Protection -->
+        <article data-route="dryrun" class="setting-card bg-white rounded-2xl p-3.5 shadow-sm border border-slate-100 flex items-center justify-between cursor-pointer hover:border-slate-200 touch-press transition-all relative overflow-hidden">
+          <div class="flex items-center space-x-3.5 pr-2">
+            <div class="w-11 h-11 rounded-2xl bg-sky-50 flex items-center justify-center flex-shrink-0 text-sky-600">
+              <svg class="w-6 h-6 fill-current" viewBox="0 0 24 24">
+                <path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"></path>
+              </svg>
+            </div>
+            <div>
+              <div class="flex items-center gap-1.5">
+                <h3 class="text-sm font-bold text-slate-900 leading-snug">Dry-Run Protection</h3>
+                <span class="text-[10px] font-bold text-sky-700 bg-sky-50 px-1.5 py-0.2 rounded" id="dryRunBadge">5.2 A</span>
+              </div>
+              <p class="text-[11px] text-slate-500 leading-tight mt-0.5" id="dryRunSub">Cutoff &lt; 5.2A • 45m well replenishment timer</p>
+            </div>
+          </div>
+          <div class="flex items-center space-x-2 flex-shrink-0">
+            <button class="toggle-pill inline-block px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-emerald-50 text-emerald-600 border border-emerald-200 active:scale-90 transition-transform cursor-pointer" data-target="dryrun" data-active="true" type="button">On</button>
+            <svg class="w-4 h-4 text-slate-400 stroke-[2.5]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path d="M8.25 4.5l7.5 7.5-7.5 7.5" stroke-linecap="round" stroke-linejoin="round"></path>
+            </svg>
+          </div>
+        </article>
+
+        <!-- 2. Overload Protection -->
+        <article data-route="overload" class="setting-card bg-white rounded-2xl p-3.5 shadow-sm border border-slate-100 flex items-center justify-between cursor-pointer hover:border-slate-200 touch-press transition-all relative overflow-hidden">
+          <div class="flex items-center space-x-3.5 pr-2">
+            <div class="w-11 h-11 rounded-2xl bg-amber-50 flex items-center justify-center flex-shrink-0 text-amber-600">
+              <svg class="w-6 h-6 fill-none stroke-current stroke-2" viewBox="0 0 24 24">
+                <circle cx="12" cy="12" r="9"></circle>
+                <path d="M12 12l3-3" stroke-linecap="round"></path>
+                <path d="M12 7v1M7 12h1M16 12h1" stroke-linecap="round"></path>
+              </svg>
+            </div>
+            <div>
+              <div class="flex items-center gap-1.5">
+                <h3 class="text-sm font-bold text-slate-900 leading-snug">Overload Protection</h3>
+                <span class="text-[10px] font-bold text-amber-700 bg-amber-50 px-1.5 py-0.2 rounded" id="overloadBadge">10.0 A</span>
+              </div>
+              <p class="text-[11px] text-slate-500 leading-tight mt-0.5" id="overloadSub">Thermal cutoff (120% FLC) • 15m cooling lock</p>
+            </div>
+          </div>
+          <div class="flex items-center space-x-2 flex-shrink-0">
+            <button class="toggle-pill inline-block px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-emerald-50 text-emerald-600 border border-emerald-200 active:scale-90 transition-transform cursor-pointer" data-target="overload" data-active="true" type="button">On</button>
+            <svg class="w-4 h-4 text-slate-400 stroke-[2.5]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path d="M8.25 4.5l7.5 7.5-7.5 7.5" stroke-linecap="round" stroke-linejoin="round"></path>
+            </svg>
+          </div>
+        </article>
+
+        <!-- 3. Voltage Protection -->
+        <article data-route="voltage" class="setting-card bg-white rounded-2xl p-3.5 shadow-sm border border-slate-100 flex items-center justify-between cursor-pointer hover:border-slate-200 touch-press transition-all relative overflow-hidden">
+          <div class="flex items-center space-x-3.5 pr-2">
+            <div class="w-11 h-11 rounded-2xl bg-purple-50 flex items-center justify-center flex-shrink-0 text-purple-600">
+              <svg class="w-6 h-6 fill-current" viewBox="0 0 24 24">
+                <path d="M13 2L3 14h8l-2 8 10-12h-8l2-8z"></path>
+              </svg>
+            </div>
+            <div>
+              <div class="flex items-center gap-1.5">
+                <h3 class="text-sm font-bold text-slate-900 leading-snug">Voltage Protection (3-Phase)</h3>
+                <span class="text-[10px] font-bold text-purple-700 bg-purple-50 px-1.5 py-0.2 rounded" id="voltageBadge">350 - 470V</span>
+              </div>
+              <p class="text-[11px] text-slate-500 leading-tight mt-0.5" id="voltageSub">415V Nominal • 3s trip • 15s power delay</p>
+            </div>
+          </div>
+          <div class="flex items-center space-x-2 flex-shrink-0">
+            <button class="toggle-pill inline-block px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-emerald-50 text-emerald-600 border border-emerald-200 active:scale-90 transition-transform cursor-pointer" data-target="voltage" data-active="true" type="button">On</button>
+            <svg class="w-4 h-4 text-slate-400 stroke-[2.5]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path d="M8.25 4.5l7.5 7.5-7.5 7.5" stroke-linecap="round" stroke-linejoin="round"></path>
+            </svg>
+          </div>
+        </article>
+
+        <!-- 4. Phase Protection -->
+        <article data-route="phase" class="setting-card bg-white rounded-2xl p-3.5 shadow-sm border border-slate-100 flex items-center justify-between cursor-pointer hover:border-slate-200 touch-press transition-all relative overflow-hidden">
+          <div class="flex items-center space-x-3.5 pr-2">
+            <div class="w-11 h-11 rounded-2xl bg-rose-50 flex items-center justify-center flex-shrink-0 text-[#D81921]">
+              <svg class="w-6 h-6 stroke-current fill-none stroke-[2.2]" viewBox="0 0 24 24">
+                <path d="M4 12h2a3 3 0 013 3v0a3 3 0 003 3h0a3 3 0 003-3v0a3 3 0 013-3h2" stroke-linecap="round" stroke-linejoin="round"></path>
+                <path d="M4 7h2a3 3 0 013 3v0a3 3 0 003 3h0" stroke-linecap="round" stroke-linejoin="round"></path>
+              </svg>
+            </div>
+            <div>
+              <div class="flex items-center gap-1.5">
+                <h3 class="text-sm font-bold text-slate-900 leading-snug">Phase Protection (SPP)</h3>
+                <span class="text-[10px] font-bold text-rose-700 bg-rose-50 px-1.5 py-0.2 rounded" id="phaseBadge">SPP &lt; 1.5s</span>
+              </div>
+              <p class="text-[11px] text-slate-500 leading-tight mt-0.5" id="phaseSub">Single phasing, phase sequence &amp; 15% imbalance</p>
+            </div>
+          </div>
+          <div class="flex items-center space-x-2 flex-shrink-0">
+            <button class="toggle-pill inline-block px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-emerald-50 text-emerald-600 border border-emerald-200 active:scale-90 transition-transform cursor-pointer" data-target="phase" data-active="true" type="button">On</button>
+            <svg class="w-4 h-4 text-slate-400 stroke-[2.5]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path d="M8.25 4.5l7.5 7.5-7.5 7.5" stroke-linecap="round" stroke-linejoin="round"></path>
+            </svg>
+          </div>
+        </article>
+
+        <!-- 5. Advanced Auto Starter Settings -->
+        <article data-route="advanced" class="setting-card bg-white rounded-2xl p-3.5 shadow-sm border border-slate-100 flex items-center justify-between cursor-pointer hover:border-slate-200 touch-press transition-all relative overflow-hidden">
+          <div class="flex items-center space-x-3.5 pr-2">
+            <div class="w-11 h-11 rounded-2xl bg-blue-50 flex items-center justify-center flex-shrink-0 text-blue-600">
+              <svg class="w-6 h-6 fill-none stroke-current stroke-2" viewBox="0 0 24 24">
+                <path d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path>
+                <circle cx="12" cy="12" r="3"></circle>
+              </svg>
+            </div>
+            <div>
+              <div class="flex items-center gap-1.5">
+                <h3 class="text-sm font-bold text-slate-900 leading-snug">Auto Starter Logic &amp; Timers</h3>
+                <span class="text-[10px] font-bold text-blue-700 bg-blue-50 px-1.5 py-0.2 rounded" id="advancedBadge">Auto Mode</span>
+              </div>
+              <p class="text-[11px] text-slate-500 leading-tight mt-0.5" id="advancedSub">60s surge delay • Cyclic run/rest • 3 retries</p>
+            </div>
+          </div>
+          <div class="flex items-center flex-shrink-0">
+            <svg class="w-4 h-4 text-slate-400 stroke-[2.5]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path d="M8.25 4.5l7.5 7.5-7.5 7.5" stroke-linecap="round" stroke-linejoin="round"></path>
+            </svg>
+          </div>
+        </article>
+
+        <!-- 6. Review & Apply Settings -->
+        <article data-route="review" class="setting-card bg-gradient-to-r from-slate-900 to-slate-800 text-white rounded-2xl p-4 shadow-md flex items-center justify-between cursor-pointer touch-press hover:brightness-110 transition-all">
+          <div class="flex items-center space-x-3.5 pr-2">
+            <div class="w-11 h-11 rounded-2xl bg-white/10 flex items-center justify-center flex-shrink-0 text-emerald-400">
+              <svg class="w-6 h-6 stroke-current stroke-2 fill-none" viewBox="0 0 24 24">
+                <path d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+              </svg>
+            </div>
+            <div>
+              <h3 class="text-sm font-bold text-white leading-snug">Review &amp; Apply All Settings</h3>
+              <p class="text-[11px] text-slate-300 leading-tight mt-0.5">Commit safety thresholds to starter controller</p>
+            </div>
+          </div>
+          <div class="flex items-center flex-shrink-0 bg-white/20 p-1.5 rounded-xl">
+            <svg class="w-4 h-4 text-white stroke-[2.5]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path d="M8.25 4.5l7.5 7.5-7.5 7.5" stroke-linecap="round" stroke-linejoin="round"></path>
+            </svg>
+          </div>
+        </article>
+
+      </section>
+    </div>
+
+    <!-- ======================================================== -->
+    <!-- ANIMATED CURVED BOTTOM NAVIGATION BAR                     -->
+    <!-- ======================================================== -->
+    <nav class="curved-navbar-wrapper" data-purpose="bottom-tab-bar" style="--active-tab: 1;">
+      <div class="curved-navbar-body">
+        <!-- Sliding Dome & Elevated Circle -->
+        <div class="nav-sliding-indicator">
+          <svg class="nav-dome-svg" viewBox="0 0 100 26" preserveAspectRatio="none">
+            <path d="M 0,26 C 14,26 22,20 28,12 C 36,1 42,0 50,0 C 58,0 64,1 72,12 C 78,20 86,26 100,26 L 100,28 L 0,28 Z"></path>
+          </svg>
+          <div class="nav-floating-circle">
+            <span class="nav-floating-icon">
+              <svg fill="currentColor" viewBox="0 0 24 24"><path d="M19 13h-1V9a2 2 0 00-2-2h-1V5a1 1 0 00-1-1H9a1 1 0 00-1 1v2H7a2 2 0 00-2 2v4H4a1 1 0 00-1 1v4a1 1 0 001 1h1v1a1 1 0 001 1h12a1 1 0 001-1v-1h1a1 1 0 001-1v-4a1 1 0 00-1-1zm-9-6h4v2h-4V7zm6 11H8v-7h8v7z"></path></svg>
+            </span>
+          </div>
+        </div>
+
+        <!-- 5 Standard Navigation Tabs -->
+        <div class="nav-tabs-row">
+          <!-- 0: Home -->
+          <a class="nav-tab-item" data-index="0" data-route="home" href="#">
+            <div class="nav-tab-icon-wrap">
+              <svg fill="currentColor" viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"></path></svg>
+            </div>
+            <span class="nav-tab-label">Home</span>
+          </a>
+
+          <!-- 1: Motors (Active) -->
+          <a class="nav-tab-item active" data-index="1" data-route="motors" href="#">
+            <div class="nav-tab-icon-wrap">
+              <svg fill="currentColor" viewBox="0 0 24 24"><path d="M19 13h-1V9a2 2 0 00-2-2h-1V5a1 1 0 00-1-1H9a1 1 0 00-1 1v2H7a2 2 0 00-2 2v4H4a1 1 0 00-1 1v4a1 1 0 001 1h1v1a1 1 0 001 1h12a1 1 0 001-1v-1h1a1 1 0 001-1v-4a1 1 0 00-1-1zm-9-6h4v2h-4V7zm6 11H8v-7h8v7z"></path></svg>
+            </div>
+            <span class="nav-tab-label">Motors</span>
+          </a>
+
+          <!-- 2: Schedules -->
+          <a class="nav-tab-item" data-index="2" data-route="schedule" href="#">
+            <div class="nav-tab-icon-wrap">
+              <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+            </div>
+            <span class="nav-tab-label">Schedules</span>
+          </a>
+
+          <!-- 3: Analytics -->
+          <a class="nav-tab-item" data-index="3" data-route="analytics" href="#">
+            <div class="nav-tab-icon-wrap">
+              <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 013 19.875v-6.75zM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V8.625zM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V4.125z"></path></svg>
+            </div>
+            <span class="nav-tab-label">Analytics</span>
+          </a>
+
+          <!-- 4: Profile -->
+          <a class="nav-tab-item" data-index="4" data-route="profile" href="#">
+            <div class="nav-tab-icon-wrap">
+              <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z"></path></svg>
+            </div>
+            <span class="nav-tab-label">Profile</span>
+          </a>
+        </div>
+
+        <!-- Home Indicator -->
+        <div class="nav-home-indicator"></div>
+      </div>
+    </nav>
+
+    <!-- Toast Notification -->
+    <div class="fixed top-5 left-1/2 -translate-x-1/2 z-50 bg-slate-900/95 text-white px-4 py-2.5 rounded-full text-xs font-semibold shadow-xl flex items-center space-x-2 transition-all duration-300 opacity-0 pointer-events-none -translate-y-4" id="toast">
+      <svg class="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+        <path d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round"></path>
+      </svg>
+      <span id="toastMsg">Action triggered</span>
+    </div>
+
+  </main>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      // Sync badges from stored configuration
+      try {
+        const stored = JSON.parse(localStorage.getItem('nationalMotorProtectionSettings') || '{}');
+        if (stored.dryrun && stored.dryrun.threshold) {
+          document.getElementById('dryRunBadge').textContent = `${stored.dryrun.threshold.toFixed(1)} A`;
+          document.getElementById('dryRunSub').textContent = `Cutoff < ${stored.dryrun.threshold.toFixed(1)}A • ${stored.dryrun.recoveryMinutes || 45}m well replenishment`;
+        }
+        if (stored.overload && stored.overload.currentLimit) {
+          document.getElementById('overloadBadge').textContent = `${stored.overload.currentLimit.toFixed(1)} A`;
+          document.getElementById('overloadSub').textContent = `Thermal cutoff (${stored.overload.currentLimit.toFixed(1)}A) • ${stored.overload.coolingMinutes || 15}m cooling lock`;
+        }
+        if (stored.voltage && stored.voltage.overVoltage) {
+          document.getElementById('voltageBadge').textContent = `${stored.voltage.underVoltage}-${stored.voltage.overVoltage}V`;
+          document.getElementById('voltageSub').textContent = `3-Phase 415V • ${stored.voltage.tripDelay || 3}s trip • ${stored.voltage.recoveryDelay || 15}s power delay`;
+        }
+        if (stored.phase && stored.phase.imbalance) {
+          document.getElementById('phaseBadge').textContent = `Imb ${stored.phase.imbalance}%`;
+          document.getElementById('phaseSub').textContent = `Single phasing (< 1.5s), phase reversal & ${stored.phase.imbalance}% imbalance`;
+        }
+        if (stored.advanced && stored.advanced.starterMode) {
+          const m = stored.advanced.starterMode;
+          document.getElementById('advancedBadge').textContent = m === 'auto' ? 'Auto Mode' : m === 'cyclic' ? 'Cyclic Mode' : 'Manual';
+        }
+      } catch(e) {}
+
+      // Quick toggle buttons on cards
+      document.querySelectorAll('.toggle-pill').forEach(pill => {
+        pill.addEventListener('click', (e) => {
+          e.stopPropagation();
+          const target = pill.getAttribute('data-target');
+          const isActive = pill.getAttribute('data-active') === 'true';
+          const nextState = !isActive;
+          pill.setAttribute('data-active', String(nextState));
+
+          if (nextState) {
+            pill.textContent = 'On';
+            pill.className = 'toggle-pill inline-block px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-emerald-50 text-emerald-600 border border-emerald-200 active:scale-90 transition-transform cursor-pointer';
+          } else {
+            pill.textContent = 'Off';
+            pill.className = 'toggle-pill inline-block px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-slate-100 text-slate-500 border border-slate-200 active:scale-90 transition-transform cursor-pointer';
+          }
+
+          // Persist toggle change
+          try {
+            const stored = JSON.parse(localStorage.getItem('nationalMotorProtectionSettings') || '{}');
+            if (!stored[target]) stored[target] = {};
+            stored[target].isEnabled = nextState;
+            localStorage.setItem('nationalMotorProtectionSettings', JSON.stringify(stored));
+          } catch(err) {}
+
+          const toast = document.getElementById('toast');
+          const toastMsg = document.getElementById('toastMsg');
+          toastMsg.textContent = `${target.toUpperCase()} protection ${nextState ? 'enabled' : 'disabled'}`;
+          toast.classList.remove('opacity-0', 'pointer-events-none', '-translate-y-4');
+          toast.classList.add('opacity-100', 'translate-y-0');
+          setTimeout(() => {
+            toast.classList.add('opacity-0', 'pointer-events-none', '-translate-y-4');
+            toast.classList.remove('opacity-100', 'translate-y-0');
+          }, 2000);
+        });
+      });
+    });
+  </script>
+  <script src="../app-runtime.js"></script>
+</body>
+</html>

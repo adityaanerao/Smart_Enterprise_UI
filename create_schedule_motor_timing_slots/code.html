@@ -1,0 +1,654 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport"/>
+  <title>National - Create Motor Schedule</title>
+  <!-- Google Fonts: Inter (Clear, Simple, Standard UI Font) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <!-- Tailwind CSS CDN with forms and container queries plugins -->
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              red: '#D81921',
+              darkRed: '#B91219',
+              green: '#10B981',
+              darkGreen: '#059669',
+            }
+          },
+          fontFamily: {
+            sans: ['"Inter"', '-apple-system', 'BlinkMacSystemFont', '"Segoe UI"', 'Roboto', 'Helvetica', 'Arial', 'sans-serif'],
+          },
+          boxShadow: {
+            card: '0 4px 18px -2px rgba(15, 23, 42, 0.06), 0 2px 6px -1px rgba(15, 23, 42, 0.04)',
+            nav: '0 -4px 20px rgba(0, 0, 0, 0.06)',
+            tactileGreen: '0 6px 18px rgba(16, 185, 129, 0.35)',
+            tactileRed: '0 6px 18px rgba(216, 25, 33, 0.35)',
+          }
+        }
+      }
+    }
+  </script>
+  <!-- Modern Dial & App Animations -->
+  <style data-purpose="schedule-screen-styles">
+    @keyframes cardEntrance {
+      from { opacity: 0; transform: translateY(14px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .animate-entrance {
+      animation: cardEntrance 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+    .clock-dial-face {
+      background: radial-gradient(circle at center, #ffffff 60%, #f4f8f6 100%);
+      user-select: none;
+      touch-action: none;
+    }
+    .btn-tactile {
+      transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .btn-tactile:active {
+      transform: scale(0.96);
+    }
+    .clock-hour-number {
+      transition: all 0.18s ease;
+      cursor: pointer;
+    }
+    .clock-hour-number:hover {
+      color: #10B981;
+      font-weight: 900;
+      transform: scale(1.15);
+    }
+    .clock-hand-line {
+      transform-origin: bottom center;
+      transition: transform 0.22s cubic-bezier(0.34, 1.45, 0.64, 1);
+    }
+    .no-scrollbar::-webkit-scrollbar { display: none; }
+    .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+  </style>
+</head>
+<body class="bg-slate-100 flex justify-center min-h-screen text-slate-800 antialiased selection:bg-emerald-200">
+
+<!-- Mobile Device Screen Container -->
+<div class="w-full max-w-[440px] min-h-screen bg-[#F4F6F9] flex flex-col relative overflow-x-hidden pb-24">
+
+  <!-- ======================================================== -->
+  <!-- BEGIN: Unified Top App Header with Official National Logo -->
+  <!-- ======================================================== -->
+  <header class="bg-[#D81921] text-white px-4 py-2.5 flex items-center justify-between shadow-md sticky top-0 z-40">
+    <!-- Brand Logo & Identity in Left Corner (No Back Arrow on Tab Screen) -->
+    <div class="flex items-center space-x-2.5 cursor-pointer btn-tactile" data-route="home">
+      <div class="bg-white rounded-lg p-1 shadow-xs flex items-center justify-center" style="width: 38px; height: 38px;">
+        <img src="../assets/national-logo.svg" alt="National Logo" class="h-6 w-auto object-contain">
+      </div>
+      <div>
+        <span class="text-base font-black tracking-tight text-white block leading-tight">Motor Schedule</span>
+        <span class="text-[11px] font-medium text-white/90 block leading-tight">Automated Timing Slots</span>
+      </div>
+    </div>
+
+    <!-- Quick Reset Schedule Icon -->
+    <button id="btnResetSchedule" aria-label="Reset Times" class="btn-tactile p-1.5 -mr-1 text-white hover:bg-white/15 rounded-full transition-all cursor-pointer" type="button">
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+      </svg>
+    </button>
+  </header>
+  <!-- END: TopBrandHeader -->
+
+  <!-- ======================================================== -->
+  <!-- BEGIN: Clean Sub-Header & Inline Target Motor Selector   -->
+  <!-- ======================================================== -->
+  <section class="px-4 pt-3.5 pb-2 flex items-center justify-between animate-entrance" style="animation-delay: 0.05s;">
+    <div>
+      <div class="flex items-center gap-1.5">
+        <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+        <span class="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Automated Timer</span>
+      </div>
+      <h1 class="text-xl font-black text-slate-900 tracking-tight leading-tight mt-0.5">Create Schedule</h1>
+    </div>
+
+    <!-- Target Motor Dropdown Card -->
+    <div class="flex items-center gap-2 bg-white px-2.5 py-1.5 rounded-2xl shadow-card border border-slate-200/80">
+      <img id="selectedMotorImg" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA0c1XvcJ0wcwXZDh7SduKk0hqI58ImUN-1msRA1vbCpAmRklzS-uxrfc1frJyunucK6DZfZbnmW1QzXbOVAgQLt-lsmk4QFJh0UKJD5rjnN2SnNs5z3UjHEInXcS8cjdsxWYNLziLf0k9h3qn44JYkNihC7SgTcqcARcV0SZzl4mrV7wmsIipnH3Kdd3iJq68nh2ni1LaYdYj5grNG_pMoY5iOPzwbTRx1YRdlWGOb_J5BZZyCCf7i" alt="Motor Thumbnail" class="w-7 h-7 object-contain mix-blend-multiply flex-shrink-0">
+      <select id="selectMotorTarget" class="bg-transparent font-black text-slate-800 text-xs focus:outline-none cursor-pointer pr-1 border-none py-0 leading-tight">
+        <option value="main" selected>Main Pump (5.0 HP)</option>
+        <option value="borewell">Borewell Motor (7.5 HP)</option>
+        <option value="field1">Field Motor 1 (3.0 HP)</option>
+        <option value="field2">Field Motor 2 (5.0 HP)</option>
+      </select>
+    </div>
+  </section>
+
+  <!-- ======================================================== -->
+  <!-- BEGIN: Main Form Cards Container                          -->
+  <!-- ======================================================== -->
+  <main class="flex-1 px-3.5 space-y-3 relative z-20">
+
+    <!-- 1. Consolidated Schedule Label & Fast Preset Chips Row -->
+    <section class="bg-white rounded-2xl p-2.5 px-3.5 shadow-card border border-slate-100 flex items-center justify-between gap-2.5 animate-entrance" style="animation-delay: 0.1s;">
+      <!-- Editable Label -->
+      <div class="flex items-center gap-2 flex-1 min-w-0">
+        <span class="text-sm">🏷️</span>
+        <input id="inputScheduleName" class="w-full bg-transparent border-none p-0 text-xs font-bold text-slate-900 focus:outline-none placeholder-slate-400 truncate" type="text" value="Morning Watering Slot">
+      </div>
+
+      <!-- Compact Presets Pills -->
+      <div class="flex items-center gap-1 flex-shrink-0">
+        <button type="button" class="btn-preset-time btn-tactile px-2.5 py-1 rounded-xl text-[10px] font-extrabold bg-emerald-50 text-emerald-800 border border-emerald-200" data-start="6" data-start-ampm="AM" data-stop="10" data-stop-ampm="AM" data-name="Morning Irrigation">
+          6–10 AM
+        </button>
+        <button type="button" class="btn-preset-time btn-tactile px-2.5 py-1 rounded-xl text-[10px] font-bold bg-slate-50 text-slate-600 border border-slate-200" data-start="2" data-start-ampm="PM" data-stop="5" data-stop-ampm="PM" data-name="Afternoon Cycle">
+          2–5 PM
+        </button>
+        <button type="button" class="btn-preset-time btn-tactile px-2.5 py-1 rounded-xl text-[10px] font-bold bg-slate-50 text-slate-600 border border-slate-200" data-start="10" data-start-ampm="PM" data-stop="2" data-stop-ampm="AM" data-name="Night Drip Slot">
+          10 PM–2 AM
+        </button>
+      </div>
+    </section>
+
+    <!-- ======================================================== -->
+    <!-- 2. THE HERO ANALOG CLOCK TIME PICKER CARD                 -->
+    <!-- ======================================================== -->
+    <section class="bg-white rounded-3xl p-3.5 shadow-card border border-slate-100 space-y-3 animate-entrance" style="animation-delay: 0.15s;" data-purpose="interactive-clock-section">
+      
+      <!-- Top Title & Live Duration Badge -->
+      <div class="flex items-center justify-between">
+        <div>
+          <h2 class="text-xs font-black text-slate-900 flex items-center gap-1.5 uppercase tracking-wide">
+            <span>⏱️</span>
+            <span>Set Clock Time</span>
+          </h2>
+          <p class="text-[11px] text-slate-500 font-medium">Tap numbers on dial to set time</p>
+        </div>
+
+        <!-- Live Calculated Duration Badge -->
+        <div id="badgeDuration" class="bg-emerald-50 border border-emerald-200 text-emerald-800 px-3 py-1 rounded-full text-xs font-black shadow-xs flex items-center gap-1">
+          <span>Duration: 4h 0m</span>
+        </div>
+      </div>
+
+      <!-- Start vs Stop Mode Selector Tabs -->
+      <div class="grid grid-cols-2 gap-2 p-1 bg-slate-100/90 rounded-2xl">
+        <!-- Start Time Tab (Active by default) -->
+        <button id="tabModeStart" type="button" class="btn-tactile py-2 px-3 rounded-xl font-black text-xs flex flex-col items-center justify-center transition-all bg-white text-emerald-800 shadow-sm border border-emerald-300">
+          <span class="text-[9px] uppercase tracking-wider text-emerald-600 font-extrabold">1. START TIME</span>
+          <div class="flex items-center gap-1.5 mt-0.5">
+            <span id="labelStartTime" class="text-base font-black">06:00</span>
+            <span id="ampmStartPill" class="text-[10px] px-1.5 py-0.2 bg-emerald-100 text-emerald-800 rounded-md font-black cursor-pointer hover:bg-emerald-200" onclick="event.stopPropagation(); window.toggleAmPm('start');">AM</span>
+          </div>
+        </button>
+
+        <!-- Stop Time Tab -->
+        <button id="tabModeStop" type="button" class="btn-tactile py-2 px-3 rounded-xl font-bold text-xs flex flex-col items-center justify-center transition-all bg-transparent text-slate-600 hover:text-slate-900 border border-transparent">
+          <span class="text-[9px] uppercase tracking-wider text-slate-400 font-extrabold">2. STOP TIME</span>
+          <div class="flex items-center gap-1.5 mt-0.5">
+            <span id="labelStopTime" class="text-base font-black">10:00</span>
+            <span id="ampmStopPill" class="text-[10px] px-1.5 py-0.2 bg-slate-200 text-slate-700 rounded-md font-black cursor-pointer hover:bg-slate-300" onclick="event.stopPropagation(); window.toggleAmPm('stop');">AM</span>
+          </div>
+        </button>
+      </div>
+
+      <!-- ============================================== -->
+      <!-- Interactive Analog Clock Dial Face             -->
+      <!-- ============================================== -->
+      <div class="relative py-1 flex flex-col items-center justify-center">
+        
+        <!-- Clock Container (230px wide, perfect viewport proportion) -->
+        <div id="clockContainer" class="relative w-[230px] h-[230px] rounded-full clock-dial-face border-4 border-slate-200/90 shadow-inner flex items-center justify-center overflow-hidden">
+          
+          <!-- Dynamic Shaded SVG Pie Wedge between Start and Stop Hands -->
+          <svg id="clockArcSvg" class="absolute inset-0 w-full h-full pointer-events-none" viewBox="0 0 230 230">
+            <path id="clockArcPath" d="" fill="rgba(16, 185, 129, 0.16)"></path>
+          </svg>
+
+          <!-- Clock Center Pivot -->
+          <div class="w-3.5 h-3.5 rounded-full bg-slate-900 z-30 shadow-md"></div>
+          <div class="w-1.5 h-1.5 rounded-full bg-white z-40"></div>
+
+          <!-- Start Hand Line (Green) with Sleek Ring Reticle (No overlapping numbers!) -->
+          <div id="handStartLine" class="clock-hand-line absolute top-1/2 left-1/2 w-1.5 h-[80px] bg-emerald-600 rounded-full origin-top -translate-x-1/2 z-10 shadow-sm" style="transform: translate(-50%, 0) rotate(180deg);">
+            <!-- Target Circle Ring that nicely frames the dial number -->
+            <div class="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2 w-7 h-7 rounded-full border-2 border-emerald-600 bg-emerald-500/20 shadow-md pointer-events-none"></div>
+          </div>
+
+          <!-- Stop Hand Line (Rose/Red) with Sleek Ring Reticle -->
+          <div id="handStopLine" class="clock-hand-line absolute top-1/2 left-1/2 w-1.5 h-[74px] bg-rose-500 rounded-full origin-top -translate-x-1/2 z-10 shadow-sm" style="transform: translate(-50%, 0) rotate(300deg);">
+            <!-- Target Circle Ring that nicely frames the dial number -->
+            <div class="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2 w-7 h-7 rounded-full border-2 border-rose-500 bg-rose-500/20 shadow-md pointer-events-none"></div>
+          </div>
+
+          <!-- Dial Numbers (1 to 12) positioned circular -->
+          <!-- 12 -->
+          <button type="button" class="clock-hour-number absolute top-2 left-1/2 -translate-x-1/2 w-7 h-7 rounded-full flex items-center justify-center font-bold text-xs text-slate-700 z-20" data-hour="12">12</button>
+          <!-- 1 -->
+          <button type="button" class="clock-hour-number absolute top-5 right-11 w-7 h-7 rounded-full flex items-center justify-center font-bold text-xs text-slate-700 z-20" data-hour="1">1</button>
+          <!-- 2 -->
+          <button type="button" class="clock-hour-number absolute top-13 right-5 w-7 h-7 rounded-full flex items-center justify-center font-bold text-xs text-slate-700 z-20" data-hour="2">2</button>
+          <!-- 3 -->
+          <button type="button" class="clock-hour-number absolute top-1/2 right-2 -translate-y-1/2 w-7 h-7 rounded-full flex items-center justify-center font-bold text-xs text-slate-700 z-20" data-hour="3">3</button>
+          <!-- 4 -->
+          <button type="button" class="clock-hour-number absolute bottom-13 right-5 w-7 h-7 rounded-full flex items-center justify-center font-bold text-xs text-slate-700 z-20" data-hour="4">4</button>
+          <!-- 5 -->
+          <button type="button" class="clock-hour-number absolute bottom-5 right-11 w-7 h-7 rounded-full flex items-center justify-center font-bold text-xs text-slate-700 z-20" data-hour="5">5</button>
+          <!-- 6 -->
+          <button type="button" class="clock-hour-number absolute bottom-2 left-1/2 -translate-x-1/2 w-7 h-7 rounded-full flex items-center justify-center font-bold text-xs text-slate-700 z-20" data-hour="6">6</button>
+          <!-- 7 -->
+          <button type="button" class="clock-hour-number absolute bottom-5 left-11 w-7 h-7 rounded-full flex items-center justify-center font-bold text-xs text-slate-700 z-20" data-hour="7">7</button>
+          <!-- 8 -->
+          <button type="button" class="clock-hour-number absolute bottom-13 left-5 w-7 h-7 rounded-full flex items-center justify-center font-bold text-xs text-slate-700 z-20" data-hour="8">8</button>
+          <!-- 9 -->
+          <button type="button" class="clock-hour-number absolute top-1/2 left-2 -translate-y-1/2 w-7 h-7 rounded-full flex items-center justify-center font-bold text-xs text-slate-700 z-20" data-hour="9">9</button>
+          <!-- 10 -->
+          <button type="button" class="clock-hour-number absolute top-13 left-5 w-7 h-7 rounded-full flex items-center justify-center font-bold text-xs text-slate-700 z-20" data-hour="10">10</button>
+          <!-- 11 -->
+          <button type="button" class="clock-hour-number absolute top-5 left-11 w-7 h-7 rounded-full flex items-center justify-center font-bold text-xs text-slate-700 z-20" data-hour="11">11</button>
+
+        </div>
+
+        <!-- Instructional Guidance Tip -->
+        <div class="mt-2 text-center">
+          <p id="tipClockMode" class="text-[11px] font-bold text-emerald-700 bg-emerald-50 px-3 py-0.5 rounded-full border border-emerald-200">
+            👆 Tapping a clock number sets <span class="underline">START TIME</span>
+          </p>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- 3. Repeat Days Card -->
+    <section class="bg-white rounded-2xl p-3 px-3.5 shadow-card border border-slate-100 space-y-2 animate-entrance" style="animation-delay: 0.2s;" data-purpose="repeat-days">
+      <div class="flex items-center justify-between">
+        <div class="flex items-center gap-1.5">
+          <span class="text-sm">📅</span>
+          <h2 class="text-xs font-black text-slate-900">Repeat Days</h2>
+        </div>
+        <!-- Quick Select All Pill -->
+        <button id="btnToggleAllDays" type="button" class="text-[10px] font-bold text-emerald-700 hover:text-emerald-800 bg-emerald-50 px-2 py-0.5 rounded-md border border-emerald-200 cursor-pointer">
+          All Days
+        </button>
+      </div>
+
+      <!-- 7-Day Pill Buttons Row -->
+      <div class="grid grid-cols-7 gap-1" id="daysRow">
+        <button type="button" class="btn-day-toggle btn-tactile py-1.5 rounded-xl bg-emerald-600 text-white font-black text-xs shadow-xs text-center cursor-pointer" data-day="Mon">Mon</button>
+        <button type="button" class="btn-day-toggle btn-tactile py-1.5 rounded-xl bg-emerald-600 text-white font-black text-xs shadow-xs text-center cursor-pointer" data-day="Tue">Tue</button>
+        <button type="button" class="btn-day-toggle btn-tactile py-1.5 rounded-xl bg-emerald-600 text-white font-black text-xs shadow-xs text-center cursor-pointer" data-day="Wed">Wed</button>
+        <button type="button" class="btn-day-toggle btn-tactile py-1.5 rounded-xl bg-emerald-600 text-white font-black text-xs shadow-xs text-center cursor-pointer" data-day="Thu">Thu</button>
+        <button type="button" class="btn-day-toggle btn-tactile py-1.5 rounded-xl bg-emerald-600 text-white font-black text-xs shadow-xs text-center cursor-pointer" data-day="Fri">Fri</button>
+        <button type="button" class="btn-day-toggle btn-tactile py-1.5 rounded-xl bg-slate-100 text-slate-500 font-bold text-xs text-center cursor-pointer hover:bg-slate-200" data-day="Sat">Sat</button>
+        <button type="button" class="btn-day-toggle btn-tactile py-1.5 rounded-xl bg-slate-100 text-slate-500 font-bold text-xs text-center cursor-pointer hover:bg-slate-200" data-day="Sun">Sun</button>
+      </div>
+    </section>
+
+    <!-- 4. Quick Activation & Save Actions -->
+    <div class="pt-0.5 space-y-2 animate-entrance" style="animation-delay: 0.25s;">
+      <!-- Toggle Row -->
+      <div class="bg-white rounded-2xl p-2.5 px-3.5 shadow-card border border-slate-100 flex items-center justify-between">
+        <div class="flex items-center gap-2">
+          <span class="text-xs">⚡</span>
+          <span class="text-xs font-bold text-slate-800">Activate Immediately on Save</span>
+        </div>
+        <label class="relative inline-flex items-center cursor-pointer">
+          <input id="toggleEnableSchedule" checked class="sr-only peer" type="checkbox"/>
+          <div class="w-10 h-5.5 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-4.5 peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-4.5 after:w-4.5 after:transition-all peer-checked:bg-emerald-600"></div>
+        </label>
+      </div>
+
+      <!-- Primary Save Button -->
+      <button id="btnSaveSchedule" class="btn-tactile w-full py-3.5 px-4 bg-[#10B981] hover:bg-[#059669] active:bg-[#047857] text-white font-black rounded-2xl shadow-tactileGreen flex items-center justify-center gap-2 transition-all cursor-pointer" type="button">
+        <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"></path>
+        </svg>
+        <span class="text-sm tracking-wide">SAVE &amp; ACTIVATE SCHEDULE</span>
+      </button>
+    </div>
+
+  </main>
+
+  <!-- ======================================================== -->
+  <!-- ANIMATED CURVED BOTTOM NAVIGATION BAR                     -->
+  <!-- ======================================================== -->
+  <nav class="curved-navbar-wrapper" data-purpose="bottom-tab-bar" style="--active-tab: 2;">
+    <div class="curved-navbar-body">
+      <!-- Sliding Dome & Elevated Circle -->
+      <div class="nav-sliding-indicator">
+        <svg class="nav-dome-svg" viewBox="0 0 100 26" preserveAspectRatio="none">
+          <path d="M 0,26 C 14,26 22,20 28,12 C 36,1 42,0 50,0 C 58,0 64,1 72,12 C 78,20 86,26 100,26 L 100,28 L 0,28 Z"></path>
+        </svg>
+        <div class="nav-floating-circle">
+          <span class="nav-floating-icon">
+            <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+          </span>
+        </div>
+      </div>
+
+      <!-- 5 Standard Navigation Tabs -->
+      <div class="nav-tabs-row">
+        <!-- 0: Home -->
+        <a class="nav-tab-item" data-index="0" data-route="home" href="#">
+          <div class="nav-tab-icon-wrap">
+            <svg fill="currentColor" viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"></path></svg>
+          </div>
+          <span class="nav-tab-label">Home</span>
+        </a>
+
+        <!-- 1: Motors -->
+        <a class="nav-tab-item" data-index="1" data-route="motors" href="#">
+          <div class="nav-tab-icon-wrap">
+            <svg fill="currentColor" viewBox="0 0 24 24"><path d="M19 13h-1V9a2 2 0 00-2-2h-1V5a1 1 0 00-1-1H9a1 1 0 00-1 1v2H7a2 2 0 00-2 2v4H4a1 1 0 00-1 1v4a1 1 0 001 1h1v1a1 1 0 001 1h12a1 1 0 001-1v-1h1a1 1 0 001-1v-4a1 1 0 00-1-1zm-9-6h4v2h-4V7zm6 11H8v-7h8v7z"></path></svg>
+          </div>
+          <span class="nav-tab-label">Motors</span>
+        </a>
+
+        <!-- 2: Schedules (Active) -->
+        <a class="nav-tab-item active" data-index="2" data-route="schedule" href="#">
+          <div class="nav-tab-icon-wrap">
+            <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+          </div>
+          <span class="nav-tab-label">Schedules</span>
+        </a>
+
+        <!-- 3: Analytics -->
+        <a class="nav-tab-item" data-index="3" data-route="analytics" href="#">
+          <div class="nav-tab-icon-wrap">
+            <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 013 19.875v-6.75zM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V8.625zM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V4.125z"></path></svg>
+          </div>
+          <span class="nav-tab-label">Analytics</span>
+        </a>
+
+        <!-- 4: Profile -->
+        <a class="nav-tab-item" data-index="4" data-route="profile" href="#">
+          <div class="nav-tab-icon-wrap">
+            <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z"></path></svg>
+          </div>
+          <span class="nav-tab-label">Profile</span>
+        </a>
+      </div>
+
+      <!-- Home Indicator -->
+      <div class="nav-home-indicator"></div>
+    </div>
+  </nav>
+
+</div>
+
+<!-- Core Runtime Script for App Navigation and Dialogs -->
+<script src="../app-runtime.js"></script>
+
+<!-- Interactive Analog Clock Engine & Form Controller -->
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    // State variables
+    let activeMode = 'start'; // 'start' or 'stop'
+    let startHour = 6;
+    let startAmPm = 'AM';
+    let stopHour = 10;
+    let stopAmPm = 'AM';
+
+    // Elements
+    const tabStart = document.getElementById('tabModeStart');
+    const tabStop = document.getElementById('tabModeStop');
+    const labelStartTime = document.getElementById('labelStartTime');
+    const labelStopTime = document.getElementById('labelStopTime');
+    const ampmStartPill = document.getElementById('ampmStartPill');
+    const ampmStopPill = document.getElementById('ampmStopPill');
+    const badgeDuration = document.getElementById('badgeDuration');
+    const tipClockMode = document.getElementById('tipClockMode');
+
+    const handStartLine = document.getElementById('handStartLine');
+    const handStopLine = document.getElementById('handStopLine');
+    const clockArcPath = document.getElementById('clockArcPath');
+
+    const clockNumbers = document.querySelectorAll('.clock-hour-number');
+    const presetButtons = document.querySelectorAll('.btn-preset-time');
+    const dayToggles = document.querySelectorAll('.btn-day-toggle');
+    const btnToggleAllDays = document.getElementById('btnToggleAllDays');
+    const btnSave = document.getElementById('btnSaveSchedule');
+    const btnReset = document.getElementById('btnResetSchedule');
+
+    // Hour to degrees (12 = 0 deg, 3 = 90 deg, 6 = 180 deg, 9 = 270 deg)
+    function hourToDegrees(h) {
+      return (h % 12) * 30;
+    }
+
+    // Recalculate duration & pie slice wedge
+    function updateClockUI() {
+      // 1. Hands rotations
+      const startDeg = hourToDegrees(startHour);
+      const stopDeg = hourToDegrees(stopHour);
+
+      handStartLine.style.transform = `translate(-50%, 0) rotate(${startDeg}deg)`;
+      handStopLine.style.transform = `translate(-50%, 0) rotate(${stopDeg}deg)`;
+
+      // 2. Digital display labels
+      labelStartTime.textContent = `${String(startHour).padStart(2, '0')}:00`;
+      ampmStartPill.textContent = startAmPm;
+
+      labelStopTime.textContent = `${String(stopHour).padStart(2, '0')}:00`;
+      ampmStopPill.textContent = stopAmPm;
+
+      // 3. Compute duration in 24h format
+      let start24 = (startHour % 12) + (startAmPm === 'PM' ? 12 : 0);
+      let stop24 = (stopHour % 12) + (stopAmPm === 'PM' ? 12 : 0);
+      let diff = stop24 - start24;
+      if (diff <= 0) diff += 24;
+
+      badgeDuration.innerHTML = `<span>Duration: ${diff}h 0m</span>`;
+
+      // 4. Draw SVG wedge arc between hands
+      drawClockArc(startDeg, stopDeg);
+
+      // 5. Highlight active clock number
+      clockNumbers.forEach(btn => {
+        const h = parseInt(btn.getAttribute('data-hour'), 10);
+        if (h === startHour) {
+          btn.style.color = '#047857';
+          btn.style.fontWeight = '900';
+          btn.style.fontSize = '14px';
+        } else if (h === stopHour) {
+          btn.style.color = '#E11D48';
+          btn.style.fontWeight = '900';
+          btn.style.fontSize = '14px';
+        } else {
+          btn.style.color = '#334155';
+          btn.style.fontWeight = '700';
+          btn.style.fontSize = '12px';
+        }
+      });
+    }
+
+    // Helper: draw SVG pie wedge
+    function drawClockArc(startAngleDeg, endAngleDeg) {
+      const cx = 115, cy = 115, r = 95;
+      let angle1 = (startAngleDeg - 90) * Math.PI / 180;
+      let angle2 = (endAngleDeg - 90) * Math.PI / 180;
+
+      let x1 = cx + r * Math.cos(angle1);
+      let y1 = cy + r * Math.sin(angle1);
+      let x2 = cx + r * Math.cos(angle2);
+      let y2 = cy + r * Math.sin(angle2);
+
+      let sweepDiff = endAngleDeg - startAngleDeg;
+      if (sweepDiff < 0) sweepDiff += 360;
+      let largeArcFlag = sweepDiff > 180 ? 1 : 0;
+
+      if (sweepDiff === 0) {
+        clockArcPath.setAttribute('d', '');
+        return;
+      }
+
+      const d = `M ${cx} ${cy} L ${x1} ${y1} A ${r} ${r} 0 ${largeArcFlag} 1 ${x2} ${y2} Z`;
+      clockArcPath.setAttribute('d', d);
+      clockArcPath.setAttribute('fill', 'rgba(16, 185, 129, 0.16)');
+    }
+
+    // Mode Toggle Tabs
+    tabStart.addEventListener('click', () => {
+      activeMode = 'start';
+      tabStart.className = 'btn-tactile py-2 px-3 rounded-xl font-black text-xs flex flex-col items-center justify-center transition-all bg-white text-emerald-800 shadow-sm border border-emerald-300';
+      tabStop.className = 'btn-tactile py-2 px-3 rounded-xl font-bold text-xs flex flex-col items-center justify-center transition-all bg-transparent text-slate-600 hover:text-slate-900 border border-transparent';
+      tipClockMode.innerHTML = '👆 Tapping a clock number sets <span class="underline">START TIME</span>';
+      tipClockMode.className = 'text-[11px] font-bold text-emerald-700 bg-emerald-50 px-3 py-0.5 rounded-full border border-emerald-200';
+      updateClockUI();
+    });
+
+    tabStop.addEventListener('click', () => {
+      activeMode = 'stop';
+      tabStop.className = 'btn-tactile py-2 px-3 rounded-xl font-black text-xs flex flex-col items-center justify-center transition-all bg-white text-rose-700 shadow-sm border border-rose-300';
+      tabStart.className = 'btn-tactile py-2 px-3 rounded-xl font-bold text-xs flex flex-col items-center justify-center transition-all bg-transparent text-slate-600 hover:text-slate-900 border border-transparent';
+      tipClockMode.innerHTML = '👆 Tapping a clock number sets <span class="underline">STOP TIME</span>';
+      tipClockMode.className = 'text-[11px] font-bold text-rose-700 bg-rose-50 px-3 py-0.5 rounded-full border border-rose-200';
+      updateClockUI();
+    });
+
+    // Clicking clock numbers
+    clockNumbers.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const pickedHour = parseInt(btn.getAttribute('data-hour'), 10);
+        if (activeMode === 'start') {
+          startHour = pickedHour;
+          if (startHour === stopHour && startAmPm === stopAmPm) {
+            stopHour = (startHour % 12) + 2;
+          }
+        } else {
+          stopHour = pickedHour;
+        }
+        updateClockUI();
+      });
+    });
+
+    // AM / PM toggles
+    window.toggleAmPm = (type) => {
+      if (type === 'start') {
+        startAmPm = startAmPm === 'AM' ? 'PM' : 'AM';
+      } else {
+        stopAmPm = stopAmPm === 'AM' ? 'PM' : 'AM';
+      }
+      updateClockUI();
+    };
+
+    // Quick presets
+    presetButtons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        startHour = parseInt(btn.getAttribute('data-start'), 10);
+        startAmPm = btn.getAttribute('data-start-ampm');
+        stopHour = parseInt(btn.getAttribute('data-stop'), 10);
+        stopAmPm = btn.getAttribute('data-stop-ampm');
+        document.getElementById('inputScheduleName').value = btn.getAttribute('data-name');
+        
+        presetButtons.forEach(b => {
+          b.className = 'btn-preset-time btn-tactile px-2.5 py-1 rounded-xl text-[10px] font-bold bg-slate-50 text-slate-600 border border-slate-200';
+        });
+        btn.className = 'btn-preset-time btn-tactile px-2.5 py-1 rounded-xl text-[10px] font-extrabold bg-emerald-50 text-emerald-800 border border-emerald-200';
+
+        updateClockUI();
+        showToast('Preset applied to clock', 'success');
+      });
+    });
+
+    // Repeat Days Interactive Toggle
+    dayToggles.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const isActive = btn.classList.contains('bg-emerald-600');
+        if (isActive) {
+          btn.classList.remove('bg-emerald-600', 'text-white', 'shadow-xs');
+          btn.classList.add('bg-slate-100', 'text-slate-500');
+        } else {
+          btn.classList.remove('bg-slate-100', 'text-slate-500');
+          btn.classList.add('bg-emerald-600', 'text-white', 'shadow-xs');
+        }
+      });
+    });
+
+    // Toggle All Days
+    btnToggleAllDays?.addEventListener('click', () => {
+      const allActive = Array.from(dayToggles).every(b => b.classList.contains('bg-emerald-600'));
+      dayToggles.forEach(btn => {
+        if (allActive) {
+          btn.classList.remove('bg-emerald-600', 'text-white', 'shadow-xs');
+          btn.classList.add('bg-slate-100', 'text-slate-500');
+        } else {
+          btn.classList.remove('bg-slate-100', 'text-slate-500');
+          btn.classList.add('bg-emerald-600', 'text-white', 'shadow-xs');
+        }
+      });
+      btnToggleAllDays.textContent = allActive ? 'Clear Days' : 'All Days';
+    });
+
+    // Reset button
+    btnReset?.addEventListener('click', () => {
+      startHour = 6; startAmPm = 'AM';
+      stopHour = 10; stopAmPm = 'AM';
+      activeMode = 'start';
+      tabStart.click();
+      updateClockUI();
+      showToast('Clock reset to default (6 AM – 10 AM)');
+    });
+
+    // Motor Target Selection Change
+    const selectMotor = document.getElementById('selectMotorTarget');
+    const motorThumb = document.getElementById('selectedMotorImg');
+    selectMotor?.addEventListener('change', (e) => {
+      const val = e.target.value;
+      if (val === 'borewell') {
+        motorThumb.src = 'https://lh3.googleusercontent.com/aida-public/AB6AXuB9wunTD2k4QfHJ8eS262EoqwlnB_YHxkgUZDjlyLhANbeJAHnRmGtVO39pbtCfOQEyjXPQCJj4dmKqhKTKo2vpE3xg1j3LqaupQ60TpWHa_5Auajpz27FRCB7sdJ1MHeOhk-kr3wZTTCWCTwFkPfjwa_XrIh3Ui34IfDlh2NbaoTaFSnNinm-VbsKV-fuzat93S5Sc3VLxjAvYpSAMhdG47Eg7J3j_1t8nipZFjpoSdpeIADWjBKCB';
+      } else if (val === 'field1') {
+        motorThumb.src = 'https://lh3.googleusercontent.com/aida-public/AB6AXuCmjGd0qs1BcFkuiZa-dTu-eQlZI3c-Hgkui2vu3l97ZKAboYIlRBshvaarmObf88NDTcl9ILdK6u7RA4z5Ci4baiYRZnkrzkFAsBS4nT1wZLaVvefn6i8LK_YQlT8_f_CbNQ55fSn9WX7WOg-UsZVB2W_5p3VzKiCWaOLubNVTQpNaYKXgLlaxTwShoA5GSj3fWlrZIAk6jTAODiTfyfcPAp-hMA30dydl4kPvTm7PKKLLJb-imbMb';
+      } else if (val === 'field2') {
+        motorThumb.src = 'https://lh3.googleusercontent.com/aida-public/AB6AXuASJE5-fbbmkYQr8cb9oOrOupRJMp8Kdo0w7LzgqXAGKXUD2nVaha3cdKVysSljCm6Gei8irvwE9mwjn_VfbRVYr6OHdhAHFttyhc7LZUn2oMmF2AdDLgzQEGka96NwK_kuVWAuKY8fv7aKYxQzXJkfpkCP-8LT_Y0HVj8Zciengn0SeGsj7ZOJscA60eAZHTojpU6e-G1b5rAqkm-gUxfFjYGpZp9BiXt5z3n73kos0aBdyBUHPbb2';
+      } else {
+        motorThumb.src = 'https://lh3.googleusercontent.com/aida-public/AB6AXuA0c1XvcJ0wcwXZDh7SduKk0hqI58ImUN-1msRA1vbCpAmRklzS-uxrfc1frJyunucK6DZfZbnmW1QzXbOVAgQLt-lsmk4QFJh0UKJD5rjnN2SnNs5z3UjHEInXcS8cjdsxWYNLziLf0k9h3qn44JYkNihC7SgTcqcARcV0SZzl4mrV7wmsIipnH3Kdd3iJq68nh2ni1LaYdYj5grNG_pMoY5iOPzwbTRx1YRdlWGOb_J5BZZyCCf7i';
+      }
+      showToast(`Selected ${selectMotor.options[selectMotor.selectedIndex].text.split('(')[0].trim()}`, 'success');
+    });
+
+    // Save button action
+    btnSave?.addEventListener('click', () => {
+      const scheduleName = document.getElementById('inputScheduleName').value || 'Custom Schedule';
+      btnSave.innerHTML = `
+        <svg class="animate-spin w-5 h-5 text-white" fill="none" viewBox="0 0 24 24">
+          <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+          <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+        </svg>
+        <span>Transmitting to IoT Starter Panel...</span>
+      `;
+
+      setTimeout(() => {
+        showToast(`Schedule "${scheduleName}" activated! (${startHour}:00 ${startAmPm} - ${stopHour}:00 ${stopAmPm})`, 'success');
+        setTimeout(() => {
+          if (window.route) {
+            window.route('details');
+          } else {
+            location.href = '../motor_details_screen/code.html';
+          }
+        }, 900);
+      }, 750);
+    });
+
+    // Toast helper
+    function showToast(msg, type = 'default') {
+      const toastEl = document.getElementById('app-unified-toast');
+      if (toastEl) {
+        toastEl.textContent = (type === 'success' ? '✓ ' : type === 'warning' ? '⚠️ ' : '') + msg;
+        toastEl.style.opacity = '1';
+        toastEl.style.transform = 'translateX(-50%) translateY(0)';
+        clearTimeout(window.__scheduleToastTimer);
+        window.__scheduleToastTimer = setTimeout(() => {
+          toastEl.style.opacity = '0';
+          toastEl.style.transform = 'translateX(-50%) translateY(20px)';
+        }, 2500);
+      }
+    }
+
+    // Initialize clock
+    updateClockUI();
+  });
+</script>
+</body>
+</html>

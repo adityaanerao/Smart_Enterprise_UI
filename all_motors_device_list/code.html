@@ -1,0 +1,801 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport">
+  <title>National - All Connected Motors</title>
+  <!-- Google Fonts: Inter (Clear, Simple, Standard UI Font) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <!-- Tailwind CSS CDN with plugins -->
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              red: '#D81921',
+              darkRed: '#B91219',
+              lightRed: '#FEECEC',
+            },
+            status: {
+              running: '#10B981',
+              stopped: '#94A3B8',
+              fault: '#EF4444',
+              offline: '#64748B',
+            }
+          },
+          fontFamily: {
+            sans: ['"Inter"', '-apple-system', 'BlinkMacSystemFont', '"Segoe UI"', 'Roboto', 'Helvetica', 'Arial', 'sans-serif'],
+          },
+          boxShadow: {
+            card: '0 4px 18px -2px rgba(15, 23, 42, 0.06), 0 2px 6px -1px rgba(15, 23, 42, 0.04)',
+            cardHover: '0 12px 28px -4px rgba(15, 23, 42, 0.12), 0 4px 12px -2px rgba(15, 23, 42, 0.06)',
+            nav: '0 -4px 20px rgba(0, 0, 0, 0.06)',
+            tactileRed: '0 4px 14px rgba(216, 25, 33, 0.35)',
+            tactileGreen: '0 4px 14px rgba(16, 185, 129, 0.35)',
+          }
+        }
+      }
+    }
+  </script>
+  <!-- Keyframe Animations & Micro-Interactions -->
+  <style data-purpose="motors-screen-animations">
+    @keyframes cardEntrance {
+      from {
+        opacity: 0;
+        transform: translateY(18px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    @keyframes pulseRing {
+      0% { transform: scale(0.95); opacity: 0.9; }
+      50% { transform: scale(1.4); opacity: 0; }
+      100% { transform: scale(0.95); opacity: 0; }
+    }
+    @keyframes floatSlow {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-3px); }
+    }
+    @keyframes runningGlow {
+      0%, 100% { box-shadow: 0 0 10px rgba(16, 185, 129, 0.15), 0 4px 18px -2px rgba(15, 23, 42, 0.06); }
+      50% { box-shadow: 0 0 20px rgba(16, 185, 129, 0.35), 0 8px 24px -2px rgba(15, 23, 42, 0.08); }
+    }
+    .animate-entrance {
+      animation: cardEntrance 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+    .card-running-glow {
+      animation: runningGlow 3s ease-in-out infinite;
+    }
+    .animate-float {
+      animation: floatSlow 3s ease-in-out infinite;
+    }
+    .btn-tactile {
+      transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .btn-tactile:active {
+      transform: scale(0.96);
+    }
+    .motor-item-card {
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .no-scrollbar::-webkit-scrollbar { display: none; }
+    .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+  </style>
+</head>
+<body class="bg-slate-100 flex justify-center min-h-screen text-slate-800 antialiased selection:bg-red-200">
+
+<!-- Mobile Screen Container -->
+<div class="w-full max-w-[440px] min-h-screen bg-[#F4F6F9] flex flex-col relative overflow-x-hidden pb-24">
+
+  <!-- ======================================================== -->
+  <!-- BEGIN: TopAppBar with Official National Brand Logo        -->
+  <!-- ======================================================== -->
+  <header class="bg-[#D81921] text-white px-4 py-2.5 flex items-center justify-between shadow-md sticky top-0 z-40">
+    <!-- Brand Logo & Identity in Left Corner (No Back Arrow on Tab Screen) -->
+    <div class="flex items-center space-x-2.5 cursor-pointer btn-tactile" data-route="home">
+      <div class="bg-white rounded-lg p-1 shadow-xs flex items-center justify-center" style="width: 38px; height: 38px;">
+        <img src="../assets/national-logo.svg" alt="National Logo" class="h-6 w-auto object-contain">
+      </div>
+      <div>
+        <span class="text-base font-black tracking-tight text-white block leading-tight">My Motors</span>
+        <span class="text-[11px] font-medium text-white/90 block leading-tight">Connected Starters</span>
+      </div>
+    </div>
+
+    <!-- Quick Refresh Button with Animation -->
+    <button id="btnRefreshMotors" aria-label="Refresh Motors" class="btn-tactile p-1.5 -mr-1 text-white hover:bg-white/15 rounded-full transition-all cursor-pointer" type="button">
+      <svg id="iconRefreshMotors" class="w-5 h-5 transition-transform duration-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+      </svg>
+    </button>
+  </header>
+  <!-- END: TopAppBar -->
+
+  <!-- ======================================================== -->
+  <!-- BEGIN: MainContent Area                                   -->
+  <!-- ======================================================== -->
+  <main class="flex-1 px-3.5 pt-4 pb-4 space-y-3.5 overflow-y-auto">
+
+    <!-- Header Section with Title & Animated Add Motor Button -->
+    <section class="flex items-center justify-between animate-entrance" style="animation-delay: 0.05s;">
+      <div>
+        <div class="flex items-center gap-2">
+          <h1 class="text-2xl font-black text-slate-900 tracking-tight leading-tight">My Motors</h1>
+          <span id="badgeTotalCount" class="text-xs font-black px-2 py-0.5 rounded-full bg-red-100 text-[#D81921]">
+            4 Devices
+          </span>
+        </div>
+        <p class="text-xs text-slate-500 font-medium mt-0.5">Live IoT Telemetry &amp; Remote Starter Panel</p>
+      </div>
+
+      <!-- Elevated Add Motor Button with Dialog Trigger -->
+      <button id="btnOpenAddMotor" aria-label="Add Motor" class="btn-tactile w-11 h-11 rounded-2xl bg-[#D81921] hover:bg-red-700 active:bg-red-800 text-white flex items-center justify-center shadow-tactileRed transition-all cursor-pointer" type="button">
+        <svg class="w-6 h-6 stroke-[2.5]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path d="M12 4v16m8-8H4" stroke-linecap="round" stroke-linejoin="round"></path>
+        </svg>
+      </button>
+    </section>
+
+    <!-- ======================================================== -->
+    <!-- BEGIN: High-Level Fleet Telemetry Summary Card           -->
+    <!-- ======================================================== -->
+    <section class="bg-gradient-to-br from-slate-900 to-slate-800 text-white rounded-3xl p-4 shadow-lg animate-entrance relative overflow-hidden" style="animation-delay: 0.1s;">
+      <!-- Background Ambient Circuit Accent -->
+      <div class="absolute -right-6 -bottom-6 w-28 h-28 bg-red-600/20 rounded-full blur-2xl pointer-events-none"></div>
+      <div class="absolute -left-6 -top-6 w-24 h-24 bg-emerald-500/15 rounded-full blur-xl pointer-events-none"></div>
+
+      <div class="relative z-10 flex items-center justify-between mb-3">
+        <div class="flex items-center gap-2">
+          <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse"></span>
+          <span class="text-xs font-bold text-slate-300 uppercase tracking-wider">Fleet Status Overview</span>
+        </div>
+        <span class="text-[10px] font-black px-2 py-0.5 rounded-md bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
+          ALL SYSTEMS ONLINE
+        </span>
+      </div>
+
+      <!-- Quick Metrics Row -->
+      <div class="relative z-10 grid grid-cols-3 gap-2 text-center pt-1">
+        <!-- Active Running -->
+        <div class="bg-white/10 backdrop-blur-md rounded-2xl p-2.5 border border-white/10">
+          <div class="text-[10px] text-slate-400 font-bold uppercase tracking-tight">Running</div>
+          <div id="statRunningCount" class="text-xl font-black text-emerald-400 mt-0.5">1</div>
+          <div class="text-[9px] text-emerald-300/80 font-medium">East Field Active</div>
+        </div>
+
+        <!-- Total Power Load -->
+        <div class="bg-white/10 backdrop-blur-md rounded-2xl p-2.5 border border-white/10">
+          <div class="text-[10px] text-slate-400 font-bold uppercase tracking-tight">Active Load</div>
+          <div id="statActiveLoad" class="text-xl font-black text-amber-400 mt-0.5">5.2 <span class="text-xs font-semibold text-slate-300">kW</span></div>
+          <div class="text-[9px] text-amber-300/80 font-medium">8.4 A @ 415 V</div>
+        </div>
+
+        <!-- Health Efficiency -->
+        <div class="bg-white/10 backdrop-blur-md rounded-2xl p-2.5 border border-white/10">
+          <div class="text-[10px] text-slate-400 font-bold uppercase tracking-tight">Health</div>
+          <div class="text-xl font-black text-sky-400 mt-0.5">98%</div>
+          <div class="text-[9px] text-sky-300/80 font-medium">1 Trip Alert</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================================================== -->
+    <!-- BEGIN: Search & Interactive Filter Tabs Section          -->
+    <!-- ======================================================== -->
+    <section class="space-y-2.5 animate-entrance" style="animation-delay: 0.15s;">
+      <!-- Search Input Box with Clear Button -->
+      <div class="relative flex items-center">
+        <span class="absolute inset-y-0 left-0 flex items-center pl-3.5 pointer-events-none text-slate-400">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path d="M21 21l-4.35-4.35m0 0A7.5 7.5 0 1116.65 6.65a7.5 7.5 0 010 10.7z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"></path>
+          </svg>
+        </span>
+        <input id="inputMotorSearch" class="w-full bg-white border border-slate-200/90 rounded-2xl py-2.5 pl-10 pr-9 text-xs font-semibold text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-[#D81921]/20 shadow-xs" placeholder="Search by name, sector or HP rating..." type="search">
+        <button id="btnClearSearch" class="hidden absolute right-3 text-slate-400 hover:text-slate-600 text-xs font-bold p-1">
+          ✕
+        </button>
+      </div>
+
+      <!-- Quick Status Filter Pills Bar -->
+      <div class="flex items-center gap-1.5 overflow-x-auto no-scrollbar pt-0.5">
+        <button class="filter-tab-pill active px-3.5 py-1.5 rounded-full text-xs font-extrabold bg-[#D81921] text-white shadow-xs transition-all cursor-pointer" data-filter="all">
+          All (4)
+        </button>
+        <button class="filter-tab-pill px-3.5 py-1.5 rounded-full text-xs font-bold bg-white text-slate-600 border border-slate-200 hover:bg-slate-50 transition-all cursor-pointer" data-filter="running">
+          🟢 Running (1)
+        </button>
+        <button class="filter-tab-pill px-3.5 py-1.5 rounded-full text-xs font-bold bg-white text-slate-600 border border-slate-200 hover:bg-slate-50 transition-all cursor-pointer" data-filter="stopped">
+          ⚪ Stopped (2)
+        </button>
+        <button class="filter-tab-pill px-3.5 py-1.5 rounded-full text-xs font-bold bg-white text-slate-600 border border-slate-200 hover:bg-slate-50 transition-all cursor-pointer" data-filter="fault">
+          🔴 Fault (1)
+        </button>
+      </div>
+    </section>
+
+    <!-- ======================================================== -->
+    <!-- BEGIN: Motor Cards List Container                        -->
+    <!-- ======================================================== -->
+    <div id="motorsListWrapper" class="space-y-3" data-purpose="motor-cards-list">
+
+      <!-- ============================================== -->
+      <!-- CARD 1: Main Pump (Running State)               -->
+      <!-- ============================================== -->
+      <article id="cardMotorMain" class="motor-item-card card-running-glow bg-white rounded-3xl p-3.5 shadow-card border-2 border-emerald-400/70 hover:shadow-cardHover cursor-pointer transition-all animate-entrance" style="animation-delay: 0.2s;" data-status="running" data-name="main pump" data-route="details">
+        <!-- Top Status Row -->
+        <div class="flex items-center justify-between mb-2.5">
+          <div class="flex items-center gap-2">
+            <span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-black bg-emerald-50 text-emerald-700 border border-emerald-200">
+              <span class="relative flex h-2 w-2">
+                <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+              </span>
+              <span class="motor-status-label">RUNNING</span>
+            </span>
+            <span class="text-[10px] font-bold text-slate-500 bg-slate-100 px-2 py-0.5 rounded-md">
+              5.0 HP Submersible
+            </span>
+          </div>
+          <!-- Signal & Sector Indicator -->
+          <div class="text-[10px] font-bold text-slate-400 flex items-center gap-1">
+            <span>Sector 4</span>
+            <span>•</span>
+            <span class="text-emerald-600">📶 4G</span>
+          </div>
+        </div>
+
+        <!-- Middle: Photo & Real-Time Telemetry Metrics -->
+        <div class="flex items-center gap-3.5">
+          <!-- Motor Product Photo with Gentle Float -->
+          <div class="w-20 h-20 rounded-2xl bg-gradient-to-tr from-sky-50 to-slate-50 flex items-center justify-center p-1.5 flex-shrink-0 border border-slate-100 shadow-xs relative overflow-hidden">
+            <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuA0c1XvcJ0wcwXZDh7SduKk0hqI58ImUN-1msRA1vbCpAmRklzS-uxrfc1frJyunucK6DZfZbnmW1QzXbOVAgQLt-lsmk4QFJh0UKJD5rjnN2SnNs5z3UjHEInXcS8cjdsxWYNLziLf0k9h3qn44JYkNihC7SgTcqcARcV0SZzl4mrV7wmsIipnH3Kdd3iJq68nh2ni1LaYdYj5grNG_pMoY5iOPzwbTRx1YRdlWGOb_J5BZZyCCf7i" alt="Main Pump" class="w-full h-full object-contain mix-blend-multiply animate-float">
+          </div>
+
+          <!-- Title & Telemetry Gauges -->
+          <div class="flex-1 min-w-0">
+            <div class="flex items-center justify-between">
+              <h2 class="text-base font-black text-slate-900 truncate">Main Pump</h2>
+              <svg class="w-4 h-4 text-slate-400 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                <path d="M9 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round"></path>
+              </svg>
+            </div>
+            <p class="text-xs text-slate-500 font-medium">East Field Irrigation</p>
+
+            <!-- Dual Metric Badges -->
+            <div class="grid grid-cols-2 gap-2 mt-2">
+              <div class="bg-amber-50/80 rounded-xl px-2 py-1 border border-amber-100">
+                <span class="text-[9px] font-bold text-amber-700 uppercase block">Current</span>
+                <span class="motor-current-val text-xs font-black text-slate-900">8.4 A</span>
+              </div>
+              <div class="bg-blue-50/80 rounded-xl px-2 py-1 border border-blue-100">
+                <span class="text-[9px] font-bold text-blue-700 uppercase block">Voltage</span>
+                <span class="motor-voltage-val text-xs font-black text-slate-900">415 V</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Bottom Action Bar: 1-Tap Control & Quick Navigation -->
+        <div class="mt-3 pt-2.5 border-t border-slate-100 flex items-center justify-between">
+          <div class="text-[10px] font-semibold text-slate-500 flex items-center gap-1">
+            <span>⏱ Runtime:</span>
+            <span class="font-bold text-slate-800">1h 45m today</span>
+          </div>
+
+          <!-- Tactile Direct Action Button -->
+          <button class="btn-motor-action btn-tactile px-4 py-1.5 rounded-xl text-xs font-black bg-red-100 hover:bg-red-200 text-red-700 border border-red-200 shadow-xs transition-all cursor-pointer flex items-center gap-1.5" onclick="event.stopPropagation(); window.toggleMotorRow('cardMotorMain');">
+            <span class="w-2.5 h-2.5 bg-red-600 rounded-xs"></span>
+            <span>Stop Motor</span>
+          </button>
+        </div>
+      </article>
+
+      <!-- ============================================== -->
+      <!-- CARD 2: Borewell Motor (Stopped State)         -->
+      <!-- ============================================== -->
+      <article id="cardMotorBorewell" class="motor-item-card bg-white rounded-3xl p-3.5 shadow-card border border-slate-100 hover:shadow-cardHover cursor-pointer transition-all animate-entrance" style="animation-delay: 0.25s;" data-status="stopped" data-name="borewell motor" data-route="details">
+        <!-- Top Status Row -->
+        <div class="flex items-center justify-between mb-2.5">
+          <div class="flex items-center gap-2">
+            <span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-slate-100 text-slate-600 border border-slate-200">
+              <span class="w-2 h-2 rounded-full bg-slate-400"></span>
+              <span class="motor-status-label">STOPPED</span>
+            </span>
+            <span class="text-[10px] font-bold text-slate-500 bg-slate-100 px-2 py-0.5 rounded-md">
+              7.5 HP Submersible
+            </span>
+          </div>
+          <!-- Signal & Sector Indicator -->
+          <div class="text-[10px] font-bold text-slate-400 flex items-center gap-1">
+            <span>North Well</span>
+            <span>•</span>
+            <span class="text-slate-400">Standby</span>
+          </div>
+        </div>
+
+        <!-- Middle: Photo & Real-Time Telemetry Metrics -->
+        <div class="flex items-center gap-3.5">
+          <!-- Motor Product Photo -->
+          <div class="w-20 h-20 rounded-2xl bg-slate-50 flex items-center justify-center p-1.5 flex-shrink-0 border border-slate-100 shadow-xs relative overflow-hidden">
+            <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuB9wunTD2k4QfHJ8eS262EoqwlnB_YHxkgUZDjlyLhANbeJAHnRmGtVO39pbtCfOQEyjXPQCJj4dmKqhKTKo2vpE3xg1j3LqaupQ60TpWHa_5Auajpz27FRCB7sdJ1MHeOhk-kr3wZTTCWCTwFkPfjwa_XrIh3Ui34IfDlh2NbaoTaFSnNinm-VbsKV-fuzat93S5Sc3VLxjAvYpSAMhdG47Eg7J3j_1t8nipZFjpoSdpeIADWjBKCB" alt="Borewell Motor" class="w-full h-full object-contain mix-blend-multiply">
+          </div>
+
+          <!-- Title & Telemetry Gauges -->
+          <div class="flex-1 min-w-0">
+            <div class="flex items-center justify-between">
+              <h2 class="text-base font-black text-slate-900 truncate">Borewell Motor</h2>
+              <svg class="w-4 h-4 text-slate-400 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                <path d="M9 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round"></path>
+              </svg>
+            </div>
+            <p class="text-xs text-slate-500 font-medium">Deep Ground Reservoir</p>
+
+            <!-- Dual Metric Badges -->
+            <div class="grid grid-cols-2 gap-2 mt-2">
+              <div class="bg-slate-50 rounded-xl px-2 py-1 border border-slate-100">
+                <span class="text-[9px] font-bold text-slate-500 uppercase block">Current</span>
+                <span class="motor-current-val text-xs font-black text-slate-600">0.0 A</span>
+              </div>
+              <div class="bg-slate-50 rounded-xl px-2 py-1 border border-slate-100">
+                <span class="text-[9px] font-bold text-slate-500 uppercase block">Voltage</span>
+                <span class="motor-voltage-val text-xs font-black text-slate-600">0 V</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Bottom Action Bar: 1-Tap Control & Quick Navigation -->
+        <div class="mt-3 pt-2.5 border-t border-slate-100 flex items-center justify-between">
+          <div class="text-[10px] font-semibold text-slate-500 flex items-center gap-1">
+            <span>⏱ Last run:</span>
+            <span class="font-bold text-slate-700">Yesterday, 4h 10m</span>
+          </div>
+
+          <!-- Tactile Direct Action Button -->
+          <button class="btn-motor-action btn-tactile px-4 py-1.5 rounded-xl text-xs font-black bg-emerald-600 hover:bg-emerald-700 text-white shadow-tactileGreen transition-all cursor-pointer flex items-center gap-1.5" onclick="event.stopPropagation(); window.toggleMotorRow('cardMotorBorewell');">
+            <svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24">
+              <path d="M8 5v14l11-7z"></path>
+            </svg>
+            <span>Start Motor</span>
+          </button>
+        </div>
+      </article>
+
+      <!-- ============================================== -->
+      <!-- CARD 3: Field Motor 1 (Fault / Overload State) -->
+      <!-- ============================================== -->
+      <article id="cardMotorField1" class="motor-item-card bg-white rounded-3xl p-3.5 shadow-card border-2 border-red-300/80 hover:shadow-cardHover cursor-pointer transition-all animate-entrance" style="animation-delay: 0.3s;" data-status="fault" data-name="field motor 1" data-route="details">
+        <!-- Top Status Row -->
+        <div class="flex items-center justify-between mb-2.5">
+          <div class="flex items-center gap-2">
+            <span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-black bg-red-50 text-red-700 border border-red-200">
+              <span class="w-2 h-2 rounded-full bg-red-600 animate-ping"></span>
+              <span class="motor-status-label">OVERLOAD TRIP</span>
+            </span>
+            <span class="text-[10px] font-bold text-red-700 bg-red-50 px-2 py-0.5 rounded-md border border-red-100">
+              3.0 HP Surface
+            </span>
+          </div>
+          <!-- Signal & Sector Indicator -->
+          <div class="text-[10px] font-bold text-red-500 flex items-center gap-1">
+            <span>Orchard Sector</span>
+            <span>•</span>
+            <span>Needs Reset</span>
+          </div>
+        </div>
+
+        <!-- Middle: Photo & Real-Time Telemetry Metrics -->
+        <div class="flex items-center gap-3.5">
+          <!-- Motor Product Photo -->
+          <div class="w-20 h-20 rounded-2xl bg-red-50/50 flex items-center justify-center p-1.5 flex-shrink-0 border border-red-100 shadow-xs relative overflow-hidden">
+            <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuCmjGd0qs1BcFkuiZa-dTu-eQlZI3c-Hgkui2vu3l97ZKAboYIlRBshvaarmObf88NDTcl9ILdK6u7RA4z5Ci4baiYRZnkrzkFAsBS4nT1wZLaVvefn6i8LK_YQlT8_f_CbNQ55fSn9WX7WOg-UsZVB2W_5p3VzKiCWaOLubNVTQpNaYKXgLlaxTwShoA5GSj3fWlrZIAk6jTAODiTfyfcPAp-hMA30dydl4kPvTm7PKKLLJb-imbMb" alt="Field Motor 1" class="w-full h-full object-contain mix-blend-multiply">
+          </div>
+
+          <!-- Title & Telemetry Gauges -->
+          <div class="flex-1 min-w-0">
+            <div class="flex items-center justify-between">
+              <h2 class="text-base font-black text-slate-900 truncate">Field Motor 1</h2>
+              <svg class="w-4 h-4 text-slate-400 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                <path d="M9 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round"></path>
+              </svg>
+            </div>
+            <p class="text-xs text-red-600 font-semibold">Tripped at 15.2A current spike</p>
+
+            <!-- Dual Metric Badges -->
+            <div class="grid grid-cols-2 gap-2 mt-2">
+              <div class="bg-red-50 rounded-xl px-2 py-1 border border-red-100">
+                <span class="text-[9px] font-bold text-red-600 uppercase block">Peak Load</span>
+                <span class="motor-current-val text-xs font-black text-red-700">15.2 A</span>
+              </div>
+              <div class="bg-slate-50 rounded-xl px-2 py-1 border border-slate-100">
+                <span class="text-[9px] font-bold text-slate-500 uppercase block">Line Volt</span>
+                <span class="motor-voltage-val text-xs font-black text-slate-600">412 V</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Bottom Action Bar: Reset Fault Button -->
+        <div class="mt-3 pt-2.5 border-t border-slate-100 flex items-center justify-between">
+          <div class="text-[10px] font-semibold text-red-600 flex items-center gap-1">
+            <span>⚠️ Tripped today at 08:24 AM</span>
+          </div>
+
+          <!-- Tactile Reset Button -->
+          <button class="btn-motor-action btn-tactile px-4 py-1.5 rounded-xl text-xs font-black bg-amber-500 hover:bg-amber-600 text-white shadow-xs transition-all cursor-pointer flex items-center gap-1.5" onclick="event.stopPropagation(); window.toggleMotorRow('cardMotorField1');">
+            <svg class="w-3.5 h-3.5 fill-none stroke-current" stroke-width="2.5" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+            </svg>
+            <span>Reset Trip</span>
+          </button>
+        </div>
+      </article>
+
+      <!-- ============================================== -->
+      <!-- CARD 4: Field Motor 2 (Standby / Stopped)      -->
+      <!-- ============================================== -->
+      <article id="cardMotorField2" class="motor-item-card bg-white rounded-3xl p-3.5 shadow-card border border-slate-100 hover:shadow-cardHover cursor-pointer transition-all animate-entrance" style="animation-delay: 0.35s;" data-status="stopped" data-name="field motor 2" data-route="details">
+        <!-- Top Status Row -->
+        <div class="flex items-center justify-between mb-2.5">
+          <div class="flex items-center gap-2">
+            <span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-slate-100 text-slate-600 border border-slate-200">
+              <span class="w-2 h-2 rounded-full bg-slate-400"></span>
+              <span class="motor-status-label">STOPPED</span>
+            </span>
+            <span class="text-[10px] font-bold text-slate-500 bg-slate-100 px-2 py-0.5 rounded-md">
+              5.0 HP Industrial
+            </span>
+          </div>
+          <!-- Signal & Sector Indicator -->
+          <div class="text-[10px] font-bold text-slate-400 flex items-center gap-1">
+            <span>Greenhouse</span>
+            <span>•</span>
+            <span class="text-slate-400">Standby</span>
+          </div>
+        </div>
+
+        <!-- Middle: Photo & Real-Time Telemetry Metrics -->
+        <div class="flex items-center gap-3.5">
+          <!-- Motor Product Photo -->
+          <div class="w-20 h-20 rounded-2xl bg-slate-50 flex items-center justify-center p-1.5 flex-shrink-0 border border-slate-100 shadow-xs relative overflow-hidden">
+            <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuASJE5-fbbmkYQr8cb9oOrOupRJMp8Kdo0w7LzgqXAGKXUD2nVaha3cdKVysSljCm6Gei8irvwE9mwjn_VfbRVYr6OHdhAHFttyhc7LZUn2oMmF2AdDLgzQEGka96NwK_kuVWAuKY8fv7aKYxQzXJkfpkCP-8LT_Y0HVj8Zciengn0SeGsj7ZOJscA60eAZHTojpU6e-G1b5rAqkm-gUxfFjYGpZp9BiXt5z3n73kos0aBdyBUHPbb2" alt="Field Motor 2" class="w-full h-full object-contain mix-blend-multiply">
+          </div>
+
+          <!-- Title & Telemetry Gauges -->
+          <div class="flex-1 min-w-0">
+            <div class="flex items-center justify-between">
+              <h2 class="text-base font-black text-slate-900 truncate">Field Motor 2</h2>
+              <svg class="w-4 h-4 text-slate-400 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                <path d="M9 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round"></path>
+              </svg>
+            </div>
+            <p class="text-xs text-slate-500 font-medium">West Drip Irrigation</p>
+
+            <!-- Dual Metric Badges -->
+            <div class="grid grid-cols-2 gap-2 mt-2">
+              <div class="bg-slate-50 rounded-xl px-2 py-1 border border-slate-100">
+                <span class="text-[9px] font-bold text-slate-500 uppercase block">Current</span>
+                <span class="motor-current-val text-xs font-black text-slate-600">0.0 A</span>
+              </div>
+              <div class="bg-slate-50 rounded-xl px-2 py-1 border border-slate-100">
+                <span class="text-[9px] font-bold text-slate-500 uppercase block">Voltage</span>
+                <span class="motor-voltage-val text-xs font-black text-slate-600">0 V</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Bottom Action Bar: 1-Tap Control & Quick Navigation -->
+        <div class="mt-3 pt-2.5 border-t border-slate-100 flex items-center justify-between">
+          <div class="text-[10px] font-semibold text-slate-500 flex items-center gap-1">
+            <span>⏱ Status:</span>
+            <span class="font-bold text-slate-700">Ready to start</span>
+          </div>
+
+          <!-- Tactile Direct Action Button -->
+          <button class="btn-motor-action btn-tactile px-4 py-1.5 rounded-xl text-xs font-black bg-emerald-600 hover:bg-emerald-700 text-white shadow-tactileGreen transition-all cursor-pointer flex items-center gap-1.5" onclick="event.stopPropagation(); window.toggleMotorRow('cardMotorField2');">
+            <svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24">
+              <path d="M8 5v14l11-7z"></path>
+            </svg>
+            <span>Start Motor</span>
+          </button>
+        </div>
+      </article>
+
+      <!-- Empty Filter State Fallback (Hidden by default) -->
+      <div id="emptyFilterState" class="hidden bg-white rounded-3xl p-8 text-center border border-slate-100 shadow-card">
+        <div class="w-14 h-14 rounded-2xl bg-slate-100 text-slate-400 flex items-center justify-center mx-auto mb-3">
+          <svg class="w-7 h-7" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-4.35-4.35m0 0A7.5 7.5 0 1116.65 6.65a7.5 7.5 0 010 10.7z"></path>
+          </svg>
+        </div>
+        <h3 class="text-sm font-black text-slate-900">No Motors Found</h3>
+        <p class="text-xs text-slate-500 mt-1">Try searching for a different name or clearing filters.</p>
+        <button id="btnResetFilter" class="mt-3 px-4 py-2 bg-slate-900 text-white rounded-xl text-xs font-bold btn-tactile">
+          Reset Filter
+        </button>
+      </div>
+
+    </div>
+    <!-- END: MotorCardsList -->
+
+  </main>
+  <!-- END: MainContent -->
+
+  <!-- ======================================================== -->
+  <!-- ANIMATED CURVED BOTTOM NAVIGATION BAR                     -->
+  <!-- ======================================================== -->
+  <nav class="curved-navbar-wrapper" data-purpose="bottom-tab-bar" style="--active-tab: 1;">
+    <div class="curved-navbar-body">
+      <!-- Sliding Dome & Elevated Circle -->
+      <div class="nav-sliding-indicator">
+        <svg class="nav-dome-svg" viewBox="0 0 100 26" preserveAspectRatio="none">
+          <path d="M 0,26 C 14,26 22,20 28,12 C 36,1 42,0 50,0 C 58,0 64,1 72,12 C 78,20 86,26 100,26 L 100,28 L 0,28 Z"></path>
+        </svg>
+        <div class="nav-floating-circle">
+          <span class="nav-floating-icon">
+            <svg fill="currentColor" viewBox="0 0 24 24"><path d="M19 13h-1V9a2 2 0 00-2-2h-1V5a1 1 0 00-1-1H9a1 1 0 00-1 1v2H7a2 2 0 00-2 2v4H4a1 1 0 00-1 1v4a1 1 0 001 1h1v1a1 1 0 001 1h12a1 1 0 001-1v-1h1a1 1 0 001-1v-4a1 1 0 00-1-1zm-9-6h4v2h-4V7zm6 11H8v-7h8v7z"></path></svg>
+          </span>
+        </div>
+      </div>
+
+      <!-- 5 Standard Navigation Tabs -->
+      <div class="nav-tabs-row">
+        <!-- 0: Home -->
+        <a class="nav-tab-item" data-index="0" data-route="home" href="#">
+          <div class="nav-tab-icon-wrap">
+            <svg fill="currentColor" viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"></path></svg>
+          </div>
+          <span class="nav-tab-label">Home</span>
+        </a>
+
+        <!-- 1: Motors (Active) -->
+        <a class="nav-tab-item active" data-index="1" data-route="motors" href="#">
+          <div class="nav-tab-icon-wrap">
+            <svg fill="currentColor" viewBox="0 0 24 24"><path d="M19 13h-1V9a2 2 0 00-2-2h-1V5a1 1 0 00-1-1H9a1 1 0 00-1 1v2H7a2 2 0 00-2 2v4H4a1 1 0 00-1 1v4a1 1 0 001 1h1v1a1 1 0 001 1h12a1 1 0 001-1v-1h1a1 1 0 001-1v-4a1 1 0 00-1-1zm-9-6h4v2h-4V7zm6 11H8v-7h8v7z"></path></svg>
+          </div>
+          <span class="nav-tab-label">Motors</span>
+        </a>
+
+        <!-- 2: Schedules -->
+        <a class="nav-tab-item" data-index="2" data-route="schedule" href="#">
+          <div class="nav-tab-icon-wrap">
+            <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+          </div>
+          <span class="nav-tab-label">Schedules</span>
+        </a>
+
+        <!-- 3: Analytics -->
+        <a class="nav-tab-item" data-index="3" data-route="analytics" href="#">
+          <div class="nav-tab-icon-wrap">
+            <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 013 19.875v-6.75zM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V8.625zM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V4.125z"></path></svg>
+          </div>
+          <span class="nav-tab-label">Analytics</span>
+        </a>
+
+        <!-- 4: Profile -->
+        <a class="nav-tab-item" data-index="4" data-route="profile" href="#">
+          <div class="nav-tab-icon-wrap">
+            <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z"></path></svg>
+          </div>
+          <span class="nav-tab-label">Profile</span>
+        </a>
+      </div>
+
+      <!-- Home Indicator -->
+      <div class="nav-home-indicator"></div>
+    </div>
+  </nav>
+
+</div>
+
+<!-- Core Runtime Script for App Navigation and Dialogs -->
+<script src="../app-runtime.js"></script>
+
+<!-- Interactive Controller for Search, Filters, Start/Stop Toggles and Micro-Animations -->
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const inputSearch = document.getElementById('inputMotorSearch');
+    const btnClearSearch = document.getElementById('btnClearSearch');
+    const filterPills = document.querySelectorAll('.filter-tab-pill');
+    const motorCards = document.querySelectorAll('.motor-item-card');
+    const emptyState = document.getElementById('emptyFilterState');
+    const btnResetFilter = document.getElementById('btnResetFilter');
+    const btnRefresh = document.getElementById('btnRefreshMotors');
+    const iconRefresh = document.getElementById('iconRefreshMotors');
+    const statRunning = document.getElementById('statRunningCount');
+    const statLoad = document.getElementById('statActiveLoad');
+
+    let currentFilter = 'all';
+    let searchQuery = '';
+
+    function applyFilters() {
+      let visibleCount = 0;
+      motorCards.forEach(card => {
+        const status = card.getAttribute('data-status');
+        const name = card.getAttribute('data-name') || '';
+        const matchesFilter = (currentFilter === 'all' || status === currentFilter);
+        const matchesSearch = !searchQuery || name.toLowerCase().includes(searchQuery.toLowerCase());
+
+        if (matchesFilter && matchesSearch) {
+          card.style.display = 'block';
+          card.style.opacity = '0';
+          card.style.transform = 'translateY(6px)';
+          setTimeout(() => {
+            card.style.opacity = '1';
+            card.style.transform = 'translateY(0)';
+          }, 30);
+          visibleCount++;
+        } else {
+          card.style.display = 'none';
+        }
+      });
+
+      if (visibleCount === 0) {
+        emptyState.classList.remove('hidden');
+      } else {
+        emptyState.classList.add('hidden');
+      }
+    }
+
+    // Filter pill click listener
+    filterPills.forEach(pill => {
+      pill.addEventListener('click', () => {
+        filterPills.forEach(p => {
+          p.classList.remove('bg-[#D81921]', 'text-white', 'shadow-xs');
+          p.classList.add('bg-white', 'text-slate-600', 'border', 'border-slate-200');
+        });
+        pill.classList.remove('bg-white', 'text-slate-600', 'border', 'border-slate-200');
+        pill.classList.add('bg-[#D81921]', 'text-white', 'shadow-xs');
+
+        currentFilter = pill.getAttribute('data-filter');
+        applyFilters();
+      });
+    });
+
+    // Search input listener
+    inputSearch?.addEventListener('input', (e) => {
+      searchQuery = e.target.value.trim();
+      if (searchQuery) {
+        btnClearSearch.classList.remove('hidden');
+      } else {
+        btnClearSearch.classList.add('hidden');
+      }
+      applyFilters();
+    });
+
+    btnClearSearch?.addEventListener('click', () => {
+      inputSearch.value = '';
+      searchQuery = '';
+      btnClearSearch.classList.add('hidden');
+      applyFilters();
+    });
+
+    btnResetFilter?.addEventListener('click', () => {
+      inputSearch.value = '';
+      searchQuery = '';
+      btnClearSearch.classList.add('hidden');
+      filterPills[0]?.click();
+    });
+
+    // Refresh animation
+    btnRefresh?.addEventListener('click', () => {
+      iconRefresh.style.transform = 'rotate(360deg)';
+      showToastNotification('Syncing live telemetry from GSM controllers...', 'default');
+      setTimeout(() => {
+        iconRefresh.style.transform = 'none';
+        showToastNotification('All 4 motors telemetry updated', 'success');
+      }, 550);
+    });
+
+    // Global interactive toggle for motor cards
+    window.toggleMotorRow = (cardId) => {
+      const card = document.getElementById(cardId);
+      if (!card) return;
+
+      const currentStatus = card.getAttribute('data-status');
+      const statusLabel = card.querySelector('.motor-status-label');
+      const actionBtn = card.querySelector('.btn-motor-action');
+      const currentVal = card.querySelector('.motor-current-val');
+      const voltageVal = card.querySelector('.motor-voltage-val');
+
+      if (currentStatus === 'running') {
+        // Switch to stopped
+        card.setAttribute('data-status', 'stopped');
+        card.classList.remove('card-running-glow', 'border-2', 'border-emerald-400/70');
+        card.classList.add('border', 'border-slate-100');
+        
+        statusLabel.textContent = 'STOPPED';
+        statusLabel.parentElement.className = 'inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-slate-100 text-slate-600 border border-slate-200';
+        
+        actionBtn.className = 'btn-motor-action btn-tactile px-4 py-1.5 rounded-xl text-xs font-black bg-emerald-600 hover:bg-emerald-700 text-white shadow-tactileGreen transition-all cursor-pointer flex items-center gap-1.5';
+        actionBtn.innerHTML = `
+          <svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"></path></svg>
+          <span>Start Motor</span>
+        `;
+        
+        currentVal.textContent = '0.0 A';
+        currentVal.className = 'motor-current-val text-xs font-black text-slate-600';
+        voltageVal.textContent = '0 V';
+
+        showToastNotification('Motor stopped successfully', 'warning');
+        recalcOverview();
+      } else if (currentStatus === 'stopped') {
+        // Switch to running
+        showToastNotification('Sending Start pulse to controller...', 'default');
+        setTimeout(() => {
+          card.setAttribute('data-status', 'running');
+          card.classList.add('card-running-glow', 'border-2', 'border-emerald-400/70');
+          card.classList.remove('border', 'border-slate-100');
+
+          statusLabel.textContent = 'RUNNING';
+          statusLabel.parentElement.className = 'inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-black bg-emerald-50 text-emerald-700 border border-emerald-200';
+          
+          actionBtn.className = 'btn-motor-action btn-tactile px-4 py-1.5 rounded-xl text-xs font-black bg-red-100 hover:bg-red-200 text-red-700 border border-red-200 shadow-xs transition-all cursor-pointer flex items-center gap-1.5';
+          actionBtn.innerHTML = `
+            <span class="w-2.5 h-2.5 bg-red-600 rounded-xs"></span>
+            <span>Stop Motor</span>
+          `;
+
+          currentVal.textContent = '7.8 A';
+          currentVal.className = 'motor-current-val text-xs font-black text-slate-900';
+          voltageVal.textContent = '415 V';
+
+          showToastNotification('Motor started successfully!', 'success');
+          recalcOverview();
+        }, 600);
+      } else if (currentStatus === 'fault') {
+        // Clear fault to standby
+        showToastNotification('Resetting overload trip relay...', 'default');
+        setTimeout(() => {
+          card.setAttribute('data-status', 'stopped');
+          card.classList.remove('border-2', 'border-red-300/80');
+          card.classList.add('border', 'border-slate-100');
+
+          statusLabel.textContent = 'STOPPED';
+          statusLabel.parentElement.className = 'inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-slate-100 text-slate-600 border border-slate-200';
+
+          actionBtn.className = 'btn-motor-action btn-tactile px-4 py-1.5 rounded-xl text-xs font-black bg-emerald-600 hover:bg-emerald-700 text-white shadow-tactileGreen transition-all cursor-pointer flex items-center gap-1.5';
+          actionBtn.innerHTML = `
+            <svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"></path></svg>
+            <span>Start Motor</span>
+          `;
+
+          currentVal.textContent = '0.0 A';
+          currentVal.className = 'motor-current-val text-xs font-black text-slate-600';
+
+          showToastNotification('Trip cleared. Motor is now ready in Standby.', 'success');
+          recalcOverview();
+        }, 500);
+      }
+    };
+
+    function recalcOverview() {
+      const runningCount = document.querySelectorAll('.motor-item-card[data-status="running"]').length;
+      if (statRunning) statRunning.textContent = runningCount;
+      if (statLoad) statLoad.innerHTML = `${(runningCount * 5.2).toFixed(1)} <span class="text-xs font-semibold text-slate-300">kW</span>`;
+    }
+
+    function showToastNotification(msg, type = 'default') {
+      const toastEl = document.getElementById('app-unified-toast');
+      if (toastEl) {
+        toastEl.textContent = (type === 'success' ? '✓ ' : type === 'warning' ? '⚠️ ' : '') + msg;
+        toastEl.style.opacity = '1';
+        toastEl.style.transform = 'translateX(-50%) translateY(0)';
+        clearTimeout(window.__motorsToastTimer);
+        window.__motorsToastTimer = setTimeout(() => {
+          toastEl.style.opacity = '0';
+          toastEl.style.transform = 'translateX(-50%) translateY(20px)';
+        }, 2200);
+      }
+    }
+  });
+</script>
+</body>
+</html>

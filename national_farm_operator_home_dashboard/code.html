@@ -1,0 +1,826 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport">
+  <title>National Farm Operator Dashboard - Smart Motor Control</title>
+  
+  <!-- Google Fonts: Inter (Clear, Simple, Standard Modern UI Font) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  
+  <!-- Tailwind CSS v3 -->
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  
+  <!-- Tailwind Configuration -->
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              red: '#D81921',
+              darkRed: '#B91219',
+              green: '#10B981',
+              darkGreen: '#059669',
+              mint: '#DCFCE7',
+              graySub: '#64748B',
+              bgLight: '#F3F5F9',
+            }
+          },
+          fontFamily: {
+            sans: ['"Inter"', '-apple-system', 'BlinkMacSystemFont', '"Segoe UI"', 'Roboto', 'Helvetica Neue', 'Arial', 'sans-serif'],
+          },
+          boxShadow: {
+            subtle: '0 2px 10px rgba(0, 0, 0, 0.04), 0 1px 3px rgba(0, 0, 0, 0.02)',
+            card: '0 4px 16px rgba(15, 23, 42, 0.06), 0 1px 3px rgba(15, 23, 42, 0.03)',
+            nav: '0 -2px 15px rgba(0, 0, 0, 0.05)'
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Modern Animations & Micro-Interactions -->
+  <style>
+    * {
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      user-select: none;
+      background: #F3F5F9;
+      margin: 0;
+      padding: 0;
+    }
+
+    /* Pump Floating Levitation Animation */
+    @keyframes gentleLevitate {
+      0%, 100% { transform: translateY(0px) scale(1); }
+      50% { transform: translateY(-4px) scale(1.015); }
+    }
+    .animate-float-pump {
+      animation: gentleLevitate 4.5s ease-in-out infinite;
+    }
+
+    /* Tactile button spring feedback */
+    .btn-tactile {
+      transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .btn-tactile:active {
+      transform: scale(0.95);
+    }
+
+    /* Smooth entrance */
+    @keyframes smoothSlideUp {
+      from { opacity: 0; transform: translateY(12px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .animate-entrance {
+      animation: smoothSlideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+
+    /* Reticle rotating glow */
+    @keyframes spinSlow {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+    .animate-spin-slow {
+      animation: spinSlow 16s linear infinite;
+    }
+
+    .no-scrollbar::-webkit-scrollbar { display: none; }
+    .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+  </style>
+</head>
+<body class="min-h-screen bg-slate-900 flex justify-center text-slate-800 antialiased selection:bg-red-100">
+
+<!-- Mobile Device Screen Container -->
+<div class="w-full bg-[#F4F6FA] min-h-screen relative flex flex-col overflow-x-hidden pb-24 shadow-2xl" style="width: 100%; max-width: 440px !important; min-width: 0; margin: 0 auto;">
+
+  <!-- ======================================================== -->
+  <!-- 1. TOP STATUS BAR (White iOS-Style on Red Background)     -->
+  <!-- ======================================================== -->
+  <div class="bg-[#D81921] px-5 pt-2 pb-1 flex items-center justify-between text-white text-xs font-semibold select-none">
+    <span class="tracking-tight font-bold text-[13px]">9:41</span>
+    <div class="flex items-center space-x-1.5">
+      <!-- Cellular Signal Bars -->
+      <svg class="w-4 h-3.5 fill-current" viewBox="0 0 17 12">
+        <rect x="0" y="8" width="2.5" height="4" rx="0.5"></rect>
+        <rect x="4" y="6" width="2.5" height="6" rx="0.5"></rect>
+        <rect x="8" y="3.5" width="2.5" height="8.5" rx="0.5"></rect>
+        <rect x="12" y="0.5" width="2.5" height="11.5" rx="0.5"></rect>
+      </svg>
+      <!-- WiFi Icon -->
+      <svg class="w-4 h-3.5 fill-current" viewBox="0 0 16 12">
+        <path d="M8 2.5C10.5 2.5 12.8 3.5 14.5 5.2L16 3.6C13.9 1.4 11.1 0 8 0C4.9 0 2.1 1.4 0 3.6L1.5 5.2C3.2 3.5 5.5 2.5 8 2.5ZM8 6C9.6 6 11 6.6 12.1 7.7L13.6 6.1C12.1 4.7 10.2 3.8 8 3.8C5.8 3.8 3.9 4.7 2.4 6.1L3.9 7.7C5 6.6 6.4 6 8 6ZM8 9.5C9 9.5 9.8 9.9 10.4 10.5L8 12.9L5.6 10.5C6.2 9.9 7 9.5 8 9.5Z"></path>
+      </svg>
+      <!-- Battery 100 Pill -->
+      <div class="flex items-center space-x-0.5">
+        <div class="border border-white/80 rounded-[4px] px-1 py-0.2 flex items-center justify-center text-[9px] font-black leading-none" style="height: 12px; min-width: 26px;">
+          100
+        </div>
+        <div class="w-0.5 h-1.5 bg-white/80 rounded-r-xs"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ======================================================== -->
+  <!-- 2. BRAND APP BAR (National Logo + Notification + Avatar) -->
+  <!-- ======================================================== -->
+  <header class="bg-[#D81921] px-4 py-2.5 flex items-center justify-between sticky top-0 z-40 shadow-sm">
+    <!-- Brand Logo & Identity -->
+    <div class="flex items-center space-x-2.5 cursor-pointer btn-tactile" data-route="home">
+      <!-- White Box with Red National Logo Badge -->
+      <div class="bg-white rounded-lg p-1 shadow-xs flex items-center justify-center" style="width: 38px; height: 38px;">
+        <img src="../assets/national-logo.svg" alt="National Logo" class="h-6 w-auto object-contain">
+      </div>
+      <div>
+        <span class="text-lg font-black tracking-tight text-white block leading-tight">National</span>
+        <span class="text-[11px] font-medium text-white/90 block leading-tight">Smart Motor Control</span>
+      </div>
+    </div>
+    
+    <!-- Action Icons -->
+    <div class="flex items-center space-x-2.5">
+      <!-- Notification Bell with Alert Dot -->
+      <button id="btnBell" aria-label="Notifications" class="w-9 h-9 rounded-full border border-white/30 bg-white/10 hover:bg-white/20 active:scale-90 transition-all flex items-center justify-center text-white cursor-pointer relative">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M14.857 17.082a23.848 23.848 0 005.454-1.31A8.967 8.967 0 0118 9.75v-.7V9A6 6 0 006 9v.75a8.967 8.967 0 01-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 01-5.714 0m5.714 0a3 3 0 11-5.714 0"></path>
+        </svg>
+        <span class="absolute top-1 right-1.5 w-2 h-2 rounded-full bg-white ring-2 ring-[#D81921]"></span>
+      </button>
+
+      <!-- Profile Avatar Button with Dropdown Chevron -->
+      <div class="flex items-center space-x-1 cursor-pointer btn-tactile" data-route="profile">
+        <div class="w-9 h-9 rounded-full bg-white text-[#D81921] font-black text-xs flex items-center justify-center shadow-xs">
+          RP
+        </div>
+        <svg class="w-3.5 h-3.5 text-white/90" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5"></path>
+        </svg>
+      </div>
+    </div>
+  </header>
+
+  <!-- ======================================================== -->
+  <!-- 3. FARM DASHBOARD HEADER WITH WEATHER & STATUS CHIPS     -->
+  <!-- ======================================================== -->
+  <section class="px-4 pt-3.5 pb-2 flex items-start justify-between">
+    <div>
+      <span class="text-[11px] font-black uppercase tracking-wider text-[#D81921] block mb-0.5">FARM DASHBOARD</span>
+      <h1 class="text-2xl font-black text-slate-900 tracking-tight leading-none mb-1">East Field Farm</h1>
+      <p class="text-xs font-semibold text-slate-500 flex items-center space-x-1">
+        <span>📍</span>
+        <span>Borewell Sector 4 • Submersible</span>
+      </p>
+    </div>
+
+    <!-- Weather & Connected Status Cards -->
+    <div class="flex items-center space-x-2 shrink-0">
+      <!-- Weather Card -->
+      <div class="bg-white rounded-2xl px-2.5 py-1.5 shadow-subtle border border-slate-100 flex items-center space-x-2">
+        <span class="text-lg">☀️</span>
+        <div>
+          <span class="text-xs font-black text-slate-900 block leading-tight">28°C</span>
+          <span class="text-[9px] font-semibold text-slate-400 block leading-none">Clear Sky</span>
+        </div>
+      </div>
+
+      <!-- Connected Status Card -->
+      <div class="bg-white rounded-2xl px-2.5 py-1.5 shadow-subtle border border-slate-100 flex items-center space-x-2 cursor-pointer btn-tactile" data-route="motors">
+        <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+        <div>
+          <span class="text-[11px] font-black text-slate-800 block leading-tight">4 Connected</span>
+          <span class="text-[9px] font-bold text-emerald-600 block leading-none">1 Running</span>
+        </div>
+        <svg class="w-3.5 h-3.5 text-slate-400" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5"></path>
+        </svg>
+      </div>
+    </div>
+  </section>
+
+  <!-- Main Scrollable Content Area -->
+  <main class="flex-1 px-4 py-1.5 space-y-3.5">
+
+    <!-- ======================================================== -->
+    <!-- 4. BIG MAIN PUMP SHOWCASE CARD                           -->
+    <!-- ======================================================== -->
+    <section class="bg-white rounded-[28px] p-4 shadow-card border border-slate-200/70 relative overflow-hidden animate-entrance" data-purpose="hero-motor-card">
+      
+      <!-- Top Row: Equipment Name, Rating & Running Status Badge -->
+      <div class="flex items-center justify-between mb-2.5">
+        <div class="flex items-center space-x-2">
+          <h2 class="text-2xl font-black text-slate-900 tracking-tight leading-none">Main Pump</h2>
+          <span class="text-[11px] font-bold text-slate-600 bg-slate-100 px-2.5 py-0.5 rounded-full">5.0 HP</span>
+        </div>
+
+        <!-- Big Running Badge -->
+        <div id="pumpStatusBadge" class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-black bg-emerald-50 text-emerald-700 border border-emerald-200/90 shadow-2xs transition-all">
+          <span class="relative flex h-2 w-2">
+            <span id="pumpPingRing" class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+            <span id="pumpStatusDot" class="relative inline-flex rounded-full h-2 w-2 bg-emerald-600"></span>
+          </span>
+          <span id="pumpStatusText" class="tracking-wide">RUNNING</span>
+        </div>
+      </div>
+
+      <!-- Telemetry Tags Row: Flow, RPM, Phase -->
+      <div class="flex items-center space-x-2 mb-3 overflow-x-auto no-scrollbar">
+        <div class="bg-slate-50 border border-slate-200/70 px-3 py-1 rounded-full text-[11px] font-extrabold text-slate-700 shadow-2xs flex items-center space-x-1.5 shrink-0">
+          <span class="text-blue-500">💧</span>
+          <span id="badgeFlow">Flow: 340 L/min</span>
+        </div>
+        <div class="bg-slate-50 border border-slate-200/70 px-3 py-1 rounded-full text-[11px] font-extrabold text-slate-700 shadow-2xs flex items-center space-x-1.5 shrink-0">
+          <span class="text-blue-600">⏱</span>
+          <span id="badgeRpm">2,850 RPM</span>
+        </div>
+        <div class="bg-slate-50 border border-slate-200/70 px-3 py-1 rounded-full text-[11px] font-extrabold text-slate-700 shadow-2xs flex items-center space-x-1.5 shrink-0">
+          <span class="text-amber-500">⚡</span>
+          <span>3-Phase</span>
+        </div>
+      </div>
+
+      <!-- Center Stage: Electric Blue Industrial Pump with Water Splash + Donut Progress Ring -->
+      <div class="grid grid-cols-12 gap-2 items-center my-2 relative min-w-0">
+        
+        <!-- Left 8 cols: Blue Pump with Dynamic Water Splash Wave -->
+        <div class="col-span-8 relative flex items-center justify-center min-w-0 overflow-hidden">
+          <img id="motorPhoto" 
+               src="../assets/hero_pump_water_splash.png" 
+               alt="National Smart Motor Pump with Water Splash" 
+               class="w-full max-w-full h-auto max-h-40 object-contain animate-float-pump transition-all duration-500 drop-shadow-sm">
+        </div>
+
+        <!-- Right 4 cols: Circular Donut Progress Ring ("Today 6h 24m Running") -->
+        <div class="col-span-4 flex flex-col items-center justify-center">
+          <div class="relative w-24 h-24 flex items-center justify-center">
+            <!-- SVG Donut Progress Ring -->
+            <svg class="w-24 h-24 transform -rotate-90" viewBox="0 0 100 100">
+              <!-- Background Circle -->
+              <circle cx="50" cy="50" r="40" stroke="#E2E8F0" stroke-width="8" fill="transparent" />
+              <!-- Animated Green Arc -->
+              <circle id="donutArc" cx="50" cy="50" r="40" stroke="#10B981" stroke-width="8" stroke-dasharray="251.2" stroke-dashoffset="75" stroke-linecap="round" fill="transparent" class="transition-all duration-1000" />
+            </svg>
+            <!-- Center Text in Ring -->
+            <div class="absolute inset-0 flex flex-col items-center justify-center text-center">
+              <span class="text-[10px] font-medium text-slate-400 leading-none mb-0.5">Today</span>
+              <span id="runtimeValue" class="text-[15px] font-black text-slate-900 leading-tight">6h 24m</span>
+              <span id="runtimeStatus" class="text-[10px] font-medium text-slate-500 leading-none mt-0.5">Running</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Row of 4 Telemetry Metrics: Voltage, Current, Frequency, Power -->
+      <div class="grid grid-cols-4 gap-2 mt-3 mb-4">
+        
+        <!-- 1. Voltage -->
+        <div class="bg-amber-50/40 border border-amber-100/90 rounded-2xl p-2.5 flex flex-col justify-between">
+          <div class="flex items-center space-x-1.5 mb-1">
+            <div class="w-5 h-5 rounded-md bg-amber-100 text-amber-600 flex items-center justify-center text-[10px] font-bold">⚡</div>
+            <span class="text-[11px] font-semibold text-slate-500">Voltage</span>
+          </div>
+          <div>
+            <div id="metricVoltage" class="text-base font-black text-slate-900 tracking-tight leading-none">415 V</div>
+            <div class="text-[9px] font-medium text-slate-400 mt-1 leading-none">(380 - 440 V)</div>
+          </div>
+        </div>
+
+        <!-- 2. Current -->
+        <div class="bg-emerald-50/40 border border-emerald-100/90 rounded-2xl p-2.5 flex flex-col justify-between">
+          <div class="flex items-center space-x-1.5 mb-1">
+            <div class="w-5 h-5 rounded-md bg-emerald-100 text-emerald-600 flex items-center justify-center text-[10px] font-bold">📈</div>
+            <span class="text-[11px] font-semibold text-slate-500">Current</span>
+          </div>
+          <div>
+            <div id="metricCurrent" class="text-base font-black text-slate-900 tracking-tight leading-none">8.4 A</div>
+            <div class="text-[9px] font-medium text-slate-400 mt-1 leading-none">Load 70%</div>
+            <!-- Mini Progress Bar -->
+            <div class="w-full bg-emerald-100 h-1 rounded-full mt-1.5 overflow-hidden">
+              <div id="barCurrent" class="bg-emerald-500 h-full rounded-full transition-all duration-500" style="width: 70%;"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 3. Frequency -->
+        <div class="bg-blue-50/40 border border-blue-100/90 rounded-2xl p-2.5 flex flex-col justify-between">
+          <div class="flex items-center space-x-1.5 mb-1">
+            <div class="w-5 h-5 rounded-md bg-blue-100 text-blue-600 flex items-center justify-center text-[10px] font-bold">📉</div>
+            <span class="text-[11px] font-semibold text-slate-500">Frequency</span>
+          </div>
+          <div>
+            <div class="text-base font-black text-slate-900 tracking-tight leading-none">50.0 Hz</div>
+            <div class="text-[9px] font-bold text-emerald-600 mt-1 leading-none">Normal</div>
+            <!-- Underline -->
+            <div class="w-full bg-blue-100/60 h-1 rounded-full mt-1.5"></div>
+          </div>
+        </div>
+
+        <!-- 4. Power -->
+        <div class="bg-rose-50/40 border border-rose-100/90 rounded-2xl p-2.5 flex flex-col justify-between">
+          <div class="flex items-center space-x-1.5 mb-1">
+            <div class="w-5 h-5 rounded-md bg-rose-100 text-rose-600 flex items-center justify-center text-[10px] font-bold">📊</div>
+            <span class="text-[11px] font-semibold text-slate-500">Power</span>
+          </div>
+          <div>
+            <div id="metricPower" class="text-base font-black text-slate-900 tracking-tight leading-none">4.8 kW</div>
+            <div class="text-[9px] font-medium text-slate-400 mt-1 leading-none">Today: 14.2 kWh</div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Action Control Buttons: Start, Stop, Timed Run, Reset Fault -->
+      <div class="grid grid-cols-4 gap-2 mb-3">
+        <!-- 1. Start Button (Green) -->
+        <button id="btnStart" class="btn-tactile bg-[#10B981] hover:bg-emerald-600 text-white rounded-2xl py-3 px-1 flex flex-col items-center justify-center space-y-1 shadow-xs cursor-pointer">
+          <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24">
+            <polygon points="5 3 19 12 5 21 5 3"></polygon>
+          </svg>
+          <span class="text-xs font-bold leading-none">Start</span>
+        </button>
+
+        <!-- 2. Stop Button (Red) -->
+        <button id="btnStop" class="btn-tactile bg-[#EF4444] hover:bg-red-600 text-white rounded-2xl py-3 px-1 flex flex-col items-center justify-center space-y-1 shadow-xs cursor-pointer">
+          <div class="w-4 h-4 bg-white rounded-xs"></div>
+          <span class="text-xs font-bold leading-none">Stop</span>
+        </button>
+
+        <!-- 3. Timed Run Button (Blue) -->
+        <button id="btnTimedRun" class="btn-tactile bg-[#2563EB] hover:bg-blue-700 text-white rounded-2xl py-3 px-1 flex flex-col items-center justify-center space-y-1 shadow-xs cursor-pointer">
+          <svg class="w-5 h-5 stroke-[2.2]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <circle cx="12" cy="12" r="9"></circle>
+            <polyline points="12 6 12 12 16 14"></polyline>
+          </svg>
+          <span class="text-xs font-bold leading-none">Timed Run</span>
+        </button>
+
+        <!-- 4. Reset Fault Button (Light Grey) -->
+        <button id="btnResetFault" class="btn-tactile bg-slate-100 hover:bg-slate-200 text-slate-800 rounded-2xl py-3 px-1 flex flex-col items-center justify-center space-y-1 border border-slate-200/80 shadow-xs cursor-pointer">
+          <svg id="iconReset" class="w-5 h-5 stroke-[2.2] transition-transform duration-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182m0-4.991v4.99"></path>
+          </svg>
+          <span class="text-xs font-bold leading-none">Reset Fault</span>
+        </button>
+      </div>
+
+      <!-- View Pump Details & Diagnostics Bar -->
+      <a href="#" data-route="details" class="btn-tactile w-full bg-white rounded-2xl p-3 border border-slate-200/90 shadow-2xs flex items-center justify-between cursor-pointer hover:border-slate-300 transition-all">
+        <div class="flex items-center space-x-2.5">
+          <div class="w-7 h-7 rounded-lg bg-slate-100 text-slate-600 flex items-center justify-center">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z"></path>
+            </svg>
+          </div>
+          <span class="text-xs font-bold text-slate-800">View Pump Details &amp; Diagnostics</span>
+        </div>
+        <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5"></path>
+        </svg>
+      </a>
+
+    </section>
+
+    <!-- ======================================================== -->
+    <!-- 5. QUICK MANAGEMENT SECTION (2x2 Grid)                   -->
+    <!-- ======================================================== -->
+    <section class="space-y-2 pt-1 animate-entrance" style="animation-delay: 0.1s;">
+      <div class="flex items-center justify-between px-1">
+        <h2 class="text-xs font-black text-slate-400 uppercase tracking-wider">QUICK MANAGEMENT</h2>
+        <span class="text-[11px] font-semibold text-slate-400">One-Tap Controls</span>
+      </div>
+
+      <div class="grid grid-cols-2 gap-3">
+        
+        <!-- Card 1: All Motors (Full Card Image) -->
+        <div data-route="motors" class="btn-tactile relative overflow-hidden rounded-3xl min-h-[148px] p-3.5 shadow-card border border-slate-200/60 hover:shadow-lg transition-all cursor-pointer flex flex-col justify-between group">
+          <!-- Full Card Background Image -->
+          <img src="../assets/card_all_motors.jpg" alt="All Motors Station" class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
+          <!-- Gradient Vignette for Text Legibility -->
+          <div class="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-slate-950/50 to-slate-900/30"></div>
+
+          <!-- Top Row (Glass Icon + Glass Chevron) -->
+          <div class="relative z-10 flex items-center justify-between">
+            <div class="w-8 h-8 rounded-xl bg-white/20 backdrop-blur-md border border-white/30 text-white flex items-center justify-center shadow-xs">
+              <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24">
+                <path d="M4 6h14a2 2 0 012 2v8a2 2 0 01-2 2H4a2 2 0 01-2-2V8a2 2 0 012-2zm16 3h2v6h-2V9zM7 8v8m3-8v8m3-8v8" stroke="currentColor" stroke-linecap="round" stroke-width="1.5"></path>
+              </svg>
+            </div>
+            <div class="w-6 h-6 rounded-full bg-white/20 backdrop-blur-md border border-white/30 text-white flex items-center justify-center group-hover:translate-x-0.5 transition-transform">
+              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5"></path>
+              </svg>
+            </div>
+          </div>
+
+          <!-- Bottom Text Overlay -->
+          <div class="relative z-10">
+            <span class="text-[11px] font-bold text-white/80 block leading-tight">All Motors</span>
+            <div class="text-lg font-black text-white mt-0.5 leading-tight tracking-tight">4 Connected</div>
+            <p class="text-[11px] font-extrabold text-emerald-400 mt-0.5 leading-none flex items-center gap-1">
+              <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+              <span>1 Running</span>
+            </p>
+          </div>
+        </div>
+
+        <!-- Card 2: Schedules (Full Card Image) -->
+        <div data-route="schedule" class="btn-tactile relative overflow-hidden rounded-3xl min-h-[148px] p-3.5 shadow-card border border-slate-200/60 hover:shadow-lg transition-all cursor-pointer flex flex-col justify-between group">
+          <!-- Full Card Background Image -->
+          <img src="../assets/card_schedules.jpg" alt="Farm Sprinkler Irrigation" class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
+          <!-- Gradient Vignette -->
+          <div class="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-slate-950/50 to-slate-900/30"></div>
+
+          <!-- Top Row -->
+          <div class="relative z-10 flex items-center justify-between">
+            <div class="w-8 h-8 rounded-xl bg-white/20 backdrop-blur-md border border-white/30 text-white flex items-center justify-center shadow-xs">
+              <svg class="w-4 h-4 stroke-[2]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <rect height="18" rx="2" ry="2" width="18" x="3" y="4"></rect>
+                <line x1="16" x2="16" y1="2" y2="6"></line>
+                <line x1="8" x2="8" y1="2" y2="6"></line>
+                <line x1="3" x2="21" y1="10" y2="10"></line>
+              </svg>
+            </div>
+            <div class="w-6 h-6 rounded-full bg-white/20 backdrop-blur-md border border-white/30 text-white flex items-center justify-center group-hover:translate-x-0.5 transition-transform">
+              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5"></path>
+              </svg>
+            </div>
+          </div>
+
+          <!-- Bottom Text Overlay -->
+          <div class="relative z-10">
+            <span class="text-[11px] font-bold text-white/80 block leading-tight">Schedules</span>
+            <div class="text-lg font-black text-white mt-0.5 leading-tight tracking-tight">2 Active</div>
+            <p class="text-[11px] font-extrabold text-cyan-300 mt-0.5 leading-none flex items-center gap-1">
+              <span>⏱</span>
+              <span>Next: 05:30 PM</span>
+            </p>
+          </div>
+        </div>
+
+        <!-- Card 3: Protection (Full Card Image) -->
+        <div data-route="protection" class="btn-tactile relative overflow-hidden rounded-3xl min-h-[148px] p-3.5 shadow-card border border-slate-200/60 hover:shadow-lg transition-all cursor-pointer flex flex-col justify-between group">
+          <!-- Full Card Background Image -->
+          <img src="../assets/card_protection.jpg" alt="Smart Starter Panel" class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
+          <!-- Gradient Vignette -->
+          <div class="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-slate-950/50 to-slate-900/30"></div>
+
+          <!-- Top Row -->
+          <div class="relative z-10 flex items-center justify-between">
+            <div class="w-8 h-8 rounded-xl bg-white/20 backdrop-blur-md border border-white/30 text-white flex items-center justify-center shadow-xs">
+              <svg class="w-4 h-4 stroke-[2.2] fill-none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M12 3c4.97 0 9 2.03 9 7.5 0 5.47-4.03 9-9 10.5C7.03 19.5 3 15.97 3 10.5 3 5.03 7.03 3 12 3z"></path>
+              </svg>
+            </div>
+            <div class="w-6 h-6 rounded-full bg-white/20 backdrop-blur-md border border-white/30 text-white flex items-center justify-center group-hover:translate-x-0.5 transition-transform">
+              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5"></path>
+              </svg>
+            </div>
+          </div>
+
+          <!-- Bottom Text Overlay -->
+          <div class="relative z-10">
+            <span class="text-[11px] font-bold text-white/80 block leading-tight">Protection</span>
+            <div class="text-lg font-black text-white mt-0.5 leading-tight tracking-tight">All Safe</div>
+            <p class="text-[11px] font-extrabold text-emerald-400 mt-0.5 leading-none flex items-center gap-1">
+              <span>🛡</span>
+              <span>0 Active Faults</span>
+            </p>
+          </div>
+        </div>
+
+        <!-- Card 4: Auto Starter Analytics (Full Card Image) -->
+        <div data-route="analytics" class="btn-tactile relative overflow-hidden rounded-3xl min-h-[148px] p-3.5 shadow-card border border-slate-200/60 hover:shadow-lg transition-all cursor-pointer flex flex-col justify-between group">
+          <!-- Full Card Background Image -->
+          <img src="../assets/card_power.jpg" alt="Farm Energy Substation" class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
+          <!-- Gradient Vignette -->
+          <div class="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-slate-950/50 to-slate-900/30"></div>
+
+          <!-- Top Row -->
+          <div class="relative z-10 flex items-center justify-between">
+            <div class="w-8 h-8 rounded-xl bg-white/20 backdrop-blur-md border border-white/30 text-white flex items-center justify-center shadow-xs">
+              <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24">
+                <path d="M4 19h4V9H4v10zm6 0h4V5h-4v14zm6 0h4v-7h-4v7z"></path>
+              </svg>
+            </div>
+            <div class="w-6 h-6 rounded-full bg-white/20 backdrop-blur-md border border-white/30 text-white flex items-center justify-center group-hover:translate-x-0.5 transition-transform">
+              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5"></path>
+              </svg>
+            </div>
+          </div>
+
+          <!-- Bottom Text Overlay -->
+          <div class="relative z-10">
+            <span class="text-[11px] font-bold text-white/80 block leading-tight">Starter Analytics</span>
+            <div class="text-lg font-black text-white mt-0.5 leading-tight tracking-tight">4.8 kW</div>
+            <p class="text-[11px] font-extrabold text-amber-300 mt-0.5 leading-none flex items-center gap-1">
+              <span>⚡</span>
+              <span>Telemetry &bull; 24h Curve</span>
+            </p>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ======================================================== -->
+    <!-- 6. ANALYTICS & RECENT ACTIVITY (Side-by-Side 2 Cards)    -->
+    <!-- ======================================================== -->
+    <section class="grid grid-cols-2 gap-3 pt-1 animate-entrance" style="animation-delay: 0.15s;">
+      
+      <!-- Left Card: Today's Power Usage Wave Chart (Click to Open Analytics) -->
+      <div data-route="analytics" class="btn-tactile bg-white rounded-3xl p-3.5 shadow-card border border-slate-200/70 hover:border-slate-300 transition-all cursor-pointer flex flex-col justify-between">
+        <!-- Header -->
+        <div class="flex items-center justify-between mb-2">
+          <div class="flex items-center space-x-1">
+            <span class="text-amber-500 text-xs">⚡</span>
+            <span class="text-[11px] font-bold text-slate-800">Today's Power Usage</span>
+          </div>
+          <span class="text-[9px] font-bold text-slate-600 bg-slate-100 px-1.5 py-0.5 rounded-full">14.2 kWh</span>
+        </div>
+
+        <!-- Chart Grid with Curve -->
+        <div class="relative w-full h-24 my-1 flex items-end">
+          <!-- Y-Axis Values -->
+          <div class="absolute left-0 top-0 bottom-0 flex flex-col justify-between text-[8px] font-bold text-slate-400 leading-none">
+            <span>8</span>
+            <span>4</span>
+            <span>0</span>
+          </div>
+
+          <!-- SVG Smooth Area Curve -->
+          <svg class="w-full h-20 ml-3" viewBox="0 0 160 80" preserveAspectRatio="none">
+            <defs>
+              <linearGradient id="powerGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                <stop offset="0%" stop-color="#EF4444" stop-opacity="0.3" />
+                <stop offset="100%" stop-color="#EF4444" stop-opacity="0.0" />
+              </linearGradient>
+            </defs>
+            <!-- Area Fill -->
+            <path d="M 0 65 L 25 65 Q 40 55 50 40 T 80 35 T 110 32 T 130 45 T 150 48 T 160 55 L 160 80 L 0 80 Z" fill="url(#powerGrad)" />
+            <!-- Line Stroke -->
+            <path d="M 0 65 L 25 65 Q 40 55 50 40 T 80 35 T 110 32 T 130 45 T 150 48 T 160 55" fill="none" stroke="#EF4444" stroke-width="2" stroke-linecap="round" />
+          </svg>
+        </div>
+
+        <!-- X-Axis Labels -->
+        <div class="flex justify-between text-[8px] font-semibold text-slate-400 mt-1 pl-3">
+          <span>12 AM</span>
+          <span>6 AM</span>
+          <span>12 PM</span>
+          <span>6 PM</span>
+          <span>12 AM</span>
+        </div>
+      </div>
+
+      <!-- Right Card: Recent Activity -->
+      <div class="bg-white rounded-3xl p-3.5 shadow-card border border-slate-200/70 flex flex-col justify-between">
+        <!-- Header -->
+        <div class="flex items-center justify-between mb-2">
+          <div class="flex items-center space-x-1">
+            <svg class="w-3.5 h-3.5 text-blue-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"></path>
+            </svg>
+            <span class="text-[11px] font-bold text-slate-800">Recent Activity</span>
+          </div>
+          <a href="#" class="text-[10px] font-bold text-blue-600 hover:underline">View All</a>
+        </div>
+
+        <!-- Activity Timeline Items -->
+        <div class="space-y-2 my-auto">
+          <!-- Item 1 -->
+          <div class="flex items-center justify-between text-[10px]">
+            <div class="flex items-center space-x-1.5 truncate">
+              <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 shrink-0"></span>
+              <span class="font-semibold text-slate-700 truncate">Main Pump Started</span>
+            </div>
+            <span class="text-slate-400 font-medium shrink-0 ml-1">09:10 AM</span>
+          </div>
+
+          <!-- Item 2 -->
+          <div class="flex items-center justify-between text-[10px]">
+            <div class="flex items-center space-x-1.5 truncate">
+              <span class="w-1.5 h-1.5 rounded-full bg-blue-500 shrink-0"></span>
+              <span class="font-semibold text-slate-700 truncate">Schedule Updated</span>
+            </div>
+            <span class="text-slate-400 font-medium shrink-0 ml-1">08:30 AM</span>
+          </div>
+
+          <!-- Item 3 -->
+          <div class="flex items-center justify-between text-[10px]">
+            <div class="flex items-center space-x-1.5 truncate">
+              <span class="w-1.5 h-1.5 rounded-full bg-amber-500 shrink-0"></span>
+              <span class="font-semibold text-slate-700 truncate">Voltage Normalised</span>
+            </div>
+            <span class="text-slate-400 font-medium shrink-0 ml-1">07:15 AM</span>
+          </div>
+
+          <!-- Item 4 -->
+          <div class="flex items-center justify-between text-[10px]">
+            <div class="flex items-center space-x-1.5 truncate">
+              <span class="w-1.5 h-1.5 rounded-full bg-red-500 shrink-0"></span>
+              <span class="font-semibold text-slate-700 truncate">Auto Stopped (Timer)</span>
+            </div>
+            <span class="text-slate-400 font-medium shrink-0 ml-1">06:00 AM</span>
+          </div>
+        </div>
+
+      </div>
+
+    </section>
+
+  </main>
+
+  <!-- ======================================================== -->
+  <!-- ======================================================== -->
+  <!-- ANIMATED CURVED BOTTOM NAVIGATION BAR                     -->
+  <!-- ======================================================== -->
+  <nav class="curved-navbar-wrapper" data-purpose="bottom-tab-bar" style="--active-tab: 0;">
+    <div class="curved-navbar-body">
+      <!-- Sliding Dome & Elevated Circle -->
+      <div class="nav-sliding-indicator">
+        <svg class="nav-dome-svg" viewBox="0 0 100 26" preserveAspectRatio="none">
+          <path d="M 0,26 C 14,26 22,20 28,12 C 36,1 42,0 50,0 C 58,0 64,1 72,12 C 78,20 86,26 100,26 L 100,28 L 0,28 Z"></path>
+        </svg>
+        <div class="nav-floating-circle">
+          <span class="nav-floating-icon">
+            <svg fill="currentColor" viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"></path></svg>
+          </span>
+        </div>
+      </div>
+
+      <!-- 5 Standard Navigation Tabs (Matching Motors Screen) -->
+      <div class="nav-tabs-row">
+        <!-- 0: Home -->
+        <a class="nav-tab-item active" data-index="0" data-route="home" href="#">
+          <div class="nav-tab-icon-wrap">
+            <svg fill="currentColor" viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"></path></svg>
+          </div>
+          <span class="nav-tab-label">Home</span>
+        </a>
+
+        <!-- 1: Motors -->
+        <a class="nav-tab-item" data-index="1" data-route="motors" href="#">
+          <div class="nav-tab-icon-wrap">
+            <svg fill="currentColor" viewBox="0 0 24 24"><path d="M19 13h-1V9a2 2 0 00-2-2h-1V5a1 1 0 00-1-1H9a1 1 0 00-1 1v2H7a2 2 0 00-2 2v4H4a1 1 0 00-1 1v4a1 1 0 001 1h1v1a1 1 0 001 1h12a1 1 0 001-1v-1h1a1 1 0 001-1v-4a1 1 0 00-1-1zm-9-6h4v2h-4V7zm6 11H8v-7h8v7z"></path></svg>
+          </div>
+          <span class="nav-tab-label">Motors</span>
+        </a>
+
+        <!-- 2: Schedules -->
+        <a class="nav-tab-item" data-index="2" data-route="schedule" href="#">
+          <div class="nav-tab-icon-wrap">
+            <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+          </div>
+          <span class="nav-tab-label">Schedules</span>
+        </a>
+
+        <!-- 3: Analytics -->
+        <a class="nav-tab-item" data-index="3" data-route="analytics" href="#">
+          <div class="nav-tab-icon-wrap">
+            <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 013 19.875v-6.75zM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V8.625zM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V4.125z"></path></svg>
+          </div>
+          <span class="nav-tab-label">Analytics</span>
+        </a>
+
+        <!-- 4: Profile -->
+        <a class="nav-tab-item" data-index="4" data-route="profile" href="#">
+          <div class="nav-tab-icon-wrap">
+            <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z"></path></svg>
+          </div>
+          <span class="nav-tab-label">Profile</span>
+        </a>
+      </div>
+
+      <!-- Home Indicator -->
+      <div class="nav-home-indicator"></div>
+    </div>
+  </nav>
+
+  <!-- Unified Toast Notification -->
+  <div id="app-unified-toast" class="fixed top-14 left-1/2 -translate-x-1/2 z-50 bg-slate-900/95 text-white px-4 py-2 rounded-full text-xs font-bold shadow-xl border border-slate-700 pointer-events-none opacity-0 transition-all duration-300 flex items-center space-x-2">
+    <span>Main Pump command executed</span>
+  </div>
+
+</div>
+
+<!-- Core Runtime Script for App Navigation -->
+<script src="../app-runtime.js"></script>
+
+<!-- Interactive Dashboard State Controller -->
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    let isRunning = true;
+    const btnStart = document.getElementById('btnStart');
+    const btnStop = document.getElementById('btnStop');
+    const btnTimedRun = document.getElementById('btnTimedRun');
+    const btnResetFault = document.getElementById('btnResetFault');
+    const iconReset = document.getElementById('iconReset');
+
+    const statusBadge = document.getElementById('pumpStatusBadge');
+    const statusText = document.getElementById('pumpStatusText');
+    const pingRing = document.getElementById('pumpPingRing');
+    const statusDot = document.getElementById('pumpStatusDot');
+
+    const metricCurrent = document.getElementById('metricCurrent');
+    const barCurrent = document.getElementById('barCurrent');
+    const metricPower = document.getElementById('metricPower');
+    const motorPhoto = document.getElementById('motorPhoto');
+    const donutArc = document.getElementById('donutArc');
+    const runtimeStatus = document.getElementById('runtimeStatus');
+
+    function setRunningState(running) {
+      isRunning = running;
+      if (running) {
+        // RUNNING STATE
+        statusBadge.className = 'inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-black bg-emerald-50 text-emerald-700 border border-emerald-200/90 shadow-2xs transition-all';
+        statusText.textContent = 'RUNNING';
+        pingRing.className = 'animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75';
+        statusDot.className = 'relative inline-flex rounded-full h-2 w-2 bg-emerald-600';
+
+        metricCurrent.textContent = '8.4 A';
+        barCurrent.style.width = '70%';
+        if (metricPower) metricPower.textContent = '4.8 kW';
+        if (runtimeStatus) runtimeStatus.textContent = 'Running';
+
+        // Animate Donut Ring
+        donutArc.style.strokeDashoffset = '75';
+        donutArc.style.stroke = '#10B981';
+
+        motorPhoto.style.filter = 'drop-shadow(0 4px 12px rgba(37,99,235,0.22))';
+        motorPhoto.classList.add('animate-float-pump');
+
+        showAppToast('Main Pump Started • Water Discharging at 340 L/min');
+      } else {
+        // STOPPED STATE
+        statusBadge.className = 'inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-black bg-slate-100 text-slate-600 border border-slate-200 shadow-2xs transition-all';
+        statusText.textContent = 'STOPPED';
+        pingRing.className = 'hidden';
+        statusDot.className = 'relative inline-flex rounded-full h-2 w-2 bg-slate-400';
+
+        metricCurrent.textContent = '0.0 A';
+        barCurrent.style.width = '0%';
+        if (metricPower) metricPower.textContent = '0.0 kW';
+        if (runtimeStatus) runtimeStatus.textContent = 'Standby';
+
+        // Donut Ring Dimmed
+        donutArc.style.strokeDashoffset = '251.2';
+        donutArc.style.stroke = '#CBD5E1';
+
+        motorPhoto.style.filter = 'grayscale(35%) opacity(85%)';
+        motorPhoto.classList.remove('animate-float-pump');
+
+        showAppToast('Main Pump Stopped Safely');
+      }
+    }
+
+    btnStart?.addEventListener('click', () => {
+      setRunningState(true);
+    });
+
+    btnStop?.addEventListener('click', () => {
+      setRunningState(false);
+    });
+
+    btnTimedRun?.addEventListener('click', () => {
+      showAppToast('Timed Run Active: Set for 2 Hours (120 Mins)');
+    });
+
+    btnResetFault?.addEventListener('click', () => {
+      if (iconReset) {
+        iconReset.style.transform = 'rotate(360deg)';
+        setTimeout(() => { iconReset.style.transform = 'none'; }, 550);
+      }
+      showAppToast('Fault Memory Cleared • All Protections Normal');
+    });
+
+    // Notification bell
+    document.getElementById('btnBell')?.addEventListener('click', () => {
+      showAppToast('3 New Notifications: Schedule run complete');
+    });
+
+    // Toast helper
+    function showAppToast(msg) {
+      const toastEl = document.getElementById('app-unified-toast');
+      if (toastEl) {
+        toastEl.textContent = '⚡ ' + msg;
+        toastEl.style.opacity = '1';
+        clearTimeout(window.__homeToastTimer);
+        window.__homeToastTimer = setTimeout(() => {
+          toastEl.style.opacity = '0';
+        }, 2400);
+      }
+    }
+  });
+</script>
+</body>
+</html>

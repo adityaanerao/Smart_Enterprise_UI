@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport"/>
+  <title>Dry-Run Protection Settings - National Auto Starter</title>
+  <!-- Google Fonts: Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              red: '#D81921',
+              darkRed: '#B91219',
+              lightRed: '#FEECEC',
+              emerald: '#10B981',
+              darkEmerald: '#059669',
+              waterBlue: '#0284c7'
+            }
+          },
+          fontFamily: {
+            sans: ['"Inter"', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body {
+      -webkit-tap-highlight-color: transparent;
+      user-select: none;
+    }
+    .stepper-btn:active {
+      transform: scale(0.92);
+    }
+    .save-btn:active {
+      transform: scale(0.98);
+    }
+  </style>
+</head>
+<body class="bg-slate-100 font-sans antialiased text-slate-800 min-h-screen flex justify-center items-start">
+  <!-- Mobile Screen Container -->
+  <div class="w-full max-w-md min-h-screen bg-[#F4F6F9] flex flex-col relative pb-8 shadow-xl">
+    
+    <!-- Top Header Bar (National Crimson) -->
+    <header class="bg-gradient-to-r from-[#D81921] via-[#D81921] to-[#B91219] text-white pt-5 pb-6 px-4 rounded-b-[24px] shadow-md relative z-10">
+      <div class="flex items-center gap-2.5">
+        <!-- Back Button -->
+        <button data-route="protection" aria-label="Go back" class="p-2 -ml-2 rounded-full hover:bg-white/10 active:scale-90 transition-all focus:outline-none flex items-center justify-center cursor-pointer shrink-0" id="backBtn" type="button">
+          <svg class="w-6 h-6 text-white stroke-[2.5]" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
+            <path d="M15 19l-7-7 7-7"></path>
+          </svg>
+        </button>
+
+        <!-- National Brand Logo in Left Corner After Back Button -->
+        <div class="bg-white rounded-lg p-1 shadow-xs flex items-center justify-center shrink-0 cursor-pointer btn-tactile" data-route="home" style="width: 36px; height: 36px;">
+          <img src="../assets/national-logo.svg" alt="National Logo" class="h-5 w-auto object-contain">
+        </div>
+
+        <!-- Title and Subtitle -->
+        <div class="flex-1 min-w-0">
+          <div class="flex items-center justify-between gap-1">
+            <h1 class="text-lg font-extrabold tracking-tight text-white leading-tight truncate">Dry-Run Protection</h1>
+            <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold bg-white/20 text-white backdrop-blur-sm shrink-0">
+              Well Safety
+            </span>
+          </div>
+          <p class="text-xs text-red-100 mt-0.5 font-normal truncate">Protects pump from running without water</p>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="flex-1 px-4 pt-4 space-y-3.5 overflow-y-auto">
+      
+      <!-- Master Toggle Card -->
+      <section class="bg-white rounded-2xl p-4 shadow-sm border border-slate-100 flex items-center justify-between" id="masterToggleCard">
+        <div class="flex items-center space-x-3.5">
+          <div class="w-11 h-11 rounded-2xl bg-sky-50 flex items-center justify-center flex-shrink-0 text-sky-600" id="statusIconBadge">
+            <svg class="w-6 h-6 fill-current" viewBox="0 0 24 24">
+              <path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"></path>
+            </svg>
+          </div>
+          <div>
+            <h2 class="text-sm font-bold text-slate-900 leading-snug">Dry-Run Automatic Cutoff</h2>
+            <p class="text-[11px] text-slate-500 leading-tight mt-0.5">Stops motor immediately if underground water drops</p>
+          </div>
+        </div>
+        <label class="relative inline-flex items-center cursor-pointer ml-3 flex-shrink-0 active:scale-95 transition-transform">
+          <input aria-label="Toggle Dry-Run Protection" checked class="sr-only peer" id="protectionToggle" type="checkbox"/>
+          <div class="w-12 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-6 peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-emerald-500 shadow-inner"></div>
+        </label>
+      </section>
+
+      <!-- Live Water Load Current Comparison Card -->
+      <section class="bg-gradient-to-br from-slate-900 to-slate-800 rounded-2xl p-3.5 text-white shadow-md">
+        <div class="flex items-center justify-between mb-2">
+          <div class="flex items-center gap-2">
+            <span class="w-2 h-2 rounded-full bg-sky-400 animate-pulse"></span>
+            <span class="text-xs font-semibold text-slate-300">Water Load Monitoring</span>
+          </div>
+          <span class="text-[11px] font-bold text-sky-400 bg-sky-500/10 px-2 py-0.5 rounded-full border border-sky-500/30">Water Flowing</span>
+        </div>
+        <div class="grid grid-cols-2 gap-2 text-center pt-1">
+          <div class="bg-white/10 rounded-xl p-2.5 border border-white/5 text-left">
+            <div class="text-[10px] text-slate-400 font-semibold">Running Load Current</div>
+            <div class="text-base font-extrabold text-emerald-400 mt-0.5">8.4 A <span class="text-[10px] font-medium text-slate-300">(Normal)</span></div>
+          </div>
+          <div class="bg-white/10 rounded-xl p-2.5 border border-white/5 text-left">
+            <div class="text-[10px] text-slate-400 font-semibold">Dry Run Cutoff Point</div>
+            <div class="text-base font-extrabold text-amber-400 mt-0.5" id="liveCutoffVal">5.2 A <span class="text-[10px] font-medium text-slate-300">(Trip)</span></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Detection Method Radio Selection -->
+      <section class="bg-white rounded-2xl p-3.5 shadow-sm border border-slate-100" id="detectionSection">
+        <h3 class="text-xs font-bold text-slate-800 uppercase tracking-wider mb-2.5">Detection Method</h3>
+        <div class="space-y-2" id="methodOptions">
+          <!-- Method 1 -->
+          <label class="method-option flex items-start space-x-3 p-2.5 rounded-xl border border-sky-200 bg-sky-50/50 cursor-pointer transition-all" data-method="current">
+            <input type="radio" name="dryRunMethod" value="current" checked class="mt-0.5 text-sky-600 focus:ring-sky-500"/>
+            <div class="flex-1 min-w-0">
+              <div class="flex items-center justify-between">
+                <span class="text-xs font-bold text-slate-900">Current Sensing (Undercurrent)</span>
+                <span class="text-[10px] font-bold text-sky-700 bg-sky-100 px-1.5 py-0.5 rounded-md">Recommended</span>
+              </div>
+              <p class="text-[11px] text-slate-500 mt-0.5">Auto-detects current drop when water pump loses suction</p>
+            </div>
+          </label>
+          <!-- Method 2 -->
+          <label class="method-option flex items-start space-x-3 p-2.5 rounded-xl border border-slate-100 hover:bg-slate-50 cursor-pointer transition-all" data-method="power">
+            <input type="radio" name="dryRunMethod" value="power" class="mt-0.5 text-sky-600 focus:ring-sky-500"/>
+            <div class="flex-1 min-w-0">
+              <span class="text-xs font-bold text-slate-800">Power Factor (Cos Φ Sensing)</span>
+              <p class="text-[11px] text-slate-500 mt-0.5">Detects inductive phase angle shift on unladen impeller</p>
+            </div>
+          </label>
+          <!-- Method 3 -->
+          <label class="method-option flex items-start space-x-3 p-2.5 rounded-xl border border-slate-100 hover:bg-slate-50 cursor-pointer transition-all" data-method="sensor">
+            <input type="radio" name="dryRunMethod" value="sensor" class="mt-0.5 text-sky-600 focus:ring-sky-500"/>
+            <div class="flex-1 min-w-0">
+              <span class="text-xs font-bold text-slate-800">Borewell Level Probe / Sensor</span>
+              <p class="text-[11px] text-slate-500 mt-0.5">Physical electrode probes suspended down the bore casing</p>
+            </div>
+          </label>
+        </div>
+      </section>
+
+      <!-- Stepper 1: Low Current Threshold -->
+      <section class="bg-white rounded-2xl p-4 shadow-sm border border-slate-100" id="cardThreshold">
+        <div class="flex items-start justify-between">
+          <div>
+            <h3 class="text-sm font-bold text-slate-900 leading-snug">Low Current Threshold</h3>
+            <p class="text-[11px] text-slate-500 mt-0.5">Below this current, starter detects no water</p>
+          </div>
+          <span class="text-[11px] font-semibold text-sky-700 bg-sky-50 px-2 py-0.5 rounded-full border border-sky-100">5.0 HP Target</span>
+        </div>
+        <div class="mt-3 flex items-center justify-between bg-slate-50 border border-slate-200 rounded-xl p-1.5">
+          <button aria-label="Decrease current threshold" class="stepper-btn cursor-pointer w-10 h-10 rounded-lg bg-white border border-slate-200 shadow-xs flex items-center justify-center text-sky-600 font-bold text-xl transition-all" id="currentDecBtn" type="button">−</button>
+          <div class="flex items-baseline space-x-1.5 select-none">
+            <span class="text-xl font-extrabold text-slate-900 tracking-tight" id="currentVal">5.2</span>
+            <span class="text-xs font-bold text-slate-500">A</span>
+          </div>
+          <button aria-label="Increase current threshold" class="stepper-btn cursor-pointer w-10 h-10 rounded-lg bg-white border border-slate-200 shadow-xs flex items-center justify-center text-sky-600 font-bold text-xl transition-all" id="currentIncBtn" type="button">+</button>
+        </div>
+        <p class="text-[11px] text-slate-400 mt-2 font-normal">Range: 1.0 - 15.0 A (Standard: 5.0 - 5.5 A for 5 HP Submersible)</p>
+      </section>
+
+      <!-- Stepper 2: Trip Delay Time -->
+      <section class="bg-white rounded-2xl p-4 shadow-sm border border-slate-100" id="cardTripDelay">
+        <div class="flex items-start justify-between">
+          <div>
+            <h3 class="text-sm font-bold text-slate-900 leading-snug">Dry-Run Trip Delay</h3>
+            <p class="text-[11px] text-slate-500 mt-0.5">Allows pump line priming before triggering cutoff</p>
+          </div>
+          <span class="text-[11px] font-semibold text-slate-700 bg-slate-100 px-2 py-0.5 rounded-full">Anti-Nuisance</span>
+        </div>
+        <div class="mt-3 flex items-center justify-between bg-slate-50 border border-slate-200 rounded-xl p-1.5">
+          <button aria-label="Decrease trip delay" class="stepper-btn cursor-pointer w-10 h-10 rounded-lg bg-white border border-slate-200 shadow-xs flex items-center justify-center text-sky-600 font-bold text-xl transition-all" id="delayDecBtn" type="button">−</button>
+          <div class="flex items-baseline space-x-1.5 select-none">
+            <span class="text-xl font-extrabold text-slate-900 tracking-tight" id="delayVal">15</span>
+            <span class="text-xs font-bold text-slate-500">sec</span>
+          </div>
+          <button aria-label="Increase trip delay" class="stepper-btn cursor-pointer w-10 h-10 rounded-lg bg-white border border-slate-200 shadow-xs flex items-center justify-center text-sky-600 font-bold text-xl transition-all" id="delayIncBtn" type="button">+</button>
+        </div>
+        <p class="text-[11px] text-slate-400 mt-2 font-normal">Range: 5 - 60 seconds (Default 15s)</p>
+      </section>
+
+      <!-- Stepper 3: Auto-Restart on Well Recovery (Well Fill Timer) -->
+      <section class="bg-white rounded-2xl p-4 shadow-sm border border-slate-100" id="cardRecovery">
+        <div class="flex items-start justify-between">
+          <div>
+            <h3 class="text-sm font-bold text-slate-900 leading-snug">Well Recovery Auto-Restart Timer</h3>
+            <p class="text-[11px] text-slate-500 mt-0.5">Waits for borewell water table to recharge, then restarts</p>
+          </div>
+          <span class="text-[11px] font-semibold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200">Auto Starter</span>
+        </div>
+        <div class="mt-3 flex items-center justify-between bg-slate-50 border border-slate-200 rounded-xl p-1.5">
+          <button aria-label="Decrease recovery timer" class="stepper-btn cursor-pointer w-10 h-10 rounded-lg bg-white border border-slate-200 shadow-xs flex items-center justify-center text-sky-600 font-bold text-xl transition-all" id="recDecBtn" type="button">−</button>
+          <div class="flex items-baseline space-x-1.5 select-none">
+            <span class="text-xl font-extrabold text-slate-900 tracking-tight" id="recVal">45</span>
+            <span class="text-xs font-bold text-slate-500">min</span>
+          </div>
+          <button aria-label="Increase recovery timer" class="stepper-btn cursor-pointer w-10 h-10 rounded-lg bg-white border border-slate-200 shadow-xs flex items-center justify-center text-sky-600 font-bold text-xl transition-all" id="recIncBtn" type="button">+</button>
+        </div>
+        <p class="text-[11px] text-slate-400 mt-2 font-normal">Range: 15 - 180 minutes (Default 45 min)</p>
+      </section>
+
+      <!-- Stepper 4: Max Restart Retries -->
+      <section class="bg-white rounded-2xl p-4 shadow-sm border border-slate-100" id="cardRetries">
+        <div class="flex items-start justify-between">
+          <div>
+            <h3 class="text-sm font-bold text-slate-900 leading-snug">Max Dry-Run Auto Retries</h3>
+            <p class="text-[11px] text-slate-500 mt-0.5">Safety lockout if borewell fails to recharge after retries</p>
+          </div>
+          <span class="text-[11px] font-semibold text-amber-700 bg-amber-50 px-2 py-0.5 rounded-full">Safety Lock</span>
+        </div>
+        <div class="mt-3 flex items-center justify-between bg-slate-50 border border-slate-200 rounded-xl p-1.5">
+          <button aria-label="Decrease max retries" class="stepper-btn cursor-pointer w-10 h-10 rounded-lg bg-white border border-slate-200 shadow-xs flex items-center justify-center text-sky-600 font-bold text-xl transition-all" id="retryDecBtn" type="button">−</button>
+          <div class="flex items-baseline space-x-1.5 select-none">
+            <span class="text-xl font-extrabold text-slate-900 tracking-tight" id="retryVal">3</span>
+            <span class="text-xs font-bold text-slate-500">attempts</span>
+          </div>
+          <button aria-label="Increase max retries" class="stepper-btn cursor-pointer w-10 h-10 rounded-lg bg-white border border-slate-200 shadow-xs flex items-center justify-center text-sky-600 font-bold text-xl transition-all" id="retryIncBtn" type="button">+</button>
+        </div>
+        <p class="text-[11px] text-slate-400 mt-2 font-normal">Range: 1 - 5 retries before locking starter</p>
+      </section>
+
+      <!-- Explanatory Information Banner -->
+      <section class="bg-sky-50/80 border border-sky-100 rounded-2xl p-3.5 flex items-start space-x-3" id="infoBanner">
+        <div class="text-sky-600 mt-0.5 flex-shrink-0">
+          <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24">
+            <path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"></path>
+          </svg>
+        </div>
+        <p class="text-xs text-sky-950 leading-relaxed font-medium" id="bannerMessage">
+          When borewell water runs out, motor current drops below <strong id="bannerThreshold">5.2 A</strong>. The starter stops after <strong id="bannerDelay">15 seconds</strong>, waits <strong id="bannerRec">45 minutes</strong> for underground aquifer recovery, and automatically attempts restart (up to <strong id="bannerRetries">3 times</strong>).
+        </p>
+      </section>
+    </main>
+
+    <!-- Bottom Actions -->
+    <footer class="px-4 mt-4 pt-2">
+      <button data-route="review" class="save-btn cursor-pointer w-full bg-[#D81921] hover:bg-[#B91219] active:scale-[0.98] text-white font-bold py-3.5 px-4 rounded-xl shadow-lg shadow-red-600/30 flex items-center justify-center space-x-2 transition-all duration-150" id="saveBtn" type="button">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+          <path d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round"></path>
+        </svg>
+        <span class="text-sm tracking-wide">Save Dry-Run Settings</span>
+      </button>
+    </footer>
+
+    <!-- Toast Notification -->
+    <div class="fixed top-5 left-1/2 -translate-x-1/2 z-50 bg-slate-900/95 text-white px-4 py-2.5 rounded-full text-xs font-semibold shadow-xl flex items-center space-x-2 transition-all duration-300 opacity-0 pointer-events-none -translate-y-4" id="toast">
+      <svg class="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+        <path d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round"></path>
+      </svg>
+      <span id="toastMsg">Dry-Run Settings Saved!</span>
+    </div>
+
+  </div>
+
+  <script>
+    // State management
+    let dryRunThreshold = 5.2;
+    let dryRunDelay = 15;
+    let recoveryMinutes = 45;
+    let maxRetries = 3;
+    let dryRunMethod = 'current';
+    let isEnabled = true;
+
+    // Load persisted state if exists
+    try {
+      const stored = JSON.parse(localStorage.getItem('nationalMotorProtectionSettings') || '{}');
+      if (stored.dryrun) {
+        if (stored.dryrun.threshold) dryRunThreshold = stored.dryrun.threshold;
+        if (stored.dryrun.tripDelay) dryRunDelay = stored.dryrun.tripDelay;
+        if (stored.dryrun.recoveryMinutes) recoveryMinutes = stored.dryrun.recoveryMinutes;
+        if (stored.dryrun.maxRetries) maxRetries = stored.dryrun.maxRetries;
+        if (stored.dryrun.method) dryRunMethod = stored.dryrun.method;
+        if (typeof stored.dryrun.isEnabled === 'boolean') isEnabled = stored.dryrun.isEnabled;
+      }
+    } catch(e) {}
+
+    // DOM Elements
+    const currentValEl = document.getElementById('currentVal');
+    const delayValEl = document.getElementById('delayVal');
+    const recValEl = document.getElementById('recVal');
+    const retryValEl = document.getElementById('retryVal');
+    const liveCutoffVal = document.getElementById('liveCutoffVal');
+
+    const bannerThresholdEl = document.getElementById('bannerThreshold');
+    const bannerDelayEl = document.getElementById('bannerDelay');
+    const bannerRecEl = document.getElementById('bannerRec');
+    const bannerRetriesEl = document.getElementById('bannerRetries');
+
+    const protectionToggle = document.getElementById('protectionToggle');
+    const toast = document.getElementById('toast');
+    const toastMsg = document.getElementById('toastMsg');
+    let toastTimeout = null;
+
+    function updateDisplay() {
+      currentValEl.textContent = dryRunThreshold.toFixed(1);
+      delayValEl.textContent = dryRunDelay;
+      recValEl.textContent = recoveryMinutes;
+      retryValEl.textContent = maxRetries;
+      liveCutoffVal.innerHTML = `${dryRunThreshold.toFixed(1)} A <span class="text-[10px] font-medium text-slate-300">(Trip)</span>`;
+
+      bannerThresholdEl.textContent = `${dryRunThreshold.toFixed(1)} A`;
+      bannerDelayEl.textContent = `${dryRunDelay} seconds`;
+      bannerRecEl.textContent = `${recoveryMinutes} minutes`;
+      bannerRetriesEl.textContent = `${maxRetries} times`;
+
+      // Update active radio option styles
+      document.querySelectorAll('.method-option').forEach(opt => {
+        const input = opt.querySelector('input');
+        if (input.value === dryRunMethod) {
+          input.checked = true;
+          opt.className = 'method-option flex items-start space-x-3 p-2.5 rounded-xl border border-sky-200 bg-sky-50/50 cursor-pointer transition-all';
+        } else {
+          opt.className = 'method-option flex items-start space-x-3 p-2.5 rounded-xl border border-slate-100 hover:bg-slate-50 cursor-pointer transition-all';
+        }
+      });
+    }
+
+    // Method selection radio handlers
+    document.querySelectorAll('.method-option').forEach(opt => {
+      opt.addEventListener('click', () => {
+        const val = opt.getAttribute('data-method');
+        dryRunMethod = val;
+        updateDisplay();
+      });
+    });
+
+    // Current Threshold Stepper (1.0 to 15.0 A, step 0.1)
+    document.getElementById('currentIncBtn').addEventListener('click', () => {
+      if (dryRunThreshold < 15.0) {
+        dryRunThreshold = Math.round((dryRunThreshold + 0.1) * 10) / 10;
+        updateDisplay();
+      }
+    });
+    document.getElementById('currentDecBtn').addEventListener('click', () => {
+      if (dryRunThreshold > 1.0) {
+        dryRunThreshold = Math.round((dryRunThreshold - 0.1) * 10) / 10;
+        updateDisplay();
+      }
+    });
+
+    // Trip Delay Stepper (5 to 60s)
+    document.getElementById('delayIncBtn').addEventListener('click', () => {
+      if (dryRunDelay < 60) {
+        dryRunDelay += 5;
+        updateDisplay();
+      }
+    });
+    document.getElementById('delayDecBtn').addEventListener('click', () => {
+      if (dryRunDelay > 5) {
+        dryRunDelay -= 5;
+        updateDisplay();
+      }
+    });
+
+    // Well Recovery Timer Stepper (15 to 180 min, step 5)
+    document.getElementById('recIncBtn').addEventListener('click', () => {
+      if (recoveryMinutes < 180) {
+        recoveryMinutes += 5;
+        updateDisplay();
+      }
+    });
+    document.getElementById('recDecBtn').addEventListener('click', () => {
+      if (recoveryMinutes > 15) {
+        recoveryMinutes -= 5;
+        updateDisplay();
+      }
+    });
+
+    // Max Retries Stepper (1 to 5)
+    document.getElementById('retryIncBtn').addEventListener('click', () => {
+      if (maxRetries < 5) {
+        maxRetries += 1;
+        updateDisplay();
+      }
+    });
+    document.getElementById('retryDecBtn').addEventListener('click', () => {
+      if (maxRetries > 1) {
+        maxRetries -= 1;
+        updateDisplay();
+      }
+    });
+
+    // Master Toggle
+    protectionToggle.checked = isEnabled;
+    protectionToggle.addEventListener('change', (e) => {
+      isEnabled = e.target.checked;
+      const cards = [
+        document.getElementById('detectionSection'),
+        document.getElementById('cardThreshold'),
+        document.getElementById('cardTripDelay'),
+        document.getElementById('cardRecovery'),
+        document.getElementById('cardRetries'),
+        document.getElementById('infoBanner')
+      ];
+      cards.forEach(c => {
+        if (isEnabled) {
+          c.classList.remove('opacity-40', 'pointer-events-none');
+        } else {
+          c.classList.add('opacity-40', 'pointer-events-none');
+        }
+      });
+      showToast(isEnabled ? 'Dry-Run Protection Enabled' : 'Dry-Run Protection Disabled');
+    });
+
+    // Toast
+    function showToast(message) {
+      if (toastTimeout) clearTimeout(toastTimeout);
+      toastMsg.textContent = message;
+      toast.classList.remove('opacity-0', 'pointer-events-none', '-translate-y-4');
+      toast.classList.add('opacity-100', 'translate-y-0');
+      toastTimeout = setTimeout(() => {
+        toast.classList.add('opacity-0', 'pointer-events-none', '-translate-y-4');
+        toast.classList.remove('opacity-100', 'translate-y-0');
+      }, 2500);
+    }
+
+    // Save Settings
+    document.getElementById('saveBtn').addEventListener('click', () => {
+      const stored = JSON.parse(localStorage.getItem('nationalMotorProtectionSettings') || '{}');
+      stored.dryrun = {
+        isEnabled,
+        threshold: dryRunThreshold,
+        tripDelay: dryRunDelay,
+        recoveryMinutes,
+        maxRetries,
+        method: dryRunMethod
+      };
+      localStorage.setItem('nationalMotorProtectionSettings', JSON.stringify(stored));
+      showToast('Dry-Run Settings Saved Successfully!');
+    });
+
+    updateDisplay();
+  </script>
+  <script src="../app-runtime.js"></script>
+</body>
+</html>

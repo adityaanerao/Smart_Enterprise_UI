@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <title>Apply Settings Confirmation Dialog - National Auto Starter</title>
+  <!-- Tailwind CSS CDN v3 with plugins -->
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <!-- Google Fonts: Inter -->
+  <link href="https://fonts.googleapis.com" rel="preconnect"/>
+  <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+          },
+          colors: {
+            brand: {
+              red: '#D81921',
+              darkRed: '#B91219',
+              emerald: '#10B981'
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      -webkit-font-smoothing: antialiased;
+      user-select: none;
+    }
+  </style>
+</head>
+<body class="bg-slate-900 flex justify-center items-center min-h-screen p-0 sm:p-4">
+  <!-- Mobile Container Viewport Mockup -->
+  <div class="relative w-full max-w-[420px] h-[860px] bg-slate-900 overflow-hidden shadow-2xl rounded-none sm:rounded-[36px] flex flex-col justify-between select-none">
+    
+    <!-- Toast Notification -->
+    <div class="absolute top-5 left-4 right-4 z-50 transform -translate-y-24 opacity-0 transition-all duration-300 pointer-events-none flex items-center gap-3 bg-emerald-600 text-white px-4 py-3 rounded-2xl shadow-xl border border-emerald-400/30" id="toast-notification">
+      <div class="w-8 h-8 rounded-full bg-white/20 flex-shrink-0 flex items-center justify-center">
+        <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+          <path d="M4.5 12.75l6 6 9-13.5" stroke-linecap="round" stroke-linejoin="round"></path>
+        </svg>
+      </div>
+      <div class="text-xs font-semibold leading-snug">Auto Starter Protection Settings dispatched &amp; active!</div>
+    </div>
+
+    <!-- Underlying Review Screen Content -->
+    <div class="w-full h-full flex flex-col bg-[#0b1324] overflow-hidden">
+      <!-- Screen Header -->
+      <header class="bg-gradient-to-r from-[#D81921] to-[#B91219] pt-4 pb-4 px-4 shadow-md">
+        <div class="flex items-center gap-2.5">
+          <!-- Back Navigation Arrow -->
+          <button aria-label="Back" data-route="review" class="cursor-pointer text-white/90 hover:text-white transition-all active:scale-90 p-1.5 -ml-1 rounded-lg shrink-0" id="back-button" type="button">
+            <svg class="w-5 h-5 stroke-[2.5]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path d="M15.75 19.5L8.25 12l7.5-7.5" stroke-linecap="round" stroke-linejoin="round"></path>
+            </svg>
+          </button>
+
+          <!-- National Brand Logo in Left Corner After Back Button -->
+          <div class="bg-white rounded-lg p-1 shadow-xs flex items-center justify-center shrink-0 cursor-pointer btn-tactile" data-route="home" style="width: 36px; height: 36px;">
+            <img src="../assets/national-logo.svg" alt="National Logo" class="h-5 w-auto object-contain">
+          </div>
+
+          <!-- Title & Subtitle -->
+          <div class="flex-1 min-w-0 text-left">
+            <h1 class="text-base font-bold text-white leading-tight truncate">Review &amp; Apply Settings</h1>
+            <p class="text-[11px] text-red-100 mt-0.5 truncate">National Auto Starter Configuration</p>
+          </div>
+        </div>
+      </header>
+
+      <!-- Scrollable Settings Cards Container -->
+      <main class="flex-1 px-4 py-3 space-y-2.5 overflow-hidden opacity-90 pb-20">
+        <!-- Motor Overview Card -->
+        <div class="bg-white rounded-2xl p-3 flex items-center justify-between shadow-sm">
+          <div class="flex items-center gap-3">
+            <div class="w-9 h-9 rounded-xl bg-red-50 flex items-center justify-center text-[#D81921]">
+              <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24">
+                <path d="M12 2a10 10 0 00-7.07 17.07l1.42-1.42A8 8 0 1112 20v2a10 10 0 000-20zm0 4a6 6 0 100 12A6 6 0 0012 6zm-1 2h2v3h-2V8zm0 5h2v3h-2v-3z"></path>
+              </svg>
+            </div>
+            <div>
+              <div class="text-xs font-bold text-slate-800">Main Pump (5.0 HP)</div>
+              <div class="text-[11px] text-slate-400">3-Phase 415V • Borewell 4</div>
+            </div>
+          </div>
+          <span class="text-[10px] font-bold bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded-full">Ready</span>
+        </div>
+
+        <!-- Dry-Run Card -->
+        <div class="bg-white rounded-2xl p-3 shadow-sm space-y-1.5">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-2.5">
+              <div class="w-7 h-7 rounded-lg bg-sky-50 flex items-center justify-center text-sky-500">
+                <svg class="w-4 h-4 fill-current" viewBox="0 0 20 20"><path d="M10 2a.75.75 0 01.65.382l4.25 7.5A.75.75 0 0114.25 11h-8.5a.75.75 0 01-.65-1.118l4.25-7.5A.75.75 0 0110 2zm0 16a6 6 0 100-12 6 6 0 000 12z"></path></svg>
+              </div>
+              <span class="text-xs font-bold text-slate-800">Dry-Run Protection</span>
+            </div>
+            <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-600">On</span>
+          </div>
+          <div class="pl-9 text-[11px] text-slate-500 space-y-0.5">
+            <div>Current Threshold : <span class="font-bold text-slate-700">5.2 A</span></div>
+            <div>Well Recovery Timer : <span class="font-bold text-emerald-700">45 min auto-restart</span></div>
+          </div>
+        </div>
+
+        <!-- Overload Card -->
+        <div class="bg-white rounded-2xl p-3 shadow-sm space-y-1.5">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-2.5">
+              <div class="w-7 h-7 rounded-lg bg-amber-50 flex items-center justify-center text-amber-500">
+                <svg class="w-4 h-4 fill-none stroke-current stroke-2" viewBox="0 0 24 24"><path d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+              </div>
+              <span class="text-xs font-bold text-slate-800">Overload Protection</span>
+            </div>
+            <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-600">On</span>
+          </div>
+          <div class="pl-9 text-[11px] text-slate-500 space-y-0.5">
+            <div>Current Limit : <span class="font-bold text-slate-700">10.0 A (120% FLC)</span></div>
+            <div>Trip / Cooling : <span class="font-bold text-slate-700">8s trip / 15m rest</span></div>
+          </div>
+        </div>
+
+        <!-- Voltage Card -->
+        <div class="bg-white rounded-2xl p-3 shadow-sm space-y-1.5">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-2.5">
+              <div class="w-7 h-7 rounded-lg bg-purple-50 flex items-center justify-center text-purple-600">
+                <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M13 2L3 14h8v8l10-12h-8V2z"></path></svg>
+              </div>
+              <span class="text-xs font-bold text-slate-800">Voltage Protection (3-Phase)</span>
+            </div>
+            <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-600">On</span>
+          </div>
+          <div class="pl-9 text-[11px] text-slate-500 space-y-0.5">
+            <div>Safe Range : <span class="font-bold text-slate-700">350 V – 470 V</span></div>
+            <div>Power Delay : <span class="font-bold text-emerald-700">15 sec stabilization</span></div>
+          </div>
+        </div>
+
+        <!-- Phase Card -->
+        <div class="bg-white rounded-2xl p-3 shadow-sm space-y-1.5">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-2.5">
+              <div class="w-7 h-7 rounded-lg bg-rose-50 flex items-center justify-center text-[#D81921]">
+                <svg class="w-4 h-4 stroke-current stroke-2 fill-none" viewBox="0 0 24 24"><path d="M3 12h2l3-7 4 14 4-10 2 5h3"></path></svg>
+              </div>
+              <span class="text-xs font-bold text-slate-800">Phase Protection</span>
+            </div>
+            <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-600">On</span>
+          </div>
+          <div class="pl-9 text-[11px] text-slate-500 space-y-0.5">
+            <div>Single Phasing (SPP) : <span class="font-bold text-slate-700">&lt; 1.5s Instant</span></div>
+            <div>Phase Imbalance : <span class="font-bold text-slate-700">15 % Limit</span></div>
+          </div>
+        </div>
+      </main>
+
+      <!-- Background Bottom Apply Button -->
+      <div class="p-4 bg-[#0b1324]">
+        <button class="cursor-pointer w-full py-3.5 px-4 rounded-xl bg-[#D81921] hover:bg-[#B91219] text-white text-xs font-bold flex items-center justify-center gap-2 transition-all duration-150 active:scale-95 shadow-lg shadow-red-950/40" id="reopen-modal-button" type="button">
+          Apply Settings to Starter
+        </button>
+      </div>
+    </div>
+
+    <!-- Modal Backdrop & Overlay -->
+    <div class="absolute inset-0 bg-black/70 backdrop-blur-xs flex items-center justify-center p-5 z-40 transition-opacity duration-300" id="modal-backdrop">
+      <div aria-modal="true" class="w-full max-w-[340px] bg-white rounded-3xl p-6 shadow-2xl flex flex-col items-center text-center transform transition-all duration-300 scale-100 opacity-100" id="modal-card" role="dialog">
+        <!-- Top Status Icon -->
+        <div class="mb-4">
+          <div class="w-16 h-16 rounded-full bg-red-50 text-[#D81921] flex items-center justify-center shadow-lg border border-red-100 transition-transform duration-300" id="status-icon-box">
+            <svg class="w-9 h-9 stroke-[2.5]" fill="none" id="status-icon-check" stroke="currentColor" viewBox="0 0 24 24">
+              <path d="M4.5 12.75l6 6 9-13.5" stroke-linecap="round" stroke-linejoin="round"></path>
+            </svg>
+          </div>
+        </div>
+
+        <h2 class="text-lg font-black text-slate-900 tracking-tight mb-2" id="modal-title">
+          Apply Settings?
+        </h2>
+        <p class="text-xs text-slate-500 leading-relaxed max-w-[260px] mb-6" id="modal-description">
+          Are you sure you want to apply these 3-phase auto starter protection settings to Main Pump?
+        </p>
+
+        <!-- Action Buttons -->
+        <div class="w-full grid grid-cols-2 gap-3">
+          <button class="cursor-pointer w-full py-3 px-4 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold transition-all active:scale-95" id="cancel-modal-btn" type="button">
+            Cancel
+          </button>
+          <button class="cursor-pointer w-full py-3 px-4 rounded-xl bg-[#D81921] hover:bg-[#B91219] text-white text-xs font-bold shadow-md shadow-red-600/30 transition-all active:scale-95 flex items-center justify-center gap-2" id="confirm-apply-btn" type="button">
+            <span id="apply-btn-label">Apply Now</span>
+            <svg class="hidden animate-spin w-4 h-4 text-white" fill="none" id="apply-btn-spinner" viewBox="0 0 24 24">
+              <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+              <path class="opacity-75" d="M4 12a8 8 0 018-8v8z" fill="currentColor"></path>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    (function initModal() {
+      const backdrop = document.getElementById('modal-backdrop');
+      const modalCard = document.getElementById('modal-card');
+      const cancelBtn = document.getElementById('cancel-modal-btn');
+      const applyBtn = document.getElementById('confirm-apply-btn');
+      const applyBtnLabel = document.getElementById('apply-btn-label');
+      const applyBtnSpinner = document.getElementById('apply-btn-spinner');
+      const reopenBtn = document.getElementById('reopen-modal-button');
+      const toast = document.getElementById('toast-notification');
+      let isApplying = false;
+
+      function closeModal() {
+        if (isApplying) return;
+        modalCard.classList.remove('scale-100', 'opacity-100');
+        modalCard.classList.add('scale-95', 'opacity-0');
+        backdrop.classList.remove('opacity-100');
+        backdrop.classList.add('opacity-0', 'pointer-events-none');
+        setTimeout(() => {
+          backdrop.classList.add('hidden');
+        }, 250);
+      }
+
+      function openModal() {
+        if (isApplying) return;
+        backdrop.classList.remove('hidden', 'pointer-events-none', 'opacity-0');
+        backdrop.classList.add('opacity-100');
+        requestAnimationFrame(() => {
+          modalCard.classList.remove('scale-95', 'opacity-0');
+          modalCard.classList.add('scale-100', 'opacity-100');
+        });
+      }
+
+      cancelBtn.addEventListener('click', closeModal);
+      reopenBtn.addEventListener('click', openModal);
+
+      applyBtn.addEventListener('click', () => {
+        if (isApplying) return;
+        isApplying = true;
+        applyBtnLabel.textContent = 'Transmitting...';
+        applyBtnSpinner.classList.remove('hidden');
+        applyBtn.classList.add('opacity-90', 'pointer-events-none');
+
+        setTimeout(() => {
+          // Success
+          closeModal();
+          toast.classList.remove('-translate-y-24', 'opacity-0');
+          toast.classList.add('translate-y-0', 'opacity-100');
+
+          setTimeout(() => {
+            toast.classList.remove('translate-y-0', 'opacity-100');
+            toast.classList.add('-translate-y-24', 'opacity-0');
+            // Navigate back
+            if (window.parent && window.parent !== window) {
+              window.parent.postMessage({ type: 'motor-app-navigate', screen: 'control' }, '*');
+            } else {
+              location.href = '../motor_control_screen/code.html';
+            }
+          }, 2000);
+        }, 900);
+      });
+    })();
+  </script>
+  <script src="../app-runtime.js"></script>
+</body>
+</html>

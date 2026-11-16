@@ -1,0 +1,415 @@
+<!DOCTYPE html><html lang="en" style=""><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport">
+<title>Motor Control Screen</title>
+<!-- Google Fonts: Inter (Clear, Simple, Standard UI Font) -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<!-- Tailwind CSS CDN with forms and container queries -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Custom Tailwind Configuration -->
+<script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              red: '#D32F2F',
+              darkRed: '#B71C1C',
+              lightRed: '#FEECEC',
+              green: '#22C55E',
+              blueBg: '#EFF6FF',
+              blueBorder: '#BFDBFE',
+              tileBg: '#F0F5FA',
+            }
+          },
+          fontFamily: {
+            sans: ['"Inter"', '-apple-system', 'BlinkMacSystemFont', '"Segoe UI"', 'Roboto', 'Helvetica', 'Arial', 'sans-serif'],
+          }
+        }
+      }
+    };
+  </script>
+<!-- Custom Styles for Mobile Frame and Layout Adjustments -->
+<style data-purpose="layout-styles">
+    body {
+      background-color: #F3F4F6;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .hide-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+    .hide-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+  </style>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"></head>
+<body class="flex justify-center items-start min-h-screen sm:py-6">
+<!-- BEGIN: MobileDeviceContainer -->
+<!-- Constrained container replicating iOS mobile device viewport -->
+<div class="w-full max-w-[414px] bg-white min-h-screen flex flex-col shadow-2xl relative overflow-hidden select-none" data-purpose="mobile-container">
+<!-- BEGIN: TopAppBar -->
+<header class="bg-[#D81921] text-white px-4 py-2.5 flex items-center justify-between sticky top-0 z-30 shadow-sm" data-purpose="top-app-bar">
+  <!-- Brand Logo & Identity in Left Corner (No Back Arrow on Tab Screen) -->
+  <div class="flex items-center space-x-2.5 cursor-pointer btn-tactile" data-route="home">
+    <div class="bg-white rounded-lg p-1 shadow-xs flex items-center justify-center" style="width: 38px; height: 38px;">
+      <img src="../assets/national-logo.svg" alt="National Logo" class="h-6 w-auto object-contain">
+    </div>
+    <div>
+      <span class="text-base font-black tracking-tight text-white block leading-tight">Motor Control</span>
+      <span class="text-[11px] font-medium text-white/90 block leading-tight">Smart Starter Switch</span>
+    </div>
+  </div>
+
+  <!-- More options button -->
+  <button aria-label="More options" class="p-1.5 -mr-1 text-white hover:bg-white/10 active:scale-90 rounded-full transition-transform flex items-center justify-center cursor-pointer" type="button">
+    <span class="material-symbols-outlined text-2xl font-bold">more_vert</span>
+  </button>
+</header>
+<!-- END: TopAppBar -->
+<!-- BEGIN: MainContentScrollableArea -->
+<main class="flex-1 overflow-y-auto px-4 pt-4 pb-5" data-purpose="main-content"><!-- Top Motor Hero & Status Section -->
+<div class="relative mb-4">
+  <!-- Header info and Running pill -->
+  <div class="flex items-start justify-between mb-2">
+    <div>
+      <div class="flex items-center gap-2">
+        <h1 class="text-2xl font-black text-slate-900 tracking-tight leading-tight">Main Pump</h1>
+        <button class="text-slate-500 hover:text-slate-800 transition" type="button">
+          <span class="material-symbols-outlined text-base">edit</span>
+        </button>
+      </div>
+      <p class="text-xs text-slate-500 font-medium mt-1 flex items-center gap-1">
+        <span class="material-symbols-outlined text-sm text-slate-500">location_on</span>
+        Farm - East Field
+      </p>
+    </div>
+    <div>
+      <button type="button" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold bg-emerald-50 text-slate-800 border border-emerald-100 shadow-sm">
+        <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+        Running
+        <span class="material-symbols-outlined text-xs text-slate-500 ml-0.5">expand_more</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Hero Motor & Connectivity Visual Card -->
+  <div class="relative w-full h-44 rounded-2xl overflow-hidden mb-3.5 shadow-sm border border-slate-100 bg-slate-100">
+    <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuDKONHrWGf42_1DIPPSP_Eprq-5fKhJtt1_ZSdTdZYsztfbZkHIdu06-PlML6il2l30o2SkbtJGfUwz7gnhtjkC3guOOQhk86hLSzBEJPZ4_8fCmfXR-0kbtsBxD5CifELjSmUfQ7UBFgHz-u_NYu6k4RU9gtXB3r3S46VS35Z4oKvaicpwdVPhgQDdGLNPpnPPbwjkEDJil0P3whugwW0YC8MLh9zLpCMvy0tAib7wjcWvME_qbqez" alt="Motor Irrigation" class="w-full h-full object-cover object-center">
+    <!-- Gradient Overlay for clarity -->
+    <div class="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent pointer-events-none"></div>
+    <!-- Connected badge overlay -->
+    <div class="absolute top-3 right-3 bg-white/95 backdrop-blur-md rounded-2xl p-2.5 px-3 border border-emerald-100/80 shadow-md flex items-center gap-2.5">
+      <div class="w-8 h-8 rounded-full bg-emerald-50 flex items-center justify-center text-emerald-600">
+        <span class="material-symbols-outlined text-lg">wifi</span>
+      </div>
+      <div class="text-left">
+        <div class="text-xs font-bold text-slate-900 leading-tight">Connected</div>
+        <div class="text-[10px] text-slate-400 font-medium mt-0.5">Last communication<br><span class="font-semibold text-slate-700">2 minutes ago</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3 Telemetry Cards Row -->
+  <div class="grid grid-cols-3 gap-2.5">
+  <div class="bg-white rounded-2xl p-3.5 border border-slate-100/90 shadow-[0_4px_16px_-2px_rgba(15,23,42,0.05),0_1px_2px_rgba(15,23,42,0.03)] flex flex-col justify-center">
+    <div class="flex items-center gap-1.5">
+      <span class="material-symbols-outlined text-amber-500 text-lg fill-1">bolt</span>
+      <span class="text-base font-bold text-slate-900">8.4 A</span>
+    </div>
+    <span class="text-[11px] text-slate-400 font-medium mt-1">Current</span>
+  </div>
+  <div class="bg-white rounded-2xl p-3.5 border border-slate-100/90 shadow-[0_4px_16px_-2px_rgba(15,23,42,0.05),0_1px_2px_rgba(15,23,42,0.03)] flex flex-col justify-center">
+    <div class="flex items-center gap-1.5">
+      <span class="material-symbols-outlined text-slate-800 text-lg">speed</span>
+      <span class="text-base font-bold text-slate-900">415 V</span>
+    </div>
+    <span class="text-[11px] text-slate-400 font-medium mt-1">Voltage</span>
+  </div>
+  <div class="bg-white rounded-2xl p-3.5 border border-slate-100/90 shadow-[0_4px_16px_-2px_rgba(15,23,42,0.05),0_1px_2px_rgba(15,23,42,0.03)] flex flex-col justify-center">
+    <div class="flex items-center gap-1.5">
+      <span class="material-symbols-outlined text-slate-800 text-lg">airwave</span>
+      <span class="text-base font-bold text-slate-900">50 Hz</span>
+    </div>
+    <span class="text-[11px] text-slate-400 font-medium mt-1">Frequency</span>
+  </div>
+</div>
+</div>
+
+<!-- Motor Control 2x2 Grid -->
+<div class="grid grid-cols-2 gap-2.5 mb-4">
+  <!-- Start Button -->
+  <button type="button" class="bg-emerald-600 hover:bg-emerald-700 active:scale-[0.98] transition-all text-white rounded-2xl p-4 flex items-center gap-3 shadow-md">
+    <div class="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center shrink-0">
+      <span class="material-symbols-outlined text-2xl fill-1 text-white">play_arrow</span>
+    </div>
+    <div class="text-left min-w-0">
+      <div class="text-base font-bold leading-tight">Start</div>
+      <div class="text-[11px] text-white/80 font-normal mt-0.5 truncate">Start the motor</div>
+    </div>
+  </button>
+
+  <!-- Stop Button -->
+  <button type="button" class="bg-[#E53935] hover:bg-[#D32F2F] active:scale-[0.98] transition-all text-white rounded-2xl p-4 flex items-center gap-3 shadow-md">
+    <div class="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center shrink-0">
+      <span class="material-symbols-outlined text-xl fill-1 text-white">square</span>
+    </div>
+    <div class="text-left min-w-0">
+      <div class="text-base font-bold leading-tight">Stop</div>
+      <div class="text-[11px] text-white/80 font-normal mt-0.5 truncate">Stop the motor</div>
+    </div>
+  </button>
+
+  <!-- Timed Run Button -->
+  <button type="button" class="bg-sky-50/70 hover:bg-sky-100/70 active:scale-[0.98] transition-all border border-sky-100/80 rounded-2xl p-3.5 flex items-center justify-between shadow-sm group">
+    <div class="flex items-center gap-2.5 min-w-0">
+      <div class="w-8 h-8 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center shrink-0">
+        <span class="material-symbols-outlined text-lg">schedule</span>
+      </div>
+      <div class="text-left min-w-0">
+        <div class="text-xs font-bold text-slate-900 leading-tight truncate">Timed Run</div>
+        <div class="text-[10px] text-slate-500 font-medium truncate mt-0.5">Run for selected time</div>
+      </div>
+    </div>
+    <span class="material-symbols-outlined text-base text-slate-400 group-hover:translate-x-0.5 transition-transform shrink-0">chevron_right</span>
+  </button>
+
+  <!-- Reset Fault Button -->
+  <button type="button" class="bg-sky-50/70 hover:bg-sky-100/70 active:scale-[0.98] transition-all border border-sky-100/80 rounded-2xl p-3.5 flex items-center justify-between shadow-sm group">
+    <div class="flex items-center gap-2.5 min-w-0">
+      <div class="w-8 h-8 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center shrink-0">
+        <span class="material-symbols-outlined text-lg">sync</span>
+      </div>
+      <div class="text-left min-w-0">
+        <div class="text-xs font-bold text-slate-900 leading-tight truncate">Reset Fault</div>
+        <div class="text-[10px] text-slate-500 font-medium truncate mt-0.5">Clear fault &amp; restart</div>
+      </div>
+    </div>
+    <span class="material-symbols-outlined text-base text-slate-400 group-hover:translate-x-0.5 transition-transform shrink-0">chevron_right</span>
+  </button>
+</div>
+
+<!-- Protection Status Section -->
+<div class="bg-white rounded-2xl border border-slate-100/80 shadow-[0_4px_20px_-2px_rgba(15,23,42,0.05),0_1px_3px_rgba(15,23,42,0.03)] p-4 mb-3">
+  <div class="flex items-center justify-between mb-3.5">
+    <div class="flex items-center gap-2">
+      <span class="material-symbols-outlined text-emerald-600 text-xl">verified_user</span>
+      <h2 class="text-sm font-bold text-slate-900 tracking-tight">Protection Status</h2>
+    </div>
+    <a data-route="protection" href="#" class="text-xs font-semibold text-blue-600 hover:text-blue-700 flex items-center gap-0.5 transition-colors cursor-pointer">
+      View / Edit
+      <span class="material-symbols-outlined text-xs">chevron_right</span>
+    </a>
+  </div>
+  <div class="grid grid-cols-4 gap-2">
+    <div data-route="overload" class="bg-[#F8FAFC] hover:bg-slate-100 cursor-pointer transition-colors border border-slate-100/90 rounded-2xl p-2.5 flex items-center gap-1.5 shadow-[0_1px_2px_rgba(0,0,0,0.02)]">
+      <span class="material-symbols-outlined text-emerald-600 text-[18px] shrink-0">check_circle</span>
+      <div class="min-w-0 leading-tight">
+        <div class="text-[9px] text-slate-500 font-medium truncate">Overload</div>
+        <div class="text-[11px] font-black text-slate-900 mt-0.5">10.0 A</div>
+      </div>
+    </div>
+    <div data-route="dryrun" class="bg-[#F8FAFC] hover:bg-slate-100 cursor-pointer transition-colors border border-slate-100/90 rounded-2xl p-2.5 flex items-center gap-1.5 shadow-[0_1px_2px_rgba(0,0,0,0.02)]">
+      <span class="material-symbols-outlined text-emerald-600 text-[18px] shrink-0">check_circle</span>
+      <div class="min-w-0 leading-tight">
+        <div class="text-[9px] text-slate-500 font-medium truncate">Dry Run</div>
+        <div class="text-[11px] font-black text-slate-900 mt-0.5">5.2 A</div>
+      </div>
+    </div>
+    <div data-route="voltage" class="bg-[#F8FAFC] hover:bg-slate-100 cursor-pointer transition-colors border border-slate-100/90 rounded-2xl p-2.5 flex items-center gap-1.5 shadow-[0_1px_2px_rgba(0,0,0,0.02)]">
+      <span class="material-symbols-outlined text-emerald-600 text-[18px] shrink-0">check_circle</span>
+      <div class="min-w-0 leading-tight">
+        <div class="text-[9px] text-slate-500 font-medium truncate">Voltage</div>
+        <div class="text-[11px] font-black text-slate-900 mt-0.5">415 V</div>
+      </div>
+    </div>
+    <div data-route="phase" class="bg-[#F8FAFC] hover:bg-slate-100 cursor-pointer transition-colors border border-slate-100/90 rounded-2xl p-2.5 flex items-center gap-1.5 shadow-[0_1px_2px_rgba(0,0,0,0.02)]">
+      <span class="material-symbols-outlined text-emerald-600 text-[18px] shrink-0">check_circle</span>
+      <div class="min-w-0 leading-tight">
+        <div class="text-[9px] text-slate-500 font-medium truncate">Phase</div>
+        <div class="text-[11px] font-black text-slate-900 mt-0.5">SPP OK</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Live Readings Section -->
+<div class="bg-white rounded-2xl border border-slate-100/80 shadow-[0_4px_20px_-2px_rgba(15,23,42,0.05),0_1px_3px_rgba(15,23,42,0.03)] p-4 mb-3">
+  <div class="flex items-center justify-between mb-3.5">
+    <div class="flex items-center gap-2">
+      <span class="material-symbols-outlined text-blue-600 text-xl">bar_chart</span>
+      <h2 class="text-sm font-bold text-slate-900 tracking-tight">Live Readings</h2>
+    </div>
+    <a data-route="details" href="#" class="text-xs font-semibold text-blue-600 hover:text-blue-700 flex items-center gap-0.5 transition-colors cursor-pointer">
+      View Details
+      <span class="material-symbols-outlined text-xs">chevron_right</span>
+    </a>
+  </div>
+  <div class="grid grid-cols-4 gap-2">
+    <div class="bg-[#F8FAFC] border border-slate-100/90 rounded-2xl p-2.5 flex items-center gap-1.5 shadow-[0_1px_2px_rgba(0,0,0,0.02)]">
+      <span class="material-symbols-outlined text-amber-500 text-lg fill-1 shrink-0">bolt</span>
+      <div class="min-w-0 leading-tight">
+        <div class="text-[11px] font-bold text-slate-900">8.4 A</div>
+        <div class="text-[9px] text-slate-400 font-medium truncate mt-0.5">Current</div>
+      </div>
+    </div>
+    <div class="bg-[#F8FAFC] border border-slate-100/90 rounded-2xl p-2.5 flex items-center gap-1.5 shadow-[0_1px_2px_rgba(0,0,0,0.02)]">
+      <span class="material-symbols-outlined text-slate-700 text-lg shrink-0">speed</span>
+      <div class="min-w-0 leading-tight">
+        <div class="text-[11px] font-bold text-slate-900">415 V</div>
+        <div class="text-[9px] text-slate-400 font-medium truncate mt-0.5">Voltage</div>
+      </div>
+    </div>
+    <div class="bg-[#F8FAFC] border border-slate-100/90 rounded-2xl p-2.5 flex items-center gap-1.5 shadow-[0_1px_2px_rgba(0,0,0,0.02)]">
+      <span class="material-symbols-outlined text-slate-700 text-lg shrink-0">airwave</span>
+      <div class="min-w-0 leading-tight">
+        <div class="text-[11px] font-bold text-slate-900">50 Hz</div>
+        <div class="text-[9px] text-slate-400 font-medium truncate mt-0.5">Freque...</div>
+      </div>
+    </div>
+    <div class="bg-[#F8FAFC] border border-slate-100/90 rounded-2xl p-2.5 flex items-center gap-1.5 shadow-[0_1px_2px_rgba(0,0,0,0.02)]">
+      <span class="material-symbols-outlined text-rose-500 text-lg shrink-0">thermostat</span>
+      <div class="min-w-0 leading-tight">
+        <div class="text-[11px] font-bold text-slate-900">36 °C</div>
+        <div class="text-[9px] text-slate-400 font-medium truncate mt-0.5">Temper...</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Motor Information Section -->
+<div class="bg-white rounded-2xl border border-slate-100/80 shadow-[0_4px_20px_-2px_rgba(15,23,42,0.05),0_1px_3px_rgba(15,23,42,0.03)] p-4 mb-3">
+  <div class="flex items-center justify-between mb-3.5">
+    <div class="flex items-center gap-2">
+      <span class="material-symbols-outlined text-blue-600 text-xl">description</span>
+      <h2 class="text-sm font-bold text-slate-900 tracking-tight">Motor Information</h2>
+    </div>
+    <button type="button" class="text-slate-400 hover:text-slate-700 transition-colors">
+      <span class="material-symbols-outlined text-base">chevron_right</span>
+    </button>
+  </div>
+  <div class="grid grid-cols-2 gap-x-5 gap-y-2.5 text-xs divide-x divide-slate-100">
+    <div class="space-y-2.5 pr-3">
+      <div class="flex justify-between items-center">
+        <span class="text-slate-400 font-medium">Motor ID</span>
+        <span class="font-bold text-slate-900">MP-001</span>
+      </div>
+      <div class="flex justify-between items-center">
+        <span class="text-slate-400 font-medium">Type</span>
+        <span class="font-bold text-slate-900">3 Phase</span>
+      </div>
+      <div class="flex justify-between items-center">
+        <span class="text-slate-400 font-medium">Rated Power</span>
+        <span class="font-bold text-slate-900">7.5 HP</span>
+      </div>
+    </div>
+    <div class="space-y-2.5 pl-4">
+      <div class="flex justify-between items-center">
+        <span class="text-slate-400 font-medium">Installation Date</span>
+        <span class="font-bold text-slate-900">15 Jan 2026</span>
+      </div>
+      <div class="flex justify-between items-center">
+        <span class="text-slate-400 font-medium">Location</span>
+        <span class="font-bold text-slate-900">East Field</span>
+      </div>
+      <div class="flex justify-between items-center">
+        <span class="text-slate-400 font-medium">Controller</span>
+        <span class="font-bold text-slate-900">National NMC-100</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- No Active Faults Alert Banner -->
+<div class="bg-[#FFF5F5] border border-rose-100/90 rounded-2xl p-4 flex items-center justify-between mb-2 shadow-[0_2px_12px_-2px_rgba(244,63,94,0.06),0_1px_3px_rgba(0,0,0,0.02)] transition-all hover:bg-rose-50/90 cursor-pointer">
+  <div class="flex items-center gap-3.5">
+    <div class="w-10 h-10 rounded-2xl bg-rose-100/80 text-rose-600 flex items-center justify-center shrink-0 shadow-sm">
+      <span class="material-symbols-outlined text-xl fill-1">notifications</span>
+    </div>
+    <div>
+      <div class="text-sm font-bold text-rose-600 leading-tight tracking-tight">No Active Faults</div>
+      <div class="text-xs text-slate-500 font-medium mt-0.5">All systems are working properly</div>
+    </div>
+  </div>
+  <span class="material-symbols-outlined text-rose-400 text-lg">chevron_right</span>
+</div></main>
+<!-- END: MainContentScrollableArea -->
+<!-- ======================================================== -->
+<!-- ANIMATED CURVED BOTTOM NAVIGATION BAR                     -->
+<!-- ======================================================== -->
+<nav class="curved-navbar-wrapper" data-purpose="bottom-tab-bar" style="--active-tab: 1;">
+  <div class="curved-navbar-body">
+    <!-- Sliding Dome & Elevated Circle -->
+    <div class="nav-sliding-indicator">
+      <svg class="nav-dome-svg" viewBox="0 0 100 26" preserveAspectRatio="none">
+        <path d="M 0,26 C 14,26 22,20 28,12 C 36,1 42,0 50,0 C 58,0 64,1 72,12 C 78,20 86,26 100,26 L 100,28 L 0,28 Z"></path>
+      </svg>
+      <div class="nav-floating-circle">
+        <span class="nav-floating-icon">
+          <svg fill="currentColor" viewBox="0 0 24 24"><path d="M19 13h-1V9a2 2 0 00-2-2h-1V5a1 1 0 00-1-1H9a1 1 0 00-1 1v2H7a2 2 0 00-2 2v4H4a1 1 0 00-1 1v4a1 1 0 001 1h1v1a1 1 0 001 1h12a1 1 0 001-1v-1h1a1 1 0 001-1v-4a1 1 0 00-1-1zm-9-6h4v2h-4V7zm6 11H8v-7h8v7z"></path></svg>
+        </span>
+      </div>
+    </div>
+
+    <!-- 5 Standard Navigation Tabs -->
+    <div class="nav-tabs-row">
+      <!-- 0: Home -->
+      <a class="nav-tab-item" data-index="0" data-route="home" href="#">
+        <div class="nav-tab-icon-wrap">
+          <svg fill="currentColor" viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"></path></svg>
+        </div>
+        <span class="nav-tab-label">Home</span>
+      </a>
+
+      <!-- 1: Motors (Active) -->
+      <a class="nav-tab-item active" data-index="1" data-route="motors" href="#">
+        <div class="nav-tab-icon-wrap">
+          <svg fill="currentColor" viewBox="0 0 24 24"><path d="M19 13h-1V9a2 2 0 00-2-2h-1V5a1 1 0 00-1-1H9a1 1 0 00-1 1v2H7a2 2 0 00-2 2v4H4a1 1 0 00-1 1v4a1 1 0 001 1h1v1a1 1 0 001 1h12a1 1 0 001-1v-1h1a1 1 0 001-1v-4a1 1 0 00-1-1zm-9-6h4v2h-4V7zm6 11H8v-7h8v7z"></path></svg>
+        </div>
+        <span class="nav-tab-label">Motors</span>
+      </a>
+
+      <!-- 2: Schedules -->
+      <a class="nav-tab-item" data-index="2" data-route="schedule" href="#">
+        <div class="nav-tab-icon-wrap">
+          <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+        </div>
+        <span class="nav-tab-label">Schedules</span>
+      </a>
+
+      <!-- 3: Analytics -->
+      <a class="nav-tab-item" data-index="3" data-route="analytics" href="#">
+        <div class="nav-tab-icon-wrap">
+          <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 013 19.875v-6.75zM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V8.625zM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V4.125z"></path></svg>
+        </div>
+        <span class="nav-tab-label">Analytics</span>
+      </a>
+
+      <!-- 4: Profile -->
+      <a class="nav-tab-item" data-index="4" data-route="profile" href="#">
+        <div class="nav-tab-icon-wrap">
+          <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z"></path></svg>
+        </div>
+        <span class="nav-tab-label">Profile</span>
+      </a>
+    </div>
+
+    <!-- Home Indicator -->
+    <div class="nav-home-indicator"></div>
+  </div>
+</nav>
+</div>
+<!-- END: MobileDeviceContainer -->
+
+
+
+
+
+
+<script src="../app-runtime.js"></script>
+</body></html>

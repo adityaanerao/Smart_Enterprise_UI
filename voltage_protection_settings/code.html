@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport"/>
+  <title>Voltage Protection Settings - National Auto Starter</title>
+  <!-- Google Fonts: Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              red: '#D81921',
+              darkRed: '#B91219',
+              lightRed: '#FEECEC',
+              emerald: '#10B981',
+              darkEmerald: '#059669',
+              slateBg: '#F8FAFC'
+            }
+          },
+          fontFamily: {
+            sans: ['"Inter"', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body {
+      -webkit-tap-highlight-color: transparent;
+      user-select: none;
+    }
+    .stepper-btn:active {
+      transform: scale(0.92);
+    }
+    .save-btn:active {
+      transform: scale(0.98);
+    }
+  </style>
+</head>
+<body class="bg-slate-100 font-sans antialiased text-slate-800 min-h-screen flex justify-center items-start">
+  <!-- Mobile Screen Container -->
+  <div class="w-full max-w-md min-h-screen bg-[#F4F6F9] flex flex-col relative pb-8 shadow-xl">
+    
+    <!-- Top Header Bar (National Crimson) -->
+    <header class="bg-gradient-to-r from-[#D81921] via-[#D81921] to-[#B91219] text-white pt-5 pb-6 px-4 rounded-b-[24px] shadow-md relative z-10">
+      <div class="flex items-center gap-2.5">
+        <!-- Back Button -->
+        <button data-route="protection" aria-label="Go back" class="p-2 -ml-2 rounded-full hover:bg-white/10 active:scale-90 transition-all focus:outline-none flex items-center justify-center cursor-pointer shrink-0" id="backBtn" type="button">
+          <svg class="w-6 h-6 text-white stroke-[2.5]" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
+            <path d="M15 19l-7-7 7-7"></path>
+          </svg>
+        </button>
+
+        <!-- National Brand Logo in Left Corner After Back Button -->
+        <div class="bg-white rounded-lg p-1 shadow-xs flex items-center justify-center shrink-0 cursor-pointer btn-tactile" data-route="home" style="width: 36px; height: 36px;">
+          <img src="../assets/national-logo.svg" alt="National Logo" class="h-5 w-auto object-contain">
+        </div>
+
+        <!-- Title and Subtitle -->
+        <div class="flex-1 min-w-0">
+          <div class="flex items-center justify-between gap-1">
+            <h1 class="text-lg font-extrabold tracking-tight text-white leading-tight truncate">Voltage Protection</h1>
+            <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold bg-white/20 text-white backdrop-blur-sm shrink-0">
+              Auto Starter
+            </span>
+          </div>
+          <p class="text-xs text-red-100 mt-0.5 font-normal truncate">Over/under voltage &amp; grid auto-restart</p>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="flex-1 px-4 pt-4 space-y-3.5 overflow-y-auto">
+      
+      <!-- Master Toggle Card -->
+      <section class="bg-white rounded-2xl p-4 shadow-sm border border-slate-100 flex items-center justify-between" id="masterToggleCard">
+        <div class="flex items-center space-x-3.5">
+          <div class="w-11 h-11 rounded-2xl bg-red-50 flex items-center justify-center flex-shrink-0 text-[#D81921]" id="statusIconBadge">
+            <svg class="w-6 h-6 fill-current" viewBox="0 0 24 24">
+              <path d="M13 2L3 14h7v8l10-12h-7l0-8z"></path>
+            </svg>
+          </div>
+          <div>
+            <h2 class="text-sm font-bold text-slate-900 leading-snug">Voltage Protection Guard</h2>
+            <p class="text-[11px] text-slate-500 leading-tight mt-0.5">Trips starter on dangerous grid voltage fluctuations</p>
+          </div>
+        </div>
+        <label class="relative inline-flex items-center cursor-pointer ml-3 flex-shrink-0 active:scale-95 transition-transform">
+          <input aria-label="Toggle Voltage Protection" checked class="sr-only peer" id="protectionToggle" type="checkbox"/>
+          <div class="w-12 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-6 peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-emerald-500 shadow-inner"></div>
+        </label>
+      </section>
+
+      <!-- Grid Power Supply Selector (3-Phase 415V vs 1-Phase 230V) -->
+      <section class="bg-white rounded-2xl p-3.5 shadow-sm border border-slate-100">
+        <div class="flex items-center justify-between mb-2 px-0.5">
+          <span class="text-xs font-bold text-slate-800 uppercase tracking-wider">Supply System Type</span>
+          <span class="text-[11px] font-semibold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200" id="phaseIndicatorBadge">415V AC Grid</span>
+        </div>
+        <div class="grid grid-cols-2 gap-2 bg-slate-100 p-1 rounded-xl" id="phaseSystemGroup">
+          <button type="button" id="mode3Phase" class="py-2 text-xs font-bold rounded-lg bg-white text-[#D81921] shadow-sm transition-all text-center flex items-center justify-center gap-1.5 cursor-pointer">
+            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"></path></svg>
+            3-Phase (415V)
+          </button>
+          <button type="button" id="mode1Phase" class="py-2 text-xs font-medium rounded-lg text-slate-600 hover:text-slate-900 transition-all text-center flex items-center justify-center gap-1.5 cursor-pointer">
+            1-Phase (230V)
+          </button>
+        </div>
+      </section>
+
+      <!-- Live Voltage Telemetry Card -->
+      <section class="bg-gradient-to-br from-slate-900 to-slate-800 rounded-2xl p-3.5 text-white shadow-md">
+        <div class="flex items-center justify-between mb-2">
+          <div class="flex items-center gap-2">
+            <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+            <span class="text-xs font-semibold text-slate-300">Live Grid Voltage</span>
+          </div>
+          <span class="text-[11px] font-bold text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded-full border border-emerald-500/30">Stable (415 V)</span>
+        </div>
+        <div class="grid grid-cols-3 gap-2 text-center pt-1" id="phaseReadingsBox">
+          <div class="bg-white/10 rounded-xl p-2 border border-white/5">
+            <div class="text-[10px] text-slate-400 font-semibold">Phase R-Y</div>
+            <div class="text-sm font-extrabold text-white mt-0.5">416 V</div>
+          </div>
+          <div class="bg-white/10 rounded-xl p-2 border border-white/5">
+            <div class="text-[10px] text-slate-400 font-semibold">Phase Y-B</div>
+            <div class="text-sm font-extrabold text-white mt-0.5">414 V</div>
+          </div>
+          <div class="bg-white/10 rounded-xl p-2 border border-white/5">
+            <div class="text-[10px] text-slate-400 font-semibold">Phase B-R</div>
+            <div class="text-sm font-extrabold text-white mt-0.5">415 V</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Stepper 1: Over Voltage Limit -->
+      <section class="bg-white rounded-2xl p-4 shadow-sm border border-slate-100" id="overVoltageCard">
+        <div class="flex items-start justify-between">
+          <div>
+            <h3 class="text-sm font-bold text-slate-900 leading-snug">Over Voltage Trip Limit</h3>
+            <p class="text-[11px] text-slate-500 mt-0.5">Stops motor if grid surges above safety threshold</p>
+          </div>
+          <span class="text-[11px] font-semibold text-amber-700 bg-amber-50 px-2 py-0.5 rounded-full">+13% Surge</span>
+        </div>
+        <div class="mt-3 flex items-center justify-between bg-slate-50 border border-slate-200 rounded-xl p-1.5">
+          <button aria-label="Decrease Over Voltage" class="stepper-btn cursor-pointer w-10 h-10 rounded-lg bg-white border border-slate-200 shadow-xs flex items-center justify-center text-[#D81921] font-bold text-xl transition-all" id="overDecBtn" type="button">−</button>
+          <div class="flex items-baseline space-x-1.5 select-none">
+            <span class="text-xl font-extrabold text-slate-900 tracking-tight" id="overVoltageVal">470</span>
+            <span class="text-xs font-bold text-slate-500">V</span>
+          </div>
+          <button aria-label="Increase Over Voltage" class="stepper-btn cursor-pointer w-10 h-10 rounded-lg bg-white border border-slate-200 shadow-xs flex items-center justify-center text-[#D81921] font-bold text-xl transition-all" id="overIncBtn" type="button">+</button>
+        </div>
+        <p class="text-[11px] text-slate-400 mt-2 font-normal" id="overRangeHelp">Range: 430 - 510 V (Default 470 V for 415V 3-Phase)</p>
+      </section>
+
+      <!-- Stepper 2: Under Voltage Limit -->
+      <section class="bg-white rounded-2xl p-4 shadow-sm border border-slate-100" id="underVoltageCard">
+        <div class="flex items-start justify-between">
+          <div>
+            <h3 class="text-sm font-bold text-slate-900 leading-snug">Under Voltage Trip Limit</h3>
+            <p class="text-[11px] text-slate-500 mt-0.5">Prevents winding burn from high current at low voltage</p>
+          </div>
+          <span class="text-[11px] font-semibold text-amber-700 bg-amber-50 px-2 py-0.5 rounded-full">-15% Brownout</span>
+        </div>
+        <div class="mt-3 flex items-center justify-between bg-slate-50 border border-slate-200 rounded-xl p-1.5">
+          <button aria-label="Decrease Under Voltage" class="stepper-btn cursor-pointer w-10 h-10 rounded-lg bg-white border border-slate-200 shadow-xs flex items-center justify-center text-[#D81921] font-bold text-xl transition-all" id="underDecBtn" type="button">−</button>
+          <div class="flex items-baseline space-x-1.5 select-none">
+            <span class="text-xl font-extrabold text-slate-900 tracking-tight" id="underVoltageVal">350</span>
+            <span class="text-xs font-bold text-slate-500">V</span>
+          </div>
+          <button aria-label="Increase Under Voltage" class="stepper-btn cursor-pointer w-10 h-10 rounded-lg bg-white border border-slate-200 shadow-xs flex items-center justify-center text-[#D81921] font-bold text-xl transition-all" id="underIncBtn" type="button">+</button>
+        </div>
+        <p class="text-[11px] text-slate-400 mt-2 font-normal" id="underRangeHelp">Range: 300 - 390 V (Default 350 V for 415V 3-Phase)</p>
+      </section>
+
+      <!-- Stepper 3: Trip Delay Time -->
+      <section class="bg-white rounded-2xl p-4 shadow-sm border border-slate-100" id="tripDelayCard">
+        <div class="flex items-start justify-between">
+          <div>
+            <h3 class="text-sm font-bold text-slate-900 leading-snug">Trip Delay Time</h3>
+            <p class="text-[11px] text-slate-500 mt-0.5">Fast trip time to prevent motor insulation breakdown</p>
+          </div>
+          <span class="text-[11px] font-semibold text-slate-700 bg-slate-100 px-2 py-0.5 rounded-full">Inverse Safe</span>
+        </div>
+        <div class="mt-3 flex items-center justify-between bg-slate-50 border border-slate-200 rounded-xl p-1.5">
+          <button aria-label="Decrease Trip Delay" class="stepper-btn cursor-pointer w-10 h-10 rounded-lg bg-white border border-slate-200 shadow-xs flex items-center justify-center text-[#D81921] font-bold text-xl transition-all" id="delayDecBtn" type="button">−</button>
+          <div class="flex items-baseline space-x-1.5 select-none">
+            <span class="text-xl font-extrabold text-slate-900 tracking-tight" id="tripDelayVal">3</span>
+            <span class="text-xs font-bold text-slate-500">sec</span>
+          </div>
+          <button aria-label="Increase Trip Delay" class="stepper-btn cursor-pointer w-10 h-10 rounded-lg bg-white border border-slate-200 shadow-xs flex items-center justify-center text-[#D81921] font-bold text-xl transition-all" id="delayIncBtn" type="button">+</button>
+        </div>
+        <p class="text-[11px] text-slate-400 mt-2 font-normal">Range: 1 - 30 seconds (Recommended: 3s)</p>
+      </section>
+
+      <!-- Stepper 4: Auto Starter Voltage Recovery Timer -->
+      <section class="bg-white rounded-2xl p-4 shadow-sm border border-slate-100" id="recoveryTimerCard">
+        <div class="flex items-start justify-between">
+          <div>
+            <h3 class="text-sm font-bold text-slate-900 leading-snug">Voltage Recovery Auto-Restart Timer</h3>
+            <p class="text-[11px] text-slate-500 mt-0.5">Wait time after healthy voltage returns before auto-start</p>
+          </div>
+          <span class="text-[11px] font-semibold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200">Auto Starter</span>
+        </div>
+        <div class="mt-3 flex items-center justify-between bg-slate-50 border border-slate-200 rounded-xl p-1.5">
+          <button aria-label="Decrease Recovery Delay" class="stepper-btn cursor-pointer w-10 h-10 rounded-lg bg-white border border-slate-200 shadow-xs flex items-center justify-center text-[#D81921] font-bold text-xl transition-all" id="recDecBtn" type="button">−</button>
+          <div class="flex items-baseline space-x-1.5 select-none">
+            <span class="text-xl font-extrabold text-slate-900 tracking-tight" id="recDelayVal">15</span>
+            <span class="text-xs font-bold text-slate-500">sec</span>
+          </div>
+          <button aria-label="Increase Recovery Delay" class="stepper-btn cursor-pointer w-10 h-10 rounded-lg bg-white border border-slate-200 shadow-xs flex items-center justify-center text-[#D81921] font-bold text-xl transition-all" id="recIncBtn" type="button">+</button>
+        </div>
+        <p class="text-[11px] text-slate-400 mt-2 font-normal">Range: 5 - 120 seconds (Filters rural grid switching surges)</p>
+      </section>
+
+      <!-- Explanatory Information Banner -->
+      <section class="bg-red-50/80 border border-red-100 rounded-2xl p-3.5 flex items-start space-x-3" id="infoBanner">
+        <div class="text-[#D81921] mt-0.5 flex-shrink-0">
+          <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24">
+            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"></path>
+          </svg>
+        </div>
+        <p class="text-xs text-red-900 leading-relaxed font-medium" id="bannerMessage">
+          If 3-phase grid voltage exceeds <strong id="bannerOverV">470 V</strong> or drops below <strong id="bannerUnderV">350 V</strong> for more than <strong id="bannerDelay">3 seconds</strong>, the auto starter will safely shut down. When voltage stabilizes, it will auto-restart after <strong id="bannerRecovery">15 seconds</strong>.
+        </p>
+      </section>
+    </main>
+
+    <!-- Bottom Actions -->
+    <footer class="px-4 mt-4 pt-2">
+      <button data-route="review" class="save-btn cursor-pointer w-full bg-[#D81921] hover:bg-[#B91219] active:scale-[0.98] text-white font-bold py-3.5 px-4 rounded-xl shadow-lg shadow-red-600/30 flex items-center justify-center space-x-2 transition-all duration-150" id="saveBtn" type="button">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+          <path d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round"></path>
+        </svg>
+        <span class="text-sm tracking-wide">Save Voltage Settings</span>
+      </button>
+    </footer>
+
+    <!-- Toast Notification -->
+    <div class="fixed top-5 left-1/2 -translate-x-1/2 z-50 bg-slate-900/95 text-white px-4 py-2.5 rounded-full text-xs font-semibold shadow-xl flex items-center space-x-2 transition-all duration-300 opacity-0 pointer-events-none -translate-y-4" id="toast">
+      <svg class="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+        <path d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round"></path>
+      </svg>
+      <span id="toastMsg">Voltage Settings Saved!</span>
+    </div>
+
+  </div>
+
+  <script>
+    // State management
+    let is3Phase = true;
+    let overVoltage = 470;
+    let underVoltage = 350;
+    let tripDelay = 3;
+    let recoveryDelay = 15;
+    let isEnabled = true;
+
+    // Range limits by system
+    const RANGES = {
+      threePhase: {
+        overMin: 430, overMax: 510, overDef: 470,
+        underMin: 300, underMax: 390, underDef: 350,
+        stepV: 5,
+        overHelp: 'Range: 430 - 510 V (Default 470 V for 415V 3-Phase)',
+        underHelp: 'Range: 300 - 390 V (Default 350 V for 415V 3-Phase)',
+        badge: '415V AC Grid'
+      },
+      singlePhase: {
+        overMin: 240, overMax: 300, overDef: 270,
+        underMin: 140, underMax: 210, underDef: 175,
+        stepV: 5,
+        overHelp: 'Range: 240 - 300 V (Default 270 V for 230V 1-Phase)',
+        underHelp: 'Range: 140 - 210 V (Default 175 V for 230V 1-Phase)',
+        badge: '230V AC Single Phase'
+      }
+    };
+
+    // Load persisted state if exists
+    try {
+      const stored = JSON.parse(localStorage.getItem('nationalMotorProtectionSettings') || '{}');
+      if (stored.voltage) {
+        if (typeof stored.voltage.is3Phase === 'boolean') is3Phase = stored.voltage.is3Phase;
+        if (stored.voltage.overVoltage) overVoltage = stored.voltage.overVoltage;
+        if (stored.voltage.underVoltage) underVoltage = stored.voltage.underVoltage;
+        if (stored.voltage.tripDelay) tripDelay = stored.voltage.tripDelay;
+        if (stored.voltage.recoveryDelay) recoveryDelay = stored.voltage.recoveryDelay;
+        if (typeof stored.voltage.isEnabled === 'boolean') isEnabled = stored.voltage.isEnabled;
+      }
+    } catch(e) {}
+
+    // DOM Elements
+    const overValEl = document.getElementById('overVoltageVal');
+    const underValEl = document.getElementById('underVoltageVal');
+    const delayValEl = document.getElementById('tripDelayVal');
+    const recValEl = document.getElementById('recDelayVal');
+
+    const bannerOverVEl = document.getElementById('bannerOverV');
+    const bannerUnderVEl = document.getElementById('bannerUnderV');
+    const bannerDelayEl = document.getElementById('bannerDelay');
+    const bannerRecoveryEl = document.getElementById('bannerRecovery');
+    const phaseIndicatorBadge = document.getElementById('phaseIndicatorBadge');
+    const phaseReadingsBox = document.getElementById('phaseReadingsBox');
+    const overRangeHelp = document.getElementById('overRangeHelp');
+    const underRangeHelp = document.getElementById('underRangeHelp');
+
+    const mode3PhaseBtn = document.getElementById('mode3Phase');
+    const mode1PhaseBtn = document.getElementById('mode1Phase');
+    const protectionToggle = document.getElementById('protectionToggle');
+    const toast = document.getElementById('toast');
+    const toastMsg = document.getElementById('toastMsg');
+    let toastTimeout = null;
+
+    function updateDisplay() {
+      overValEl.textContent = overVoltage;
+      underValEl.textContent = underVoltage;
+      delayValEl.textContent = tripDelay;
+      recValEl.textContent = recoveryDelay;
+
+      bannerOverVEl.textContent = `${overVoltage} V`;
+      bannerUnderVEl.textContent = `${underVoltage} V`;
+      bannerDelayEl.textContent = `${tripDelay} ${tripDelay === 1 ? 'second' : 'seconds'}`;
+      bannerRecoveryEl.textContent = `${recoveryDelay} seconds`;
+
+      const cfg = is3Phase ? RANGES.threePhase : RANGES.singlePhase;
+      overRangeHelp.textContent = cfg.overHelp;
+      underRangeHelp.textContent = cfg.underHelp;
+      phaseIndicatorBadge.textContent = cfg.badge;
+
+      if (is3Phase) {
+        mode3PhaseBtn.className = 'py-2 text-xs font-bold rounded-lg bg-white text-[#D81921] shadow-sm transition-all text-center flex items-center justify-center gap-1.5 cursor-pointer';
+        mode1PhaseBtn.className = 'py-2 text-xs font-medium rounded-lg text-slate-600 hover:text-slate-900 transition-all text-center flex items-center justify-center gap-1.5 cursor-pointer';
+        phaseReadingsBox.innerHTML = `
+          <div class="bg-white/10 rounded-xl p-2 border border-white/5">
+            <div class="text-[10px] text-slate-400 font-semibold">Phase R-Y</div>
+            <div class="text-sm font-extrabold text-white mt-0.5">416 V</div>
+          </div>
+          <div class="bg-white/10 rounded-xl p-2 border border-white/5">
+            <div class="text-[10px] text-slate-400 font-semibold">Phase Y-B</div>
+            <div class="text-sm font-extrabold text-white mt-0.5">414 V</div>
+          </div>
+          <div class="bg-white/10 rounded-xl p-2 border border-white/5">
+            <div class="text-[10px] text-slate-400 font-semibold">Phase B-R</div>
+            <div class="text-sm font-extrabold text-white mt-0.5">415 V</div>
+          </div>
+        `;
+      } else {
+        mode1PhaseBtn.className = 'py-2 text-xs font-bold rounded-lg bg-white text-[#D81921] shadow-sm transition-all text-center flex items-center justify-center gap-1.5 cursor-pointer';
+        mode3PhaseBtn.className = 'py-2 text-xs font-medium rounded-lg text-slate-600 hover:text-slate-900 transition-all text-center flex items-center justify-center gap-1.5 cursor-pointer';
+        phaseReadingsBox.innerHTML = `
+          <div class="bg-white/10 rounded-xl p-2 border border-white/5 col-span-2">
+            <div class="text-[10px] text-slate-400 font-semibold">Phase - Neutral (Line)</div>
+            <div class="text-sm font-extrabold text-white mt-0.5">232 V AC</div>
+          </div>
+          <div class="bg-white/10 rounded-xl p-2 border border-white/5">
+            <div class="text-[10px] text-slate-400 font-semibold">Frequency</div>
+            <div class="text-sm font-extrabold text-white mt-0.5">50.0 Hz</div>
+          </div>
+        `;
+      }
+    }
+
+    // Switch between 3-phase and 1-phase modes
+    mode3PhaseBtn.addEventListener('click', () => {
+      if (!is3Phase) {
+        is3Phase = true;
+        overVoltage = RANGES.threePhase.overDef;
+        underVoltage = RANGES.threePhase.underDef;
+        updateDisplay();
+        showToast('Switched to 3-Phase 415V Auto Starter Mode');
+      }
+    });
+
+    mode1PhaseBtn.addEventListener('click', () => {
+      if (is3Phase) {
+        is3Phase = false;
+        overVoltage = RANGES.singlePhase.overDef;
+        underVoltage = RANGES.singlePhase.underDef;
+        updateDisplay();
+        showToast('Switched to 1-Phase 230V Mode');
+      }
+    });
+
+    // Over Voltage Stepper
+    document.getElementById('overIncBtn').addEventListener('click', () => {
+      const cfg = is3Phase ? RANGES.threePhase : RANGES.singlePhase;
+      if (overVoltage + cfg.stepV <= cfg.overMax) {
+        overVoltage += cfg.stepV;
+        updateDisplay();
+      }
+    });
+
+    document.getElementById('overDecBtn').addEventListener('click', () => {
+      const cfg = is3Phase ? RANGES.threePhase : RANGES.singlePhase;
+      if (overVoltage - cfg.stepV >= cfg.overMin) {
+        overVoltage -= cfg.stepV;
+        updateDisplay();
+      }
+    });
+
+    // Under Voltage Stepper
+    document.getElementById('underIncBtn').addEventListener('click', () => {
+      const cfg = is3Phase ? RANGES.threePhase : RANGES.singlePhase;
+      if (underVoltage + cfg.stepV <= cfg.underMax) {
+        underVoltage += cfg.stepV;
+        updateDisplay();
+      }
+    });
+
+    document.getElementById('underDecBtn').addEventListener('click', () => {
+      const cfg = is3Phase ? RANGES.threePhase : RANGES.singlePhase;
+      if (underVoltage - cfg.stepV >= cfg.underMin) {
+        underVoltage -= cfg.stepV;
+        updateDisplay();
+      }
+    });
+
+    // Trip Delay Stepper (1 to 30s)
+    document.getElementById('delayIncBtn').addEventListener('click', () => {
+      if (tripDelay < 30) {
+        tripDelay += 1;
+        updateDisplay();
+      }
+    });
+    document.getElementById('delayDecBtn').addEventListener('click', () => {
+      if (tripDelay > 1) {
+        tripDelay -= 1;
+        updateDisplay();
+      }
+    });
+
+    // Recovery Delay Stepper (5 to 120s)
+    document.getElementById('recIncBtn').addEventListener('click', () => {
+      if (recoveryDelay < 120) {
+        recoveryDelay += 5;
+        updateDisplay();
+      }
+    });
+    document.getElementById('recDecBtn').addEventListener('click', () => {
+      if (recoveryDelay > 5) {
+        recoveryDelay -= 5;
+        updateDisplay();
+      }
+    });
+
+    // Master Toggle
+    protectionToggle.checked = isEnabled;
+    protectionToggle.addEventListener('change', (e) => {
+      isEnabled = e.target.checked;
+      const cards = [
+        document.getElementById('overVoltageCard'),
+        document.getElementById('underVoltageCard'),
+        document.getElementById('tripDelayCard'),
+        document.getElementById('recoveryTimerCard'),
+        document.getElementById('infoBanner')
+      ];
+      cards.forEach(c => {
+        if (isEnabled) {
+          c.classList.remove('opacity-40', 'pointer-events-none');
+        } else {
+          c.classList.add('opacity-40', 'pointer-events-none');
+        }
+      });
+      showToast(isEnabled ? 'Voltage Protection Enabled' : 'Voltage Protection Disabled');
+    });
+
+    // Toast
+    function showToast(message) {
+      if (toastTimeout) clearTimeout(toastTimeout);
+      toastMsg.textContent = message;
+      toast.classList.remove('opacity-0', 'pointer-events-none', '-translate-y-4');
+      toast.classList.add('opacity-100', 'translate-y-0');
+      toastTimeout = setTimeout(() => {
+        toast.classList.add('opacity-0', 'pointer-events-none', '-translate-y-4');
+        toast.classList.remove('opacity-100', 'translate-y-0');
+      }, 2500);
+    }
+
+    // Save Settings
+    document.getElementById('saveBtn').addEventListener('click', () => {
+      const stored = JSON.parse(localStorage.getItem('nationalMotorProtectionSettings') || '{}');
+      stored.voltage = {
+        isEnabled,
+        is3Phase,
+        overVoltage,
+        underVoltage,
+        tripDelay,
+        recoveryDelay
+      };
+      localStorage.setItem('nationalMotorProtectionSettings', JSON.stringify(stored));
+      showToast('Voltage Settings Saved Successfully!');
+    });
+
+    updateDisplay();
+  </script>
+  <script src="../app-runtime.js"></script>
+</body>
+</html>

@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport"/>
+  <title>Overload Protection Settings - National Auto Starter</title>
+  <!-- Google Fonts: Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              red: '#D81921',
+              darkRed: '#B91219',
+              lightRed: '#FEECEC',
+              emerald: '#10B981',
+              darkEmerald: '#059669',
+              amber: '#f59e0b'
+            }
+          },
+          fontFamily: {
+            sans: ['"Inter"', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body {
+      -webkit-tap-highlight-color: transparent;
+      user-select: none;
+    }
+    .stepper-btn:active {
+      transform: scale(0.92);
+    }
+    .save-btn:active {
+      transform: scale(0.98);
+    }
+  </style>
+</head>
+<body class="bg-slate-100 font-sans antialiased text-slate-800 min-h-screen flex justify-center items-start">
+  <!-- Mobile Screen Container -->
+  <div class="w-full max-w-md min-h-screen bg-[#F4F6F9] flex flex-col relative pb-8 shadow-xl">
+    
+    <!-- Top Header Bar (National Crimson) -->
+    <header class="bg-gradient-to-r from-[#D81921] via-[#D81921] to-[#B91219] text-white pt-5 pb-6 px-4 rounded-b-[24px] shadow-md relative z-10">
+      <div class="flex items-center gap-2.5">
+        <!-- Back Button -->
+        <button data-route="protection" aria-label="Go back" class="p-2 -ml-2 rounded-full hover:bg-white/10 active:scale-90 transition-all focus:outline-none flex items-center justify-center cursor-pointer shrink-0" id="backBtn" type="button">
+          <svg class="w-6 h-6 text-white stroke-[2.5]" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
+            <path d="M15 19l-7-7 7-7"></path>
+          </svg>
+        </button>
+
+        <!-- National Brand Logo in Left Corner After Back Button -->
+        <div class="bg-white rounded-lg p-1 shadow-xs flex items-center justify-center shrink-0 cursor-pointer btn-tactile" data-route="home" style="width: 36px; height: 36px;">
+          <img src="../assets/national-logo.svg" alt="National Logo" class="h-5 w-auto object-contain">
+        </div>
+
+        <!-- Title and Subtitle -->
+        <div class="flex-1 min-w-0">
+          <div class="flex items-center justify-between gap-1">
+            <h1 class="text-lg font-extrabold tracking-tight text-white leading-tight truncate">Overload Protection</h1>
+            <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold bg-white/20 text-white backdrop-blur-sm shrink-0">
+              Class 10
+            </span>
+          </div>
+          <p class="text-xs text-red-100 mt-0.5 font-normal truncate">Winding overload &amp; burnout guard</p>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="flex-1 px-4 pt-4 space-y-3.5 overflow-y-auto">
+      
+      <!-- Master Toggle Card -->
+      <section class="bg-white rounded-2xl p-4 shadow-sm border border-slate-100 flex items-center justify-between" id="masterToggleCard">
+        <div class="flex items-center space-x-3.5">
+          <div class="w-11 h-11 rounded-2xl bg-amber-50 flex items-center justify-center flex-shrink-0 text-amber-600" id="statusIconBadge">
+            <svg class="w-6 h-6 fill-none stroke-current stroke-2" viewBox="0 0 24 24">
+              <circle cx="12" cy="12" r="9"></circle>
+              <path d="M12 12l3-3" stroke-linecap="round"></path>
+              <path d="M12 7v1M7 12h1M16 12h1" stroke-linecap="round"></path>
+            </svg>
+          </div>
+          <div>
+            <h2 class="text-sm font-bold text-slate-900 leading-snug">Thermal Overload Relay</h2>
+            <p class="text-[11px] text-slate-500 leading-tight mt-0.5">Stops starter if current exceeds motor thermal rating</p>
+          </div>
+        </div>
+        <label class="relative inline-flex items-center cursor-pointer ml-3 flex-shrink-0 active:scale-95 transition-transform">
+          <input aria-label="Toggle Overload Protection" checked class="sr-only peer" id="protectionToggle" type="checkbox"/>
+          <div class="w-12 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-6 peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-emerald-500 shadow-inner"></div>
+        </label>
+      </section>
+
+      <!-- Motor Rating & FLC Reference Chips -->
+      <section class="bg-white rounded-2xl p-3.5 shadow-sm border border-slate-100" id="motorRatingSection">
+        <div class="flex items-center justify-between mb-2 px-0.5">
+          <span class="text-xs font-bold text-slate-800 uppercase tracking-wider">Motor Rating (415V FLC)</span>
+          <span class="text-[11px] font-bold text-[#D81921] bg-red-50 px-2 py-0.5 rounded-full border border-red-100" id="flcBadge">FLC: 8.4 A</span>
+        </div>
+        <div class="grid grid-cols-3 gap-2" id="motorHpGroup">
+          <button type="button" data-hp="3.0" data-flc="5.5" class="hp-btn py-2 text-xs font-medium rounded-xl border border-slate-200 text-slate-700 hover:bg-slate-50 transition-all text-center cursor-pointer">
+            3.0 HP (5.5A)
+          </button>
+          <button type="button" data-hp="5.0" data-flc="8.4" class="hp-btn active py-2 text-xs font-bold rounded-xl border-2 border-[#D81921] bg-red-50/60 text-[#D81921] transition-all text-center cursor-pointer">
+            5.0 HP (8.4A)
+          </button>
+          <button type="button" data-hp="7.5" data-flc="12.5" class="hp-btn py-2 text-xs font-medium rounded-xl border border-slate-200 text-slate-700 hover:bg-slate-50 transition-all text-center cursor-pointer">
+            7.5 HP (12.5A)
+          </button>
+        </div>
+      </section>
+
+      <!-- Live Current Load vs Trip Calculation -->
+      <section class="bg-gradient-to-br from-slate-900 to-slate-800 rounded-2xl p-3.5 text-white shadow-md">
+        <div class="flex items-center justify-between mb-2">
+          <div class="flex items-center gap-2">
+            <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+            <span class="text-xs font-semibold text-slate-300">Thermal Current Margin</span>
+          </div>
+          <span class="text-[11px] font-bold text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded-full border border-emerald-500/30" id="safetyMarginBadge">Normal Load (8.4 A)</span>
+        </div>
+        <div class="grid grid-cols-2 gap-2 text-center pt-1">
+          <div class="bg-white/10 rounded-xl p-2.5 border border-white/5 text-left">
+            <div class="text-[10px] text-slate-400 font-semibold">Motor Rated FLC</div>
+            <div class="text-base font-extrabold text-white mt-0.5" id="liveFlcText">8.4 A</div>
+          </div>
+          <div class="bg-white/10 rounded-xl p-2.5 border border-white/5 text-left">
+            <div class="text-[10px] text-slate-400 font-semibold">Overload Trip Point</div>
+            <div class="text-base font-extrabold text-amber-400 mt-0.5" id="liveTripText">10.0 A (+19%)</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Stepper 1: Overload Current Limit -->
+      <section class="bg-white rounded-2xl p-4 shadow-sm border border-slate-100" id="cardCurrentLimit">
+        <div class="flex items-start justify-between">
+          <div>
+            <h3 class="text-sm font-bold text-slate-900 leading-snug">Overload Current Limit</h3>
+            <p class="text-[11px] text-slate-500 mt-0.5">Maximum sustained running current</p>
+          </div>
+          <span class="text-[11px] font-semibold text-amber-800 bg-amber-50 px-2 py-0.5 rounded-full border border-amber-200" id="percentOverloadBadge">120% FLC</span>
+        </div>
+        <div class="mt-3 flex items-center justify-between bg-slate-50 border border-slate-200 rounded-xl p-1.5">
+          <button aria-label="Decrease current limit" class="stepper-btn cursor-pointer w-10 h-10 rounded-lg bg-white border border-slate-200 shadow-xs flex items-center justify-center text-amber-600 font-bold text-xl transition-all" id="currentDecBtn" type="button">−</button>
+          <div class="flex items-baseline space-x-1.5 select-none">
+            <span class="text-xl font-extrabold text-slate-900 tracking-tight" id="currentLimitVal">10.0</span>
+            <span class="text-xs font-bold text-slate-500">A</span>
+          </div>
+          <button aria-label="Increase current limit" class="stepper-btn cursor-pointer w-10 h-10 rounded-lg bg-white border border-slate-200 shadow-xs flex items-center justify-center text-amber-600 font-bold text-xl transition-all" id="currentIncBtn" type="button">+</button>
+        </div>
+        <p class="text-[11px] text-slate-400 mt-2 font-normal">Range: 2.0 - 25.0 A (Standard: 110% - 125% of motor full load)</p>
+      </section>
+
+      <!-- Stepper 2: Trip Delay Time (Inverse Thermal Characteristic) -->
+      <section class="bg-white rounded-2xl p-4 shadow-sm border border-slate-100" id="cardTripTime">
+        <div class="flex items-start justify-between">
+          <div>
+            <h3 class="text-sm font-bold text-slate-900 leading-snug">Overload Trip Delay Time</h3>
+            <p class="text-[11px] text-slate-500 mt-0.5">Allows normal starting current inrush without false trip</p>
+          </div>
+          <span class="text-[11px] font-semibold text-slate-700 bg-slate-100 px-2 py-0.5 rounded-full">Inrush Tolerant</span>
+        </div>
+        <div class="mt-3 flex items-center justify-between bg-slate-50 border border-slate-200 rounded-xl p-1.5">
+          <button aria-label="Decrease trip time" class="stepper-btn cursor-pointer w-10 h-10 rounded-lg bg-white border border-slate-200 shadow-xs flex items-center justify-center text-amber-600 font-bold text-xl transition-all" id="timeDecBtn" type="button">−</button>
+          <div class="flex items-baseline space-x-1.5 select-none">
+            <span class="text-xl font-extrabold text-slate-900 tracking-tight" id="tripTimeVal">8</span>
+            <span class="text-xs font-bold text-slate-500">sec</span>
+          </div>
+          <button aria-label="Increase trip time" class="stepper-btn cursor-pointer w-10 h-10 rounded-lg bg-white border border-slate-200 shadow-xs flex items-center justify-center text-amber-600 font-bold text-xl transition-all" id="timeIncBtn" type="button">+</button>
+        </div>
+        <p class="text-[11px] text-slate-400 mt-2 font-normal">Range: 2 - 60 seconds (Standard: 8s for Class 10 submersible)</p>
+      </section>
+
+      <!-- Stepper 3: Motor Cooling Lockout Timer -->
+      <section class="bg-white rounded-2xl p-4 shadow-sm border border-slate-100" id="cardCooling">
+        <div class="flex items-start justify-between">
+          <div>
+            <h3 class="text-sm font-bold text-slate-900 leading-snug">Motor Cooling Rest Delay</h3>
+            <p class="text-[11px] text-slate-500 mt-0.5">Prevents hot restart while copper windings are overheated</p>
+          </div>
+          <span class="text-[11px] font-semibold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200">Cooling Lock</span>
+        </div>
+        <div class="mt-3 flex items-center justify-between bg-slate-50 border border-slate-200 rounded-xl p-1.5">
+          <button aria-label="Decrease cooling time" class="stepper-btn cursor-pointer w-10 h-10 rounded-lg bg-white border border-slate-200 shadow-xs flex items-center justify-center text-amber-600 font-bold text-xl transition-all" id="coolingDecBtn" type="button">−</button>
+          <div class="flex items-baseline space-x-1.5 select-none">
+            <span class="text-xl font-extrabold text-slate-900 tracking-tight" id="coolingVal">15</span>
+            <span class="text-xs font-bold text-slate-500">min</span>
+          </div>
+          <button aria-label="Increase cooling time" class="stepper-btn cursor-pointer w-10 h-10 rounded-lg bg-white border border-slate-200 shadow-xs flex items-center justify-center text-amber-600 font-bold text-xl transition-all" id="coolingIncBtn" type="button">+</button>
+        </div>
+        <p class="text-[11px] text-slate-400 mt-2 font-normal">Range: 5 - 45 minutes (Standard: 15 min for borewell motors)</p>
+      </section>
+
+      <!-- Explanatory Information Banner -->
+      <section class="bg-amber-50/80 border border-amber-100 rounded-2xl p-3.5 flex items-start space-x-3" id="infoBanner">
+        <div class="text-amber-600 mt-0.5 flex-shrink-0">
+          <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24">
+            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"></path>
+          </svg>
+        </div>
+        <p class="text-xs text-amber-950 leading-relaxed font-medium" id="bannerMessage">
+          If motor current exceeds <strong id="bannerCurrent">10.0 A</strong> for more than <strong id="bannerTime">8 seconds</strong>, the auto starter will trip and engage a <strong id="bannerCooling">15-minute cooling lockout</strong> before allowing another restart attempt.
+        </p>
+      </section>
+    </main>
+
+    <!-- Bottom Actions -->
+    <footer class="px-4 mt-4 pt-2">
+      <button data-route="review" class="save-btn cursor-pointer w-full bg-[#D81921] hover:bg-[#B91219] active:scale-[0.98] text-white font-bold py-3.5 px-4 rounded-xl shadow-lg shadow-red-600/30 flex items-center justify-center space-x-2 transition-all duration-150" id="saveBtn" type="button">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+          <path d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round"></path>
+        </svg>
+        <span class="text-sm tracking-wide">Save Overload Settings</span>
+      </button>
+    </footer>
+
+    <!-- Toast Notification -->
+    <div class="fixed top-5 left-1/2 -translate-x-1/2 z-50 bg-slate-900/95 text-white px-4 py-2.5 rounded-full text-xs font-semibold shadow-xl flex items-center space-x-2 transition-all duration-300 opacity-0 pointer-events-none -translate-y-4" id="toast">
+      <svg class="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+        <path d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round"></path>
+      </svg>
+      <span id="toastMsg">Overload Settings Saved!</span>
+    </div>
+
+  </div>
+
+  <script>
+    // State management
+    let motorHp = 5.0;
+    let motorFlc = 8.4;
+    let currentLimit = 10.0;
+    let tripTime = 8;
+    let coolingMinutes = 15;
+    let isEnabled = true;
+
+    // Load persisted state if exists
+    try {
+      const stored = JSON.parse(localStorage.getItem('nationalMotorProtectionSettings') || '{}');
+      if (stored.overload) {
+        if (stored.overload.motorHp) motorHp = stored.overload.motorHp;
+        if (stored.overload.motorFlc) motorFlc = stored.overload.motorFlc;
+        if (stored.overload.currentLimit) currentLimit = stored.overload.currentLimit;
+        if (stored.overload.tripTime) tripTime = stored.overload.tripTime;
+        if (stored.overload.coolingMinutes) coolingMinutes = stored.overload.coolingMinutes;
+        if (typeof stored.overload.isEnabled === 'boolean') isEnabled = stored.overload.isEnabled;
+      }
+    } catch(e) {}
+
+    // DOM Elements
+    const currentLimitValEl = document.getElementById('currentLimitVal');
+    const tripTimeValEl = document.getElementById('tripTimeVal');
+    const coolingValEl = document.getElementById('coolingVal');
+    const liveFlcText = document.getElementById('liveFlcText');
+    const liveTripText = document.getElementById('liveTripText');
+    const flcBadge = document.getElementById('flcBadge');
+    const percentOverloadBadge = document.getElementById('percentOverloadBadge');
+
+    const bannerCurrentEl = document.getElementById('bannerCurrent');
+    const bannerTimeEl = document.getElementById('bannerTime');
+    const bannerCoolingEl = document.getElementById('bannerCooling');
+
+    const protectionToggle = document.getElementById('protectionToggle');
+    const toast = document.getElementById('toast');
+    const toastMsg = document.getElementById('toastMsg');
+    let toastTimeout = null;
+
+    function updateDisplay() {
+      currentLimitValEl.textContent = currentLimit.toFixed(1);
+      tripTimeValEl.textContent = tripTime;
+      coolingValEl.textContent = coolingMinutes;
+
+      const pct = Math.round((currentLimit / motorFlc) * 100);
+      const diffPct = Math.round(((currentLimit - motorFlc) / motorFlc) * 100);
+      percentOverloadBadge.textContent = `${pct}% FLC`;
+      liveFlcText.textContent = `${motorFlc.toFixed(1)} A`;
+      liveTripText.textContent = `${currentLimit.toFixed(1)} A (${diffPct >= 0 ? '+' : ''}${diffPct}%)`;
+      flcBadge.textContent = `FLC: ${motorFlc.toFixed(1)} A`;
+
+      bannerCurrentEl.textContent = `${currentLimit.toFixed(1)} A`;
+      bannerTimeEl.textContent = `${tripTime} seconds`;
+      bannerCoolingEl.textContent = `${coolingMinutes}-minute cooling lockout`;
+
+      // Update HP button styles
+      document.querySelectorAll('.hp-btn').forEach(btn => {
+        const hp = parseFloat(btn.getAttribute('data-hp'));
+        if (hp === motorHp) {
+          btn.className = 'hp-btn active py-2 text-xs font-bold rounded-xl border-2 border-[#D81921] bg-red-50/60 text-[#D81921] transition-all text-center cursor-pointer';
+        } else {
+          btn.className = 'hp-btn py-2 text-xs font-medium rounded-xl border border-slate-200 text-slate-700 hover:bg-slate-50 transition-all text-center cursor-pointer';
+        }
+      });
+    }
+
+    // HP Preset Button Clicks
+    document.querySelectorAll('.hp-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        motorHp = parseFloat(btn.getAttribute('data-hp'));
+        motorFlc = parseFloat(btn.getAttribute('data-flc'));
+        // Automatically calculate ~120% FLC
+        currentLimit = Math.round((motorFlc * 1.20) * 10) / 10;
+        updateDisplay();
+        showToast(`Selected ${motorHp} HP Motor (FLC: ${motorFlc} A)`);
+      });
+    });
+
+    // Current Limit Stepper (2.0 to 30.0 A, step 0.2)
+    document.getElementById('currentIncBtn').addEventListener('click', () => {
+      if (currentLimit < 30.0) {
+        currentLimit = Math.round((currentLimit + 0.2) * 10) / 10;
+        updateDisplay();
+      }
+    });
+    document.getElementById('currentDecBtn').addEventListener('click', () => {
+      if (currentLimit > 2.0) {
+        currentLimit = Math.round((currentLimit - 0.2) * 10) / 10;
+        updateDisplay();
+      }
+    });
+
+    // Trip Time Stepper (2 to 60s)
+    document.getElementById('timeIncBtn').addEventListener('click', () => {
+      if (tripTime < 60) {
+        tripTime += 1;
+        updateDisplay();
+      }
+    });
+    document.getElementById('timeDecBtn').addEventListener('click', () => {
+      if (tripTime > 2) {
+        tripTime -= 1;
+        updateDisplay();
+      }
+    });
+
+    // Cooling Lockout Stepper (5 to 45 min, step 5)
+    document.getElementById('coolingIncBtn').addEventListener('click', () => {
+      if (coolingMinutes < 45) {
+        coolingMinutes += 5;
+        updateDisplay();
+      }
+    });
+    document.getElementById('coolingDecBtn').addEventListener('click', () => {
+      if (coolingMinutes > 5) {
+        coolingMinutes -= 5;
+        updateDisplay();
+      }
+    });
+
+    // Master Toggle
+    protectionToggle.checked = isEnabled;
+    protectionToggle.addEventListener('change', (e) => {
+      isEnabled = e.target.checked;
+      const cards = [
+        document.getElementById('motorRatingSection'),
+        document.getElementById('cardCurrentLimit'),
+        document.getElementById('cardTripTime'),
+        document.getElementById('cardCooling'),
+        document.getElementById('infoBanner')
+      ];
+      cards.forEach(c => {
+        if (isEnabled) {
+          c.classList.remove('opacity-40', 'pointer-events-none');
+        } else {
+          c.classList.add('opacity-40', 'pointer-events-none');
+        }
+      });
+      showToast(isEnabled ? 'Overload Protection Enabled' : 'Overload Protection Disabled');
+    });
+
+    // Toast
+    function showToast(message) {
+      if (toastTimeout) clearTimeout(toastTimeout);
+      toastMsg.textContent = message;
+      toast.classList.remove('opacity-0', 'pointer-events-none', '-translate-y-4');
+      toast.classList.add('opacity-100', 'translate-y-0');
+      toastTimeout = setTimeout(() => {
+        toast.classList.add('opacity-0', 'pointer-events-none', '-translate-y-4');
+        toast.classList.remove('opacity-100', 'translate-y-0');
+      }, 2500);
+    }
+
+    // Save Settings
+    document.getElementById('saveBtn').addEventListener('click', () => {
+      const stored = JSON.parse(localStorage.getItem('nationalMotorProtectionSettings') || '{}');
+      stored.overload = {
+        isEnabled,
+        motorHp,
+        motorFlc,
+        currentLimit,
+        tripTime,
+        coolingMinutes
+      };
+      localStorage.setItem('nationalMotorProtectionSettings', JSON.stringify(stored));
+      showToast('Overload Settings Saved Successfully!');
+    });
+
+    updateDisplay();
+  </script>
+  <script src="../app-runtime.js"></script>
+</body>
+</html>

@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 340 220" width="100%" height="100%">
+  <!-- Official National 4-Petal Dual-Wing Emblem -->
+  <g transform="translate(170, 116)" fill="#FFFFFF">
+    <!-- Right Inner Petal -->
+    <path d="M 0 0 C 8 -22 22 -62 36 -96 C 42 -99 52 -92 56 -84 C 42 -60 22 -28 0 0 Z"/>
+    
+    <!-- Right Outer Petal -->
+    <path d="M 3 0 C 24 -18 56 -48 88 -66 C 82 -76 68 -84 56 -86 C 36 -62 18 -26 3 0 Z"/>
+
+    <!-- Left Inner Petal (Mirrored) -->
+    <path d="M 0 0 C -8 -22 -22 -62 -36 -96 C -42 -99 -52 -92 -56 -84 C -42 -60 -22 -28 0 0 Z"/>
+
+    <!-- Left Outer Petal (Mirrored) -->
+    <path d="M -3 0 C -24 -18 -56 -48 -88 -66 C -82 -76 -68 -84 -56 -86 C -36 -62 -18 -26 -3 0 Z"/>
+  </g>
+
+  <!-- TM Trademark -->
+  <text x="296" y="100" fill="#FFFFFF" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Arial Black', sans-serif" font-size="19" font-weight="900" letter-spacing="0.5">TM</text>
+
+  <!-- Wordmark 'National' -->
+  <text x="170" y="178" text-anchor="middle" fill="#FFFFFF" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Arial Black', sans-serif" font-size="66" font-weight="900" letter-spacing="-1.2px">National</text>
+
+  <!-- Clean Horizontal Underline -->
+  <rect x="22" y="192" width="296" height="6" rx="3" fill="#FFFFFF"/>
+</svg>
